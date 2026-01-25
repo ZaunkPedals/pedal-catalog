@@ -123,7 +123,6 @@
       transition: 0.3s ease;
     }
 
-    /* GRANO (Textura visual) */
     .img-wrapper::after {
       content: ""; position: absolute; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
@@ -133,7 +132,6 @@
     .card:hover .card-img { transform: scale(1.05); }
     .card:hover .img-wrapper::after { opacity: 0; }
 
-    /* ESTADO SELECCIONADO */
     .card.active {
       border: 4px solid var(--zaunk-blue);
       transform: scale(1.02) rotate(-2deg) !important;
@@ -183,7 +181,7 @@
       font-size: 1.5rem; margin: 0 15px;
     }
 
-    /* === MODAL Y CARRUSEL === */
+    /* === MODAL / FICHA === */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(37,52,148,0.95);
       display: none; align-items: center; justify-content: center; z-index: 100;
@@ -191,36 +189,52 @@
     
     .modal-box {
       background: #fff; border: 4px solid #fff;
-      width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto;
+      /* Ajuste ancho para vertical */
+      width: 90%; max-width: 600px; 
+      max-height: 90vh; overflow-y: auto;
       padding: 2rem; box-shadow: 20px 20px 0px var(--ink);
-      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;
+      /* ESTRUCTURA VERTICAL */
+      display: flex; flex-direction: column; gap: 1.5rem;
     }
 
-    @media(max-width: 768px) { .modal-box { display: block; padding: 1.5rem; } #modal-media { margin-bottom: 2rem; } }
-    
-    /* ESTILOS DEL CARRUSEL */
+    /* CARRUSEL */
     .carousel-container {
       position: relative; width: 100%;
       border: 2px solid #000; box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
+      background: #000; /* Fondo negro para el video */
     }
     .carousel-track {
       display: flex; overflow-x: auto; 
       scroll-snap-type: x mandatory; 
       scroll-behavior: smooth;
-      scrollbar-width: none; /* Firefox */
+      scrollbar-width: none;
     }
-    .carousel-track::-webkit-scrollbar { display: none; /* Chrome */ }
+    .carousel-track::-webkit-scrollbar { display: none; }
     
     .carousel-item {
       flex: 0 0 100%;
       scroll-snap-align: center;
       cursor: zoom-in;
-    }
-    .carousel-item img, .carousel-item iframe {
-      width: 100%; display: block; aspect-ratio: 1/1; object-fit: cover;
+      display: flex; /* Para centrar video */
+      align-items: center; 
+      justify-content: center;
+      height: auto;
+      aspect-ratio: 1/1; /* Mantiene el carrusel cuadrado */
+      overflow: hidden;
     }
     
-    /* BOTONES DEL CARRUSEL */
+    /* IMAGEN: Llena el cuadrado */
+    .carousel-item img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    
+    /* VIDEO: Mantiene 16:9 y se centra */
+    .carousel-item iframe {
+      width: 100%; 
+      aspect-ratio: 16/9; 
+      border: none;
+    }
+    
     .carousel-btn {
       position: absolute; top: 50%; transform: translateY(-50%);
       background: rgba(0,0,0,0.7); color: #fff; border: none;
@@ -229,18 +243,14 @@
     }
     .carousel-btn.prev { left: 0; }
     .carousel-btn.next { right: 0; }
-    .carousel-btn:hover { background: var(--zaunk-blue); }
-
-    /* PUNTOS INDICADORES */
+    
     .carousel-dots {
       display: flex; justify-content: center; margin-top: 10px; gap: 5px;
     }
-    .dot {
-      width: 10px; height: 10px; background: #ccc; border-radius: 50%;
-    }
+    .dot { width: 10px; height: 10px; background: #ccc; border-radius: 50%; }
     .dot.active { background: var(--zaunk-blue); }
 
-    /* === LIGHTBOX === */
+    /* LIGHTBOX */
     #lightbox {
       position: fixed; inset: 0; z-index: 5000;
       background: rgba(0,0,0,0.95);
@@ -258,7 +268,7 @@
       cursor: pointer; text-shadow: 2px 2px 0 #000;
     }
 
-    /* === ADMIN === */
+    /* ADMIN */
     #admin {
       position: fixed; inset: 0; background: #eee; z-index: 2000;
       padding: 2rem; overflow-y: auto; display: none;
@@ -266,7 +276,6 @@
     }
     .admin-card { background: #fff; border: 2px solid #000; padding: 1.5rem; margin-bottom: 2rem; }
     input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid #ccc; }
-    
     #admin input[type="checkbox"] { width: auto !important; display: inline-block; margin-right: 10px; transform: scale(1.5); }
     .hash-box { background: #000; color: #0f0; padding: 1rem; font-family: monospace; border: 2px solid red; margin-bottom: 2rem; }
 
@@ -321,7 +330,7 @@
 
 <div class="modal-overlay" id="modal">
   <div class="modal-box">
-    <div style="grid-column: 1/-1; text-align:right;">
+    <div style="text-align:right;">
       <button class="btn" style="padding:5px 10px;" onclick="closeModal()">X CERRAR</button>
     </div>
     
@@ -335,10 +344,10 @@
     </div>
 
     <div id="modal-info">
-      <h2 id="m-title"></h2>
+      <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;"></h2>
       <div id="m-cats" style="margin-bottom:1rem;"></div>
-      <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px;">0 €</h3>
-      <p id="m-desc" style="white-space: pre-line; border-left: 3px solid var(--zaunk-blue); padding-left:1rem; margin-top:1rem;"></p>
+      <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px;"></h3>
+      <p id="m-desc" style="white-space: pre-line; border-left: 3px solid var(--zaunk-blue); padding-left:1rem; margin-top:1rem; font-size:0.95rem; line-height:1.6;"></p>
       <br>
       <button id="m-btn" class="btn" style="width:100%" onclick="toggleFromModal()">LO QUIERO</button>
     </div>
@@ -370,6 +379,7 @@
         <div class="admin-card">
           <h3>EDITOR DE PEDALES</h3>
           <input type="hidden" id="e-id">
+          
           <label>Nombre:</label> <input id="e-nombre">
           <label>Precio (€):</label> <input type="number" id="e-precio">
           <label>Categorías (separadas por coma):</label> 
@@ -483,7 +493,6 @@ function renderFront() {
 
   sortedCats.forEach(cat => {
     const items = db.filter(p => p.categoria.some(c => c.toLowerCase() === cat));
-    
     if(items.length > 0) {
       const section = document.createElement('div');
       section.innerHTML = `
@@ -491,7 +500,6 @@ function renderFront() {
         <div class="grid"></div>
       `;
       const grid = section.querySelector('.grid');
-      
       items.forEach(p => {
         const isSel = cart.has(p.id);
         const img = p.imagenes[0] || ''; 
@@ -510,7 +518,6 @@ function renderFront() {
           </div>
           <h3 onclick="openModal('${p.id}')" style="cursor:pointer">${p.nombre}</h3>
           <p>${p.descripcionCorta || ''}</p>
-          
           <label class="check-area">
             <input type="checkbox" onchange="toggleCart('${p.id}', this)" ${isSel?'checked':''} ${chkDisabled}>
             <span class="box"></span>
@@ -556,7 +563,6 @@ function goToCheckout() {
   window.open(finalUrl, '_blank');
 }
 
-// === MODAL Y CARRUSEL ===
 function openModal(id) {
   const p = db.find(x => x.id === id);
   if(!p) return;
@@ -566,7 +572,6 @@ function openModal(id) {
   document.getElementById('m-cats').innerHTML = p.categoria.map(c => `<span style="background:var(--zaunk-blue); color:#fff; padding:2px 6px; margin-right:5px; font-size:0.8rem;">${c.toUpperCase()}</span>`).join('');
   document.getElementById('m-desc').innerText = p.descripcionLarga || '';
   
-  // Botón Comprar
   const btn = document.getElementById('m-btn');
   if(p.agotado) {
     btn.innerText = "AGOTADO"; btn.disabled = true; btn.style.opacity = 0.5;
@@ -578,33 +583,27 @@ function openModal(id) {
     };
   }
 
-  // Generar Carrusel
   const track = document.getElementById('carousel-track');
   const dots = document.getElementById('carousel-dots');
   track.innerHTML = "";
   dots.innerHTML = "";
   
-  // Imagenes
   p.imagenes.forEach((src, idx) => {
     const div = document.createElement('div');
     div.className = 'carousel-item';
     div.innerHTML = `<img src="${src}" onclick="viewImage('${src}')">`;
     track.appendChild(div);
-    
-    // Punto indicador
     dots.innerHTML += `<div class="dot ${idx===0?'active':''}"></div>`;
   });
   
-  // Video (al final)
   if(p.videoID) {
     const div = document.createElement('div');
     div.className = 'carousel-item';
-    div.innerHTML = `<iframe src="https://www.youtube.com/embed/${p.videoID}" allowfullscreen style="width:100%; aspect-ratio:16/9; border:0;"></iframe>`;
+    div.innerHTML = `<iframe src="https://www.youtube.com/embed/${p.videoID}" allowfullscreen></iframe>`;
     track.appendChild(div);
     dots.innerHTML += `<div class="dot"></div>`;
   }
   
-  // Botones navegación (ocultar si solo hay 1 item)
   const totalItems = p.imagenes.length + (p.videoID ? 1 : 0);
   const btns = document.querySelectorAll('.carousel-btn');
   btns.forEach(b => b.style.display = totalItems > 1 ? 'block' : 'none');
@@ -632,7 +631,6 @@ function closeLightbox() {
   document.getElementById('lightbox').style.display = 'none';
 }
 
-// 5. SEGURIDAD
 async function hash(s) {
   const b = new TextEncoder().encode(s);
   const h = await crypto.subtle.digest('SHA-256', b);
@@ -654,7 +652,6 @@ async function forceLogin() {
 }
 function closeAdmin() { document.getElementById('admin').style.display = 'none'; renderFront(); }
 
-// 6. ADMIN
 async function genHash() {
   const v = document.getElementById('hash-input').value;
   if(!v) return;
