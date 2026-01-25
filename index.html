@@ -123,7 +123,6 @@
       transition: 0.3s ease;
     }
 
-    /* GRANO SUTIL */
     .img-wrapper::after {
       content: ""; position: absolute; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
@@ -133,7 +132,6 @@
     .card:hover .card-img { transform: scale(1.05); }
     .card:hover .img-wrapper::after { opacity: 0; }
 
-    /* ESTADO SELECCIONADO */
     .card.active {
       border: 4px solid var(--zaunk-blue);
       transform: scale(1.02) rotate(-2deg) !important;
@@ -173,7 +171,7 @@
     input[type="checkbox"]:checked + .box { background: var(--zaunk-blue); }
     input[type="checkbox"]:checked + .box::after { content: 'X'; color: #fff; font-weight: bold; }
 
-    /* === FOOTER CON ICONOS === */
+    /* === FOOTER === */
     footer {
       background: var(--zaunk-blue); color: #fff;
       padding: 3rem 1rem; margin-top: auto; text-align: center;
@@ -184,15 +182,10 @@
     }
     .socials a {
       color: #fff; text-decoration: none; font-family: var(--font-title);
-      font-size: 1.2rem; 
-      display: flex; align-items: center; gap: 8px; 
-      transition: 0.2s;
+      font-size: 1.2rem; display: flex; align-items: center; gap: 8px; transition: 0.2s;
     }
     .socials a:hover { transform: scale(1.1); text-shadow: 2px 2px 0 #000; }
-    
-    .social-icon {
-      width: 24px; height: 24px; fill: currentColor;
-    }
+    .social-icon { width: 24px; height: 24px; fill: currentColor; }
 
     /* === MODAL / FICHA === */
     .modal-overlay {
@@ -202,13 +195,11 @@
     
     .modal-box {
       background: #fff; border: 4px solid #fff;
+      /* ANCHO CONTROLADO Y DISEÑO VERTICAL */
       width: 90%; max-width: 800px; 
       max-height: 90vh; overflow-y: auto;
       padding: 2rem; box-shadow: 20px 20px 0px var(--ink);
-      
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
+      display: flex; flex-direction: column; gap: 1.5rem;
     }
 
     /* CARRUSEL */
@@ -230,9 +221,7 @@
     .carousel-track::-webkit-scrollbar { display: none; }
     
     .carousel-item {
-      flex: 0 0 100%;
-      scroll-snap-align: center;
-      cursor: zoom-in;
+      flex: 0 0 100%; scroll-snap-align: center; cursor: zoom-in;
       display: flex; align-items: center; justify-content: center;
       height: auto; aspect-ratio: 1/1; overflow: hidden;
     }
@@ -381,8 +370,9 @@
       <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;"></h2>
       <div id="m-cats" style="margin-bottom:1rem;"></div>
       
-      <div style="margin-bottom: 1rem;">
+      <div style="margin-bottom: 1rem; display:flex; align-items:center;">
         <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px; margin:0;">0 €</h3>
+        <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px;">LO QUIERO</button>
       </div>
 
       <div id="m-desc"></div>
@@ -430,7 +420,9 @@
           </label>
           
           <label>Imágenes (1 URL por línea):</label> <textarea id="e-imgs" rows="3"></textarea>
-          <label>Youtube ID:</label> <input id="e-video">
+          
+          <label>Youtube IDs (1 por línea o separados por comas):</label> <textarea id="e-videos" rows="2" placeholder="ej: dQw4w9WgXcQ"></textarea>
+          
           <label>Intro Corta:</label> <textarea id="e-short"></textarea>
           
           <label>Descripción Larga (HTML permitido):</label> 
@@ -483,7 +475,6 @@
 
 <script>
 /* ================= CONFIGURACIÓN ================= */
-// Estos valores se actualizarán al descargar desde el admin
 const FORM_URL = "https://docs.google.com/forms/d/e/TU_ID_AQUI/viewform"; 
 const FORM_ENTRY = "entry.123456789";
 
@@ -498,16 +489,13 @@ window.addEventListener('DOMContentLoaded', () => {
   loadData();
   setupKeys();
   
-  // Cargar textos actuales
   document.getElementById('txt-title').value = document.getElementById('web-title').innerText;
   document.getElementById('txt-subtitle').value = document.getElementById('web-subtitle').innerText;
   document.getElementById('txt-footer').value = document.getElementById('web-footer').innerText.replace('© 2024 ZAUNK EFFECTS. HECHO EN CASA.', '').trim();
 
-  // Cargar Configuración Forms
   document.getElementById('txt-form-url').value = FORM_URL;
   document.getElementById('txt-form-entry').value = FORM_ENTRY;
 
-  // Cargar Redes
   document.getElementById('txt-insta').value = document.getElementById('link-insta').href;
   document.getElementById('txt-youtube').value = document.getElementById('link-yt').href;
   document.getElementById('txt-email').value = document.getElementById('link-email').href.replace('mailto:', '');
@@ -525,11 +513,16 @@ async function loadData() {
       else if(p.categoria) cats = p.categoria.split(',').map(s => s.trim());
       else cats = ['otros'];
       
+      // Parsear videos (soporte para JSON antiguo 'videoID' y nuevo 'videoIDs')
+      let vids = p.videoIDs || [];
+      if(!vids.length && p.videoID) vids = [p.videoID];
+
       return {
         ...p,
         categoria: cats,
         precio: p.precio || 0,
         imagenes: p.imagenes || [],
+        videoIDs: vids,
         agotado: !!p.agotado, 
         id: p.id || Math.random().toString(36).substr(2, 9)
       };
@@ -640,22 +633,29 @@ function openModal(id) {
   document.getElementById('m-cats').innerHTML = p.categoria.map(c => `<span style="background:var(--zaunk-blue); color:#fff; padding:2px 6px; margin-right:5px; font-size:0.8rem;">${c.toUpperCase()}</span>`).join('');
   document.getElementById('m-desc').innerHTML = p.descripcionLarga || '';
   
+  // Gestión de Botones (Arriba y Abajo)
   const btn = document.getElementById('m-btn');
-  if(p.agotado) {
-    btn.innerText = "AGOTADO"; btn.disabled = true; btn.style.opacity = 0.5;
-  } else {
-    btn.innerText = "LO QUIERO"; btn.disabled = false; btn.style.opacity = 1;
-    btn.onclick = () => {
-        if(cart.has(id)) { alert("Ya está en tu lista"); }
-        else { cart.add(id); renderFront(); updateFab(); closeModal(); }
-    };
-  }
+  const btnSide = document.getElementById('m-btn-side');
+  const buttons = [btn, btnSide];
+  
+  buttons.forEach(b => {
+      if(p.agotado) {
+        b.innerText = "AGOTADO"; b.disabled = true; b.style.opacity = 0.5;
+      } else {
+        b.innerText = "LO QUIERO"; b.disabled = false; b.style.opacity = 1;
+        b.onclick = () => {
+            if(cart.has(id)) { alert("Ya está en tu lista"); }
+            else { cart.add(id); renderFront(); updateFab(); closeModal(); }
+        };
+      }
+  });
 
   const track = document.getElementById('carousel-track');
   const dots = document.getElementById('carousel-dots');
   track.innerHTML = "";
   dots.innerHTML = "";
   
+  // Agregar Imágenes
   p.imagenes.forEach((src, idx) => {
     const div = document.createElement('div');
     div.className = 'carousel-item';
@@ -664,15 +664,18 @@ function openModal(id) {
     dots.innerHTML += `<div class="dot ${idx===0?'active':''}"></div>`;
   });
   
-  if(p.videoID) {
-    const div = document.createElement('div');
-    div.className = 'carousel-item';
-    div.innerHTML = `<iframe src="https://www.youtube.com/embed/${p.videoID}" allowfullscreen></iframe>`;
-    track.appendChild(div);
-    dots.innerHTML += `<div class="dot"></div>`;
+  // Agregar Múltiples Videos
+  if(p.videoIDs && p.videoIDs.length > 0) {
+    p.videoIDs.forEach(vid => {
+        const div = document.createElement('div');
+        div.className = 'carousel-item';
+        div.innerHTML = `<iframe src="https://www.youtube.com/embed/${vid}" allowfullscreen></iframe>`;
+        track.appendChild(div);
+        dots.innerHTML += `<div class="dot"></div>`;
+    });
   }
   
-  const totalItems = p.imagenes.length + (p.videoID ? 1 : 0);
+  const totalItems = p.imagenes.length + (p.videoIDs ? p.videoIDs.length : 0);
   const btns = document.querySelectorAll('.carousel-btn');
   btns.forEach(b => b.style.display = totalItems > 1 ? 'block' : 'none');
 
@@ -763,7 +766,11 @@ function editP(id) {
   document.getElementById('e-cat').value = p.categoria.join(', ');
   document.getElementById('e-agotado').checked = !!p.agotado;
   document.getElementById('e-imgs').value = p.imagenes.join('\n');
-  document.getElementById('e-video').value = p.videoID || '';
+  
+  // Cargar videos
+  const vids = p.videoIDs || [];
+  document.getElementById('e-videos').value = vids.join('\n');
+  
   document.getElementById('e-short').value = p.descripcionCorta || '';
   document.getElementById('e-long').value = p.descripcionLarga || '';
 }
@@ -792,6 +799,7 @@ function saveData() {
   const id = idField || nombre.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
   const cats = document.getElementById('e-cat').value.split(',').map(s=>s.trim()).filter(s=>s);
   const imgs = document.getElementById('e-imgs').value.split('\n').map(s=>s.trim()).filter(s=>s);
+  const vids = document.getElementById('e-videos').value.split(/[\n,]+/).map(s=>s.trim()).filter(s=>s);
   
   const nuevo = {
     id, nombre, 
@@ -799,7 +807,7 @@ function saveData() {
     precio: document.getElementById('e-precio').value,
     agotado: document.getElementById('e-agotado').checked,
     imagenes: imgs,
-    videoID: document.getElementById('e-video').value,
+    videoIDs: vids, // Nuevo campo array de videos
     descripcionCorta: document.getElementById('e-short').value,
     descripcionLarga: document.getElementById('e-long').value
   };
@@ -832,29 +840,24 @@ function downloadJson() {
 }
 
 function downloadHTML() {
-  // 1. Actualizar Textos
   document.getElementById('web-title').innerText = document.getElementById('txt-title').value;
   document.getElementById('web-subtitle').innerText = document.getElementById('txt-subtitle').value;
   document.getElementById('web-footer').innerText = document.getElementById('txt-footer').value;
   
-  // 2. Actualizar Enlaces Footer
   document.getElementById('link-insta').href = document.getElementById('txt-insta').value;
   document.getElementById('link-yt').href = document.getElementById('txt-youtube').value;
   document.getElementById('link-email').href = 'mailto:' + document.getElementById('txt-email').value;
 
-  // 3. Preparar Clon
   const clone = document.documentElement.cloneNode(true);
   clone.querySelector('#catalog-root').innerHTML = '<div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div>';
   clone.querySelector('#modal').style.display = 'none';
   clone.querySelector('#admin').style.display = 'none';
   clone.querySelector('#lightbox').style.display = 'none';
 
-  // 4. Inyectar Configuración Google Forms
   let scriptContent = clone.querySelector('script').innerHTML;
   const newUrl = document.getElementById('txt-form-url').value;
   const newEntry = document.getElementById('txt-form-entry').value;
   
-  // Reemplazo seguro usando regex
   scriptContent = scriptContent.replace(/const FORM_URL = ".*?";/, `const FORM_URL = "${newUrl}";`);
   scriptContent = scriptContent.replace(/const FORM_ENTRY = ".*?";/, `const FORM_ENTRY = "${newEntry}";`);
   
