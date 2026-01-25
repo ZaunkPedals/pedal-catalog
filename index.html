@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ZAUNK! // PEDALES DE EFECTO</title>
   
+  <meta name="description" content="Pedales de efecto boutique hechos a mano. Fuzz, Overdrive y ruido analógico.">
+  <meta property="og:title" content="ZAUNK! Pedal Effects">
+  <meta property="og:image" content="img/Zaunk_Logo.png">
+  
+  <link rel="icon" type="image/png" href="img/Zaunk_Logo.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
@@ -93,22 +99,21 @@
       border: 2px solid var(--ink);
       padding: 1rem;
       position: relative;
-      /* Transición suave para el movimiento */
+      /* Transición suave para el movimiento y la sombra */
       transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
     }
 
-    /* EFECTO DE MOVIMIENTO AL PASAR EL CURSOR (HOVER) */
+    /* EFECTO MOVIMIENTO AL PASAR CURSOR */
     .card:hover {
-      transform: translateY(-5px) rotate(1deg); /* Sube y rota ligeramente */
-      box-shadow: 12px 12px 0px rgba(37, 52, 148, 0.2); /* Sombra más pronunciada */
+      transform: translateY(-5px) rotate(1deg);
+      box-shadow: 12px 12px 0px rgba(37, 52, 148, 0.2);
       z-index: 10;
     }
 
-    /* --- IMAGEN CUADRADA CON GRANO --- */
+    /* IMAGEN CUADRADA CON GRANO */
     .img-wrapper {
       position: relative;
-      width: 100%; 
-      aspect-ratio: 1 / 1; /* <--- ESTO LA HACE CUADRADA PERFECTA */
+      width: 100%; aspect-ratio: 1 / 1; /* Cuadrado perfecto */
       border: 2px solid var(--ink);
       margin-bottom: 1rem;
       overflow: hidden;
@@ -119,42 +124,34 @@
       width: 100%; height: 100%; object-fit: cover;
       display: block;
       transition: 0.3s ease;
-      /* Filtro "LO-FI": Colores apagados + Contraste + Sepia */
+      /* Filtro Lo-Fi: Saturación baja, contraste alto, toque sepia */
       filter: saturate(0.6) contrast(1.1) sepia(0.2);
     }
 
-    /* CAPA DE RUIDO (GRANO) */
+    /* Capa de ruido sobre la imagen */
     .img-wrapper::after {
-      content: "";
-      position: absolute; inset: 0;
+      content: ""; position: absolute; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
-      opacity: 0.5;
-      mix-blend-mode: overlay;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
+      opacity: 0.5; mix-blend-mode: overlay; pointer-events: none; transition: opacity 0.3s ease;
     }
 
-    /* --- ESTADOS INTERACTIVOS --- */
-    
-    /* Al pasar el ratón: QUITAR FILTROS */
+    /* ESTADO: HOVER (Recupera color) */
     .card:hover .card-img { filter: none; }
     .card:hover .img-wrapper::after { opacity: 0; }
-    
-    /* Al seleccionar: QUITAR FILTROS Y BORDE AZUL FIJO */
+
+    /* ESTADO: ACTIVO (Seleccionado) */
     .card.active {
       border: 4px solid var(--zaunk-blue);
-      transform: scale(1.02); /* Se queda un poco grande si está activo */
+      transform: scale(1.02);
       box-shadow: 10px 10px 0px rgba(37, 52, 148, 0.2);
       z-index: 10;
     }
-    /* Si está activo, el hover no debe rotarlo más o se ve raro, mantenemos estado */
-    .card.active:hover { transform: scale(1.02); }
-
+    .card.active:hover { transform: scale(1.02); /* Evita doble movimiento */ }
     .card.active .card-img { filter: none; }
     .card.active .img-wrapper::after { opacity: 0; }
     .card.active .img-wrapper { border-color: var(--zaunk-blue); }
 
-    /* PRECIO */
+    /* PRECIO (Siempre visible delante) */
     .price-tag {
       position: absolute; top: -15px; right: -10px;
       background: var(--ink); color: #fff;
@@ -168,7 +165,6 @@
     /* AGOTADO */
     .card.agotado { pointer-events: none; opacity: 0.6; }
     .card.agotado .card-img { filter: grayscale(100%) blur(2px); opacity: 0.5; }
-
     .sold-out-badge {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
       border: 3px solid red; color: red; font-size: 2rem; font-family: var(--font-title);
@@ -220,6 +216,14 @@
     .admin-card { background: #fff; border: 2px solid #000; padding: 1.5rem; margin-bottom: 2rem; }
     input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid #ccc; }
     
+    /* FIX CHECKBOX ADMIN: Fuerza que el checkbox se comporte normal */
+    #admin input[type="checkbox"] {
+      width: auto !important;
+      display: inline-block;
+      margin-right: 10px;
+      transform: scale(1.5); /* Un poco más grande para verlo bien */
+    }
+
     .hash-box {
       background: #000; color: #0f0; padding: 1rem; 
       font-family: monospace; border: 2px solid red; margin-bottom: 2rem;
@@ -319,9 +323,9 @@
           <input id="e-cat" list="cat-suggestions" placeholder="Ej: fuzz, bajo, merch">
           <datalist id="cat-suggestions"></datalist>
           
-          <label style="background:#ddd; padding:10px; display:block; cursor:pointer; margin-bottom:1rem; margin-top:1rem;">
-            <input type="checkbox" id="e-agotado" style="width:auto; margin-right:10px;"> 
-            MARCAR COMO AGOTADO (SOLD OUT)
+          <label style="background:#ddd; padding:10px; display:flex; align-items:center; cursor:pointer; margin-bottom:1rem; margin-top:1rem;">
+            <input type="checkbox" id="e-agotado"> 
+            <span style="font-weight:bold; margin-left:5px;">MARCAR COMO AGOTADO (SOLD OUT)</span>
           </label>
           
           <label>Imágenes (1 URL por línea):</label> <textarea id="e-imgs" rows="3"></textarea>
@@ -399,7 +403,7 @@ async function loadData() {
         categoria: cats,
         precio: p.precio || 0,
         imagenes: p.imagenes || [],
-        agotado: !!p.agotado,
+        agotado: !!p.agotado, // Asegura que es booleano
         id: p.id || Math.random().toString(36).substr(2, 9)
       };
     });
@@ -600,7 +604,10 @@ function editP(id) {
   document.getElementById('e-nombre').value = p.nombre;
   document.getElementById('e-precio').value = p.precio;
   document.getElementById('e-cat').value = p.categoria.join(', ');
-  document.getElementById('e-agotado').checked = p.agotado;
+  
+  // FIX CRÍTICO: Asegurar que el checkbox refleje el estado
+  document.getElementById('e-agotado').checked = !!p.agotado;
+  
   document.getElementById('e-imgs').value = p.imagenes.join('\n');
   document.getElementById('e-video').value = p.videoID || '';
   document.getElementById('e-short').value = p.descripcionCorta || '';
@@ -620,7 +627,10 @@ function saveData() {
     id, nombre, 
     categoria: cats.length ? cats : ['otros'],
     precio: document.getElementById('e-precio').value,
+    
+    // FIX CRÍTICO: Capturar correctamente el estado del checkbox
     agotado: document.getElementById('e-agotado').checked,
+    
     imagenes: imgs,
     videoID: document.getElementById('e-video').value,
     descripcionCorta: document.getElementById('e-short').value,
@@ -632,7 +642,7 @@ function saveData() {
   
   renderAdminList();
   updateAutocomplete();
-  alert("Guardado en memoria");
+  alert("Guardado en memoria. RECUERDA DESCARGAR EL JSON.");
   clearEditor();
 }
 
@@ -644,7 +654,7 @@ function delP(id) {
 }
 function clearEditor() {
   document.querySelectorAll('#admin input, #admin textarea').forEach(x => x.value = '');
-  document.getElementById('e-agotado').checked = false;
+  document.getElementById('e-agotado').checked = false; // Reset checkbox
 }
 
 // 7. DESCARGAS
