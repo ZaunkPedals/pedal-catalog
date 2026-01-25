@@ -29,11 +29,11 @@
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
     }
 
-    /* === HEADER (ESTILO ANTERIOR LIMPIO) === */
+    /* === HEADER === */
     header {
       text-align: center;
       padding: 3rem 1rem;
-      background-color: #fff; /* Fondo blanco limpio */
+      background-color: #fff;
       border-bottom: 5px solid var(--zaunk-blue);
     }
 
@@ -96,18 +96,34 @@
       transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    /* ESTADO NORMAL (NO SELECCIONADO): Filtro sucio/vintage pero CON COLOR */
+    /* PRECIO (Corrección: Z-INDEX ALTO) */
+    .price-tag {
+      position: absolute; 
+      top: -15px; 
+      right: -10px;
+      background: var(--ink); 
+      color: #fff;
+      padding: 5px 10px; 
+      font-family: var(--font-title);
+      font-size: 1.3rem; 
+      transform: rotate(5deg);
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+      z-index: 50; /* Z-Index para asegurar que esté delante */
+    }
+    .card.active .price-tag { background: var(--zaunk-blue); }
+
+    /* IMAGEN (Corrección: FILTRO POTENTE) */
     .card-img {
       width: 100%; height: 220px; object-fit: cover;
       border: 2px solid var(--ink); margin-bottom: 1rem;
-      transition: 0.3s;
-      /* Filtro: Contraste alto + sepia ligero para look "viejo" pero color */
-      filter: contrast(1.2) brightness(0.9) sepia(0.2); 
+      transition: 0.3s ease;
+      /* Filtro "Fotocopia": Grayscale total + Alto contraste + Oscurecido */
+      filter: grayscale(100%) contrast(1.5) brightness(0.9);
     }
     
-    .card:hover .card-img { filter: contrast(1.1) brightness(1); }
+    .card:hover .card-img { filter: grayscale(100%) contrast(1.2) brightness(1); }
 
-    /* ESTADO SELECCIONADO: Imagen Pura y Borde Azul */
+    /* ESTADO SELECCIONADO: A COLOR */
     .card.active {
       border: 4px solid var(--zaunk-blue);
       transform: scale(1.02);
@@ -116,30 +132,19 @@
     }
     
     .card.active .card-img {
-      filter: none; /* Color original puro */
+      filter: none; /* Quita todos los filtros */
       border-color: var(--zaunk-blue);
     }
 
-    .card.agotado {
-      pointer-events: none; opacity: 0.6;
-    }
-    .card.agotado .card-img { filter: grayscale(100%); }
+    .card.agotado { pointer-events: none; opacity: 0.6; }
+    .card.agotado .card-img { filter: grayscale(100%) blur(2px); opacity: 0.5; }
 
     .sold-out-badge {
       position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
       border: 3px solid red; color: red; font-size: 2rem; font-family: var(--font-title);
-      padding: 10px; background: rgba(255,255,255,0.9); z-index: 20; white-space: nowrap;
+      padding: 10px; background: rgba(255,255,255,0.9); z-index: 60; white-space: nowrap;
     }
     
-    .price-tag {
-      position: absolute; top: -10px; right: -10px;
-      background: var(--ink); color: #fff;
-      padding: 5px 10px; font-family: var(--font-title);
-      font-size: 1.2rem; transform: rotate(5deg);
-      box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
-    }
-    .card.active .price-tag { background: var(--zaunk-blue); }
-
     .check-area {
       margin-top: 1rem; border-top: 1px dotted var(--zaunk-blue);
       padding-top: 0.5rem; display: flex; align-items: center; gap: 10px; cursor: pointer;
@@ -279,9 +284,10 @@
           
           <label>Nombre:</label> <input id="e-nombre">
           <label>Precio (€):</label> <input type="number" id="e-precio">
-          <label>Categorías (separadas por coma):</label> <input id="e-cat" placeholder="Ej: fuzz, bajo, merch">
           
-          <label style="background:#ddd; padding:10px; display:block; cursor:pointer; margin-bottom:1rem;">
+          <label>Categorías (separadas por coma):</label> 
+          <input id="e-cat" list="cat-suggestions" placeholder="Ej: fuzz, bajo, merch">
+          <datalist id="cat-suggestions"></datalist> <label style="background:#ddd; padding:10px; display:block; cursor:pointer; margin-bottom:1rem; margin-top:1rem;">
             <input type="checkbox" id="e-agotado" style="width:auto; margin-right:10px;"> 
             MARCAR COMO AGOTADO (SOLD OUT)
           </label>
@@ -338,7 +344,6 @@ let keyBuffer = "";
 window.addEventListener('DOMContentLoaded', () => {
   loadData();
   setupKeys();
-  // Cargar textos actuales
   document.getElementById('txt-title').value = document.getElementById('web-title').innerText;
   document.getElementById('txt-subtitle').value = document.getElementById('web-subtitle').innerText;
   document.getElementById('txt-footer').value = document.getElementById('web-footer').innerText;
@@ -368,6 +373,7 @@ async function loadData() {
     });
     
     renderFront();
+    updateAutocomplete(); // Cargar sugerencias
     renderAdminList();
   } catch(e) { console.error(e); }
 }
@@ -528,6 +534,19 @@ async function genHash() {
   document.getElementById('hash-str').innerText = h;
 }
 
+// Autocompletado Categorías
+function updateAutocomplete() {
+  const datalist = document.getElementById('cat-suggestions');
+  datalist.innerHTML = "";
+  const cats = new Set();
+  db.forEach(p => p.categoria.forEach(c => cats.add(c)));
+  cats.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c;
+    datalist.appendChild(opt);
+  });
+}
+
 function renderAdminList() {
   document.getElementById('admin-list').innerHTML = db.map(p => `
     <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
@@ -577,9 +596,10 @@ function saveData() {
   };
   
   const idx = db.findIndex(x => x.id === id);
-  if(idx >= 0) db[idx] = nuevo; else db.push(newItem);
+  if(idx >= 0) db[idx] = nuevo; else db.push(nuevo);
   
   renderAdminList();
+  updateAutocomplete();
   alert("Guardado en memoria");
   clearEditor();
 }
