@@ -3,21 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pedales // NOISE & GLITCH</title>
+  <title>Pedales Boutique | Efectos Artesanales</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #050505;
-      --card-bg: #111;
-      --text: #eaeaea;
-      --accent: #39ff14; /* Verde Neón */
-      --secondary: #ff00ff; /* Rosa Magenta */
-      --border: 2px solid var(--text);
-      --font-main: 'Special Elite', monospace;
+      --bg: #121212;
+      --card-bg: #1e1e1e;
+      --text-main: #e0e0e0;
+      --text-muted: #a0a0a0;
+      --accent: #d4af37; /* Oro envejecido */
+      --accent-hover: #b5952f;
+      --border: #333;
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'Lato', sans-serif;
     }
 
     * { box-sizing: border-box; }
@@ -25,156 +27,121 @@
     body {
       margin: 0;
       background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-main);
-      /* Textura de ruido de fondo sutil */
-      background-image: repeating-linear-gradient(0deg, transparent, transparent 1px, #111 1px, #111 2px);
-      background-size: 100% 4px;
+      color: var(--text-main);
+      font-family: var(--font-body);
+      line-height: 1.6;
     }
 
-    h1, h2, h3 { 
-      text-transform: uppercase; 
-      letter-spacing: 2px;
-      color: var(--accent);
-      text-shadow: 2px 2px 0px var(--secondary);
-    }
-
+    h1, h2, h3 { font-family: var(--font-heading); color: var(--accent); margin-top: 0; }
+    
     /* HEADER */
     header {
-      padding: 4rem 1rem;
+      padding: 3rem 0;
       text-align: center;
-      border-bottom: 4px dashed var(--accent);
-      background: #000;
+      background: radial-gradient(circle at center, #1a1a1a 0%, #121212 100%);
+      border-bottom: 1px solid var(--border);
     }
-    header h1 { font-size: 3rem; margin: 0; transform: rotate(-1deg); }
-    header p { color: #fff; background: var(--secondary); display: inline-block; padding: 0.2rem 0.5rem; transform: rotate(1deg); color: #000; font-weight: bold;}
+    header img { max-width: 140px; margin-bottom: 1rem; }
+    header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: #fff; }
+    header p { color: var(--text-muted); font-style: italic; }
 
     /* LAYOUT */
-    .container { max-width: 1200px; margin: auto; padding: 0 1.5rem; }
-    section { padding: 4rem 0; border-bottom: 1px solid #333; }
-
-    /* BOTONES PUNK */
-    .btn {
-      background: transparent;
-      color: var(--accent);
-      border: 2px solid var(--accent);
-      padding: 0.8rem 1.5rem;
-      font-family: var(--font-main);
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.1s;
-      text-transform: uppercase;
-      box-shadow: 4px 4px 0px var(--accent);
-    }
-    .btn:hover {
-      background: var(--accent);
-      color: #000;
-      box-shadow: 0px 0px 0px transparent;
-      transform: translate(2px, 2px);
-    }
-    .btn-danger {
-      color: var(--secondary);
-      border-color: var(--secondary);
-      box-shadow: 4px 4px 0px var(--secondary);
-    }
-    .btn-danger:hover {
-      background: var(--secondary);
-    }
-
-    /* TARJETAS */
-    .grid-pedales {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 2rem;
-    }
+    .container { max-width: 1100px; margin: auto; padding: 0 1.5rem; }
+    section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
     
+    /* BOTONES */
+    .btn {
+      background: var(--accent); color: #000; border: none;
+      padding: .6rem 1.2rem; font-weight: bold; cursor: pointer;
+      border-radius: 2px; text-transform: uppercase; letter-spacing: 1px;
+      font-size: 0.8rem; transition: background .3s;
+    }
+    .btn:hover { background: var(--accent-hover); }
+    .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+    .btn-outline:hover { background: var(--accent); color: #000; }
+
+    /* CATALOGO */
+    .category-title {
+      font-size: 1.8rem; border-bottom: 1px solid var(--accent);
+      display: inline-block; margin-bottom: 2rem; padding-bottom: 0.5rem;
+    }
+
+    .grid-pedales {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem; margin-bottom: 3rem;
+    }
+
     .card {
-      background: var(--card-bg);
-      border: 2px solid #333;
-      padding: 1rem;
-      position: relative;
-      transition: transform 0.2s;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 4px; overflow: hidden;
+      transition: transform .3s ease, box-shadow .3s ease;
     }
     .card:hover {
-      border-color: var(--secondary);
-      transform: scale(1.02) rotate(0.5deg);
-      z-index: 10;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.4); border-color: var(--accent);
     }
-    .card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      filter: grayscale(100%) contrast(120%);
-      border-bottom: 2px solid #333;
-      margin-bottom: 1rem;
-      transition: filter 0.3s;
-    }
-    .card:hover img { filter: grayscale(0%) contrast(100%); }
-    
-    .card h3 { font-size: 1.5rem; margin: 0.5rem 0; text-shadow: none; color: #fff; }
-    .category-tag {
-      position: absolute; top: 0.5rem; right: 0.5rem;
-      background: var(--accent); color: #000;
-      padding: 2px 8px; font-size: 0.8rem; font-weight: bold;
-      transform: rotate(2deg);
-    }
+    .card-img { height: 200px; width: 100%; object-fit: cover; background: #000; cursor: pointer; }
+    .card-body { padding: 1.5rem; }
+    .card h3 { font-size: 1.4rem; margin-bottom: 0.5rem; color: #fff; cursor: pointer; }
+    .card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; height: 3em; overflow: hidden; }
 
-    /* CHECKBOX CUSTOM */
-    .select-row {
-      margin-top: 1rem;
-      display: flex; align-items: center; gap: 0.5rem;
-      border-top: 1px dashed #333; padding-top: 0.5rem;
+    .card-actions {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);
     }
-    input[type="checkbox"] {
-      appearance: none; width: 20px; height: 20px; border: 2px solid var(--accent);
-      cursor: pointer; position: relative;
-    }
-    input[type="checkbox"]:checked { background: var(--accent); }
-    input[type="checkbox"]:checked::after {
-      content: 'X'; color: #000; position: absolute;
-      top: 50%; left: 50%; transform: translate(-50%, -50%);
-      font-weight: bold; font-size: 1.2rem;
-    }
+    .select-label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; }
+    input[type="checkbox"] { accent-color: var(--accent); transform: scale(1.2); }
 
-    /* MODAL */
+    /* MODAL DETALLE */
     .modal {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.95);
-      display: none; align-items: center; justify-content: center; z-index: 100;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+      display: none; justify-content: center; align-items: center; z-index: 1000;
+      backdrop-filter: blur(5px);
     }
     .modal-content {
-      background: #000; border: 2px solid var(--accent);
-      width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto;
-      padding: 2rem; position: relative;
-      box-shadow: 10px 10px 0px var(--secondary);
+      background: var(--card-bg); width: 90%; max-width: 900px; max-height: 90vh;
+      overflow-y: auto; border-radius: 4px; border: 1px solid var(--accent);
+      position: relative; display: grid; grid-template-columns: 1fr 1fr;
     }
-    .close-modal {
-      position: absolute; top: 1rem; right: 1rem;
-      color: var(--secondary); font-size: 2rem; cursor: pointer;
+    @media(max-width: 768px) { .modal-content { grid-template-columns: 1fr; } }
+    
+    .modal-gallery { background: #000; padding: 1rem; display: flex; flex-direction: column; gap: 1rem; }
+    .modal-gallery img { width: 100%; border-radius: 2px; }
+    /* Estilo para el Video */
+    .video-container {
+      position: relative; padding-bottom: 56.25%; /* 16:9 ratio */
+      height: 0; overflow: hidden; border-radius: 2px; border: 1px solid #333;
     }
+    .video-container iframe {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+    }
+    
+    .modal-info { padding: 2rem; }
+    .close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 2rem; cursor: pointer; color: #fff; z-index: 10; line-height: 1; }
 
-    /* FAB */
+    /* FAB (Botón Flotante) */
     #cart-fab {
       position: fixed; bottom: 2rem; right: 2rem;
-      background: var(--secondary); color: #000;
-      border: 2px solid #fff;
-      padding: 1rem; font-weight: bold; cursor: pointer;
-      display: none; z-index: 90;
-      box-shadow: 5px 5px 0px #fff;
-      animation: shake 0.5s infinite alternate;
+      background: var(--accent); color: #000; padding: 1rem 2rem;
+      border-radius: 50px; box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+      display: none; align-items: center; gap: 1rem; font-weight: bold; cursor: pointer; z-index: 100;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    @keyframes shake { from {transform: rotate(-1deg);} to {transform: rotate(1deg);} }
+    @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
 
     /* ADMIN PANEL */
     #admin-panel {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: #000; z-index: 2000; padding: 2rem; overflow-y: auto; display: none;
-      border: 4px solid var(--secondary);
+      background: #111; z-index: 2000; padding: 2rem; overflow-y: auto; display: none;
     }
-    input, textarea, select {
-      width: 100%; background: #111; border: 1px solid #444; 
-      color: var(--accent); padding: 10px; font-family: var(--font-main); margin-bottom: 10px;
+    #admin-panel input, #admin-panel textarea, #admin-panel select {
+      width: 100%; padding: 10px; margin-bottom: 10px;
+      background: #222; border: 1px solid #444; color: #fff; font-family: sans-serif;
     }
-    input:focus, textarea:focus { outline: none; border-color: var(--accent); }
+    .admin-row { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 10px; margin-bottom: 5px; }
+
+    /* FOOTER */
+    footer { text-align: center; padding: 3rem; color: var(--text-muted); font-size: 0.9rem; }
 
   </style>
 </head>
@@ -182,279 +149,356 @@
 
 <header>
   <div class="container">
-    <h1>PEDALES // DIY</h1>
-    <p>RUIDO ARTESANAL HECHO A MANO</p>
+    <img src="img/logo.png" alt="Logo" onerror="this.style.display='none'">
+    <h1>Pedales Boutique</h1>
+    <p>Sonido analógico con alma.</p>
   </div>
 </header>
 
-<section>
+<section id="catalogo">
   <div class="container" id="pedal-container">
-    <p>CARGANDO RUIDO...</p>
+    <p style="text-align:center">Cargando catálogo...</p>
   </div>
 </section>
 
-<footer>
-  <div class="container" style="text-align: center; opacity: 0.5;">
-    <p>&copy; 2024 NOISE INC.</p>
+<section id="sobre-mi">
+  <div class="container" style="text-align: center; max-width: 700px;">
+    <h2>Artesanía Sonora</h2>
+    <p>Cada pedal es construido a mano, punto a punto, buscando la perfección tonal. No hay dos exactamente iguales.</p>
   </div>
-</footer>
+</section>
+
+<footer>&copy; 2024 Pedales Boutique.</footer>
 
 <div id="cart-fab" onclick="checkout()">
-  <span id="cart-count">0 SELECCIONADOS</span>
-  <span style="display:block; font-size:0.8rem">>> FINALIZAR PEDIDO <<</span>
+  <span id="cart-count">0 seleccionados</span>
+  <span style="background:#000; color:var(--accent); padding:2px 8px; border-radius:4px;">Solicitar Presupuesto →</span>
 </div>
 
 <div class="modal" id="product-modal">
   <div class="modal-content">
-    <span class="close-modal" onclick="closeModal()">[CERRAR X]</span>
-    <h2 id="modal-title">TITULO</h2>
-    <div id="modal-imgs" style="display:flex; gap:10px; overflow-x:auto; margin: 1rem 0;"></div>
-    <p id="modal-desc" style="white-space: pre-line; color: #bbb;"></p>
-    <button class="btn" onclick="toggleSelectFromModal()">ME INTERESA / NO ME INTERESA</button>
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+    <div class="modal-gallery" id="modal-imgs">
+      </div>
+    <div class="modal-info">
+      <small style="color:var(--accent); text-transform:uppercase;" id="modal-cat"></small>
+      <h2 id="modal-title" style="margin-top:0.5rem;"></h2>
+      <p id="modal-desc" style="white-space: pre-line;"></p>
+      <br>
+      <button class="btn" onclick="toggleSelectFromModal()">Me interesa</button>
+    </div>
   </div>
 </div>
 
 <div id="admin-panel">
   <div class="container">
-    <div style="display:flex; justify-content:space-between;">
-      <h2>ZONA DE CONTROL</h2>
-      <button class="btn btn-danger" onclick="closeAdmin()">SALIR</button>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h2>Panel de Administración</h2>
+      <button class="btn btn-outline" onclick="closeAdmin()">Salir</button>
     </div>
     
-    <div style="background:#111; padding:1rem; border:1px dashed #444; margin-bottom:2rem;">
-      <small style="color:#666">UTILIDAD PARA GENERAR HASHES (Abre la consola F12 para ver el resultado si quieres cambiar tu clave)</small><br>
-      <input type="text" id="hash-input" placeholder="Escribe texto para hashear" style="width:auto; display:inline-block;">
-      <button class="btn" onclick="generateHashTool()">Log Hash</button>
+    <div style="margin-bottom: 2rem; background: #222; padding: 1rem; border: 1px dashed #444;">
+        <small style="color: #888;">Generador de Hashes (Para cambiar contraseña en el código)</small><br>
+        <input type="text" id="hash-tool-input" placeholder="Texto a hashear" style="width: auto; display: inline-block;">
+        <button class="btn" onclick="runHashTool()">Ver Hash en Consola</button>
     </div>
 
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem;">
       <div>
-        <h3>NUEVO ARTEFACTO</h3>
+        <h3>Editar Pedal</h3>
         <input type="hidden" id="admin-id">
-        <input type="text" id="admin-nombre" placeholder="NOMBRE">
+        <input type="text" id="admin-nombre" placeholder="Nombre">
         <select id="admin-categoria">
-          <option value="fuzz">FUZZ</option>
-          <option value="overdrive">OVERDRIVE</option>
-          <option value="distorsion">DISTORSION</option>
-          <option value="modulacion">MODULACION</option>
-          <option value="bajo">BAJO</option>
-          <option value="otros">OTROS</option>
+          <option value="fuzz">Fuzz</option>
+          <option value="overdrive">Overdrive</option>
+          <option value="distorsion">Distorsión</option>
+          <option value="modulacion">Modulación</option>
+          <option value="preamp">Preamp</option>
+          <option value="bajo">Bajo</option>
+          <option value="sintetizador">Sintetizador</option>
+          <option value="otros">Otros</option>
         </select>
-        <textarea id="admin-short" rows="2" placeholder="DESCRIPCION CORTA"></textarea>
-        <textarea id="admin-long" rows="5" placeholder="DESCRIPCION LARGA"></textarea>
-        <input type="text" id="admin-img1" placeholder="URL IMAGEN 1">
+        <input type="text" id="admin-video" placeholder="ID Video YouTube (ej: dQw4w9WgXcQ)">
+        <textarea id="admin-short" rows="2" placeholder="Descripción Corta"></textarea>
+        <textarea id="admin-long" rows="6" placeholder="Descripción Larga"></textarea>
+        <input type="text" id="admin-img1" placeholder="Imagen 1 (Ruta)">
+        <input type="text" id="admin-img2" placeholder="Imagen 2 (Ruta)">
         
-        <button class="btn" onclick="savePedal()">GUARDAR EN MEMORIA</button>
-        <button class="btn btn-danger" onclick="clearForm()">LIMPIAR</button>
+        <button class="btn" onclick="savePedal()">Guardar</button>
+        <button class="btn btn-outline" onclick="clearForm()">Limpiar</button>
       </div>
+
       <div>
-        <h3>INVENTARIO ACTUAL</h3>
-        <div id="admin-list"></div>
-        <br>
-        <button class="btn" style="width:100%" onclick="downloadJSON()">>>> DESCARGAR JSON <<<</button>
+        <h3>Lista Actual</h3>
+        <div id="admin-list" style="max-height: 400px; overflow-y:auto; margin-bottom:1rem;"></div>
+        <button class="btn" style="width:100%" onclick="downloadJSON()">⬇ Descargar pedales.json actualizado</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-/* ================= CONFIGURACIÓN ================= */
-// HASH de la secuencia secreta "nagusi"
-const SECRET_SEQ_HASH = "8056214555075677813083110295627771746654160408542454559888927878"; 
-// HASH de la contraseña "admin"
-const ADMIN_PASS_HASH = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"; 
-
-// CONFIGURACIÓN DE GOOGLE FORMS
-const GFORM_URL = "https://docs.google.com/forms/d/e/TU_ID_DE_FORMULARIO/viewform";
-const GFORM_ENTRY_ID = "entry.123456789"; // El ID del campo "Pedales"
-
-/* ================= LÓGICA ================= */
-let allPedals = [];
-let selectedPedals = new Set();
-let keyBuffer = "";
-
-window.addEventListener('DOMContentLoaded', () => {
-  fetchPedales();
-  setupSecurity();
-});
-
-// Hasheador SHA-256
-async function sha256(text) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(text);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-// 1. CARGA DE DATOS
-async function fetchPedales() {
-  try {
-    const res = await fetch('pedales.json');
-    allPedals = await res.json();
-    renderCatalog();
-    renderAdminList();
-  } catch(e) { console.log("Error cargando json"); }
-}
-
-// 2. RENDERIZADO (Estilo Punk)
-function renderCatalog() {
-  const cont = document.getElementById('pedal-container');
-  cont.innerHTML = "";
+  /* ================= CONFIGURACIÓN ================= */
   
-  // Agrupar
-  const grouped = {};
-  allPedals.forEach(p => {
-    const cat = p.categoria || 'otros';
-    if(!grouped[cat]) grouped[cat] = [];
-    grouped[cat].push(p);
+  // 1. SEGURIDAD (HASHES SHA-256)
+  // "nagusi" = 8056214555075677813083110295627771746654160408542454559888927878
+  const HASH_SECRET = "8056214555075677813083110295627771746654160408542454559888927878";
+  // "admin" = 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+  const HASH_PASS = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
+  
+  // 2. GOOGLE FORMS
+  // Pega aquí la URL de tu formulario (sin lo de 'viewform...')
+  const GFORM_URL = "https://docs.google.com/forms/d/e/TU_ID_AQUI/viewform";
+  // Pega aquí el ID del campo (entry.xxxx)
+  const GFORM_ENTRY = "entry.123456789";
+
+  /* ================= GLOBALES ================= */
+  let allPedals = [];
+  let selectedPedals = new Set();
+  let currentModalId = null;
+  let keyBuffer = "";
+  
+  const CAT_ORDER = ["fuzz", "overdrive", "distorsion", "preamp", "modulacion", "sintetizador", "bajo", "otros"];
+  const CAT_NAMES = {
+    fuzz: "Fuzz", overdrive: "Overdrive", distorsion: "Distorsión", 
+    preamp: "Preamps", modulacion: "Modulación", sintetizador: "Sintetizadores", 
+    bajo: "Bajo", otros: "Otros"
+  };
+
+  /* ================= INICIO ================= */
+  window.addEventListener('DOMContentLoaded', () => {
+    fetchPedales();
+    setupSecurity();
   });
 
-  for (const [cat, items] of Object.entries(grouped)) {
-    cont.innerHTML += `<h2 style="border-bottom:2px dashed var(--accent); display:inline-block; margin-top:3rem;">// ${cat.toUpperCase()}</h2>`;
-    const grid = document.createElement('div');
-    grid.className = 'grid-pedales';
+  async function sha256(message) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  /* ================= LÓGICA CATÁLOGO ================= */
+  async function fetchPedales() {
+    try {
+      const res = await fetch('pedales.json');
+      allPedals = await res.json();
+      renderCatalog();
+      renderAdminList();
+    } catch (e) { console.error(e); }
+  }
+
+  function renderCatalog() {
+    const container = document.getElementById('pedal-container');
+    container.innerHTML = "";
+    const grouped = {};
     
-    items.forEach(p => {
-      const isSel = selectedPedals.has(p.id);
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <div class="category-tag">${p.categoria}</div>
-        <img src="${p.imagenes[0]}" onclick="openModal('${p.id}')">
-        <h3>${p.nombre}</h3>
-        <p style="font-size:0.9rem; color:#aaa;">${p.descripcionCorta}</p>
-        <div class="select-row">
-          <input type="checkbox" onchange="toggleSel('${p.id}', this)" ${isSel ? 'checked':''}>
-          <label onclick="openModal('${p.id}')" style="cursor:pointer; text-decoration:underline;">VER DETALLES</label>
+    allPedals.forEach(p => {
+      const cat = p.categoria || 'otros';
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(p);
+    });
+
+    CAT_ORDER.forEach(cat => {
+      if (grouped[cat]) {
+        container.innerHTML += `<h3 class="category-title">${CAT_NAMES[cat] || cat.toUpperCase()}</h3>`;
+        const grid = document.createElement('div');
+        grid.className = 'grid-pedales';
+        
+        grouped[cat].forEach(p => {
+          const isSel = selectedPedals.has(p.id);
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <img src="${p.imagenes[0]}" class="card-img" onclick="openModal('${p.id}')">
+            <div class="card-body">
+              <h3 onclick="openModal('${p.id}')">${p.nombre}</h3>
+              <p>${p.descripcionCorta}</p>
+              <div class="card-actions">
+                <button class="btn btn-outline" onclick="openModal('${p.id}')">+ Info</button>
+                <label class="select-label">
+                  <input type="checkbox" onchange="toggleSel('${p.id}', this)" ${isSel?'checked':''}>
+                  Me interesa
+                </label>
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+        container.appendChild(grid);
+      }
+    });
+  }
+
+  function toggleSel(id, cb) {
+    if (cb.checked) selectedPedals.add(id);
+    else selectedPedals.delete(id);
+    updateFab();
+  }
+
+  function updateFab() {
+    const fab = document.getElementById('cart-fab');
+    const c = selectedPedals.size;
+    fab.style.display = c > 0 ? 'flex' : 'none';
+    document.getElementById('cart-count').innerText = `${c} pedal${c!==1?'es':''} seleccionado${c!==1?'s':''}`;
+  }
+
+  function checkout() {
+    const items = allPedals.filter(p => selectedPedals.has(p.id)).map(p => `- ${p.nombre}`).join('\n');
+    const finalUrl = `${GFORM_URL}?usp=pp_url&${GFORM_ENTRY}=${encodeURIComponent(items)}`;
+    window.open(finalUrl, '_blank');
+  }
+
+  /* ================= MODAL & VIDEO ================= */
+  function openModal(id) {
+    const p = allPedals.find(x => x.id === id);
+    if (!p) return;
+    currentModalId = id;
+    
+    document.getElementById('modal-title').innerText = p.nombre;
+    document.getElementById('modal-cat').innerText = CAT_NAMES[p.categoria] || p.categoria;
+    document.getElementById('modal-desc').innerText = p.descripcionLarga;
+    
+    const gallery = document.getElementById('modal-imgs');
+    let html = p.imagenes.map(src => `<img src="${src}">`).join('');
+    
+    // Inserción de VIDEO
+    if (p.videoID && p.videoID.trim() !== "") {
+      html += `
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/${p.videoID}" allowfullscreen></iframe>
         </div>
       `;
-      grid.appendChild(card);
-    });
-    cont.appendChild(grid);
-  }
-}
-
-// 3. SELECCIÓN Y GOOGLE FORMS
-function toggleSel(id, chk) {
-  if(chk.checked) selectedPedals.add(id);
-  else selectedPedals.delete(id);
-  updateFab();
-}
-
-function updateFab() {
-  const fab = document.getElementById('cart-fab');
-  const count = selectedPedals.size;
-  document.getElementById('cart-count').innerText = `${count} PEDAL${count!==1?'ES':''} EN COLA`;
-  fab.style.display = count > 0 ? 'block' : 'none';
-}
-
-function checkout() {
-  // Recopilar nombres
-  const lista = allPedals.filter(p => selectedPedals.has(p.id)).map(p => `- ${p.nombre}`).join('\n');
-  
-  // Construir URL de Google Forms pre-rellenada
-  // Formato: URL_BASE + ?usp=pp_url + &entry.NUMERO=VALOR
-  const finalUrl = `${GFORM_URL}?usp=pp_url&${GFORM_ENTRY_ID}=${encodeURIComponent(lista)}`;
-  
-  window.open(finalUrl, '_blank');
-}
-
-// 4. SEGURIDAD (HASHING)
-function setupSecurity() {
-  window.addEventListener("keydown", async e => {
-    keyBuffer += e.key.toLowerCase();
-    // Mantenemos el buffer corto para no sobrecargar, pero suficiente para la palabra clave más larga
-    if(keyBuffer.length > 20) keyBuffer = keyBuffer.slice(-20);
-
-    // Verificamos si CUALQUIER subcadena del buffer coincide con el hash secreto
-    // Esto es un truco: como no podemos comparar texto plano con hash fácilmente en un rolling buffer
-    // vamos a hashear las últimas N letras cada vez.
-    // Asumimos que la palabra clave "nagusi" tiene 6 letras.
-    
-    const possibleKeyword = keyBuffer.slice(-6); // "nagusi" tiene 6 letras
-    const hashAttempt = await sha256(possibleKeyword);
-    
-    if (hashAttempt === SECRET_SEQ_HASH) {
-      keyBuffer = ""; // Reset
-      const pass = prompt("PASSWORD:");
-      if(!pass) return;
-      
-      const passHash = await sha256(pass);
-      
-      if(passHash === ADMIN_PASS_HASH) {
-        document.getElementById('admin-panel').style.display = 'block';
-      } else {
-        alert("ACCESO DENEGADO");
-      }
     }
-  });
-}
-
-// Utilidad para que tú generes tus propios hashes en la consola
-async function generateHashTool() {
-  const txt = document.getElementById('hash-input').value;
-  const hash = await sha256(txt);
-  console.log(`HASH DE "${txt}":`, hash);
-  alert("Hash generado en consola (F12)");
-}
-
-// 5. FUNCIONES DE MODAL Y ADMIN (Similares a versión anterior)
-function openModal(id) {
-  // ... lógica de abrir modal ...
-  const p = allPedals.find(x => x.id === id);
-  document.getElementById('modal-title').innerText = p.nombre;
-  document.getElementById('modal-desc').innerText = p.descripcionLarga;
-  const gal = document.getElementById('modal-imgs');
-  gal.innerHTML = p.imagenes.map(src => `<img src="${src}" style="height:150px; border:1px solid #fff;">`).join('');
-  document.getElementById('product-modal').style.display = 'flex';
-}
-function closeModal() { document.getElementById('product-modal').style.display = 'none'; }
-function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; renderCatalog(); }
-function clearForm() { 
-  document.querySelectorAll('#admin-panel input, #admin-panel textarea').forEach(i => i.value = ''); 
-}
-function savePedal() {
-  // Lógica de guardado (igual que antes pero adaptada)
-  const idField = document.getElementById('admin-id').value;
-  const nombre = document.getElementById('admin-nombre').value;
-  const id = idField || nombre.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-  
-  const nuevo = {
-    id,
-    nombre,
-    categoria: document.getElementById('admin-categoria').value,
-    descripcionCorta: document.getElementById('admin-short').value,
-    descripcionLarga: document.getElementById('admin-long').value,
-    imagenes: [document.getElementById('admin-img1').value].filter(Boolean)
-  };
-  
-  const idx = allPedals.findIndex(p => p.id === id);
-  if(idx >= 0) allPedals[idx] = nuevo;
-  else allPedals.push(nuevo);
-  
-  renderAdminList();
-  alert("Guardado en memoria");
-}
-function renderAdminList() {
-  document.getElementById('admin-list').innerHTML = allPedals.map(p => 
-    `<div style="border-bottom:1px solid #333; padding:5px; display:flex; justify-content:space-between;">
-       <span>${p.nombre}</span> <button onclick="deletePedal('${p.id}')" style="color:red; background:none; border:none;">[X]</button>
-     </div>`
-  ).join('');
-}
-function deletePedal(id) {
-  if(confirm("¿Eliminar?")) {
-    allPedals = allPedals.filter(p => p.id !== id);
-    renderAdminList();
+    
+    gallery.innerHTML = html;
+    document.getElementById('product-modal').style.display = 'flex';
   }
-}
-function downloadJSON() {
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allPedals, null, 2));
-  const a = document.createElement('a');
-  a.href = dataStr; a.download = "pedales.json";
-  a.click();
-}
+
+  function closeModal() {
+    document.getElementById('product-modal').style.display = 'none';
+    document.getElementById('modal-imgs').innerHTML = ""; // Limpiar para parar video
+  }
+
+  function toggleSelectFromModal() {
+    if(!currentModalId) return;
+    if(selectedPedals.has(currentModalId)) selectedPedals.delete(currentModalId);
+    else selectedPedals.add(currentModalId);
+    renderCatalog();
+    updateFab();
+    alert("Selección actualizada");
+  }
+
+  /* ================= SEGURIDAD Y ADMIN ================= */
+  function setupSecurity() {
+    window.addEventListener("keydown", async e => {
+      // Buffer para capturar 'nagusi'
+      keyBuffer += e.key.toLowerCase();
+      // Solo nos importan las ultimas 6 letras (longitud de nagusi)
+      if(keyBuffer.length > 20) keyBuffer = keyBuffer.slice(-20); // Limpieza preventiva
+
+      // Verificamos si las últimas 6 letras coinciden con el hash de nagusi
+      const sliceToCheck = keyBuffer.slice(-6); 
+      const hashAttempt = await sha256(sliceToCheck);
+
+      if (hashAttempt === HASH_SECRET) {
+        keyBuffer = ""; // Resetear para evitar bucles
+        const pass = prompt("Contraseña de Admin:");
+        if (!pass) return;
+
+        const passHash = await sha256(pass);
+        if (passHash === HASH_PASS) {
+          document.getElementById('admin-panel').style.display = 'block';
+        } else {
+          alert("Credenciales inválidas");
+        }
+      }
+    });
+  }
+
+  function closeAdmin() {
+    document.getElementById('admin-panel').style.display = 'none';
+    renderCatalog();
+  }
+
+  /* ================= GESTIÓN DATOS ================= */
+  function clearForm() {
+    document.querySelectorAll('#admin-panel input, #admin-panel textarea').forEach(i => i.value = '');
+    document.getElementById('admin-categoria').value = 'fuzz';
+  }
+
+  function savePedal() {
+    const idField = document.getElementById('admin-id').value;
+    const nombre = document.getElementById('admin-nombre').value;
+    const id = idField || nombre.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+    
+    const nuevo = {
+      id,
+      nombre,
+      categoria: document.getElementById('admin-categoria').value,
+      videoID: document.getElementById('admin-video').value,
+      descripcionCorta: document.getElementById('admin-short').value,
+      descripcionLarga: document.getElementById('admin-long').value,
+      imagenes: [
+        document.getElementById('admin-img1').value,
+        document.getElementById('admin-img2').value
+      ].filter(Boolean)
+    };
+    
+    const idx = allPedals.findIndex(p => p.id === id);
+    if(idx >= 0) allPedals[idx] = nuevo;
+    else allPedals.push(nuevo);
+    
+    renderAdminList();
+    alert("Guardado en memoria (Recuerda descargar el JSON)");
+    clearForm();
+  }
+  
+  function editPedal(id) {
+    const p = allPedals.find(x => x.id === id);
+    document.getElementById('admin-id').value = p.id;
+    document.getElementById('admin-nombre').value = p.nombre;
+    document.getElementById('admin-categoria').value = p.categoria;
+    document.getElementById('admin-video').value = p.videoID || "";
+    document.getElementById('admin-short').value = p.descripcionCorta;
+    document.getElementById('admin-long').value = p.descripcionLarga;
+    document.getElementById('admin-img1').value = p.imagenes[0] || "";
+    document.getElementById('admin-img2').value = p.imagenes[1] || "";
+  }
+
+  function renderAdminList() {
+    const list = document.getElementById('admin-list');
+    list.innerHTML = allPedals.map(p => `
+      <div class="admin-row">
+        <span>${p.nombre}</span>
+        <div>
+          <button class="btn btn-outline" style="padding:2px 6px" onclick="editPedal('${p.id}')">Edit</button>
+          <button class="btn btn-outline" style="color:red; border-color:red; padding:2px 6px" onclick="deletePedal('${p.id}')">X</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function deletePedal(id) {
+    if(confirm("¿Borrar?")) {
+      allPedals = allPedals.filter(p => p.id !== id);
+      renderAdminList();
+    }
+  }
+
+  function downloadJSON() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allPedals, null, 2));
+    const a = document.createElement('a');
+    a.href = dataStr; a.download = "pedales.json";
+    a.click();
+  }
+
+  async function runHashTool() {
+    const txt = document.getElementById('hash-tool-input').value;
+    const h = await sha256(txt);
+    console.log("HASH:", h);
+    alert("Hash generado en Consola (F12)");
+  }
 </script>
 </body>
 </html>
