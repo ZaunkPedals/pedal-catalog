@@ -181,7 +181,7 @@
       font-size: 1.5rem; margin: 0 15px;
     }
 
-    /* === MODAL / FICHA === */
+    /* === MODAL === */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(37,52,148,0.95);
       display: none; align-items: center; justify-content: center; z-index: 100;
@@ -189,19 +189,18 @@
     
     .modal-box {
       background: #fff; border: 4px solid #fff;
-      /* Ajuste ancho para vertical */
-      width: 90%; max-width: 600px; 
-      max-height: 90vh; overflow-y: auto;
+      width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto;
       padding: 2rem; box-shadow: 20px 20px 0px var(--ink);
-      /* ESTRUCTURA VERTICAL */
-      display: flex; flex-direction: column; gap: 1.5rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;
     }
 
+    @media(max-width: 768px) { .modal-box { display: block; padding: 1.5rem; } #modal-media-col { margin-bottom: 2rem; } }
+    
     /* CARRUSEL */
     .carousel-container {
       position: relative; width: 100%;
       border: 2px solid #000; box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
-      background: #000; /* Fondo negro para el video */
+      background: #000;
     }
     .carousel-track {
       display: flex; overflow-x: auto; 
@@ -212,28 +211,12 @@
     .carousel-track::-webkit-scrollbar { display: none; }
     
     .carousel-item {
-      flex: 0 0 100%;
-      scroll-snap-align: center;
-      cursor: zoom-in;
-      display: flex; /* Para centrar video */
-      align-items: center; 
-      justify-content: center;
-      height: auto;
-      aspect-ratio: 1/1; /* Mantiene el carrusel cuadrado */
-      overflow: hidden;
+      flex: 0 0 100%; scroll-snap-align: center; cursor: zoom-in;
+      display: flex; align-items: center; justify-content: center;
+      height: auto; aspect-ratio: 1/1; overflow: hidden;
     }
-    
-    /* IMAGEN: Llena el cuadrado */
-    .carousel-item img {
-      width: 100%; height: 100%; object-fit: cover;
-    }
-    
-    /* VIDEO: Mantiene 16:9 y se centra */
-    .carousel-item iframe {
-      width: 100%; 
-      aspect-ratio: 16/9; 
-      border: none;
-    }
+    .carousel-item img { width: 100%; height: 100%; object-fit: cover; }
+    .carousel-item iframe { width: 100%; aspect-ratio: 16/9; border: none; }
     
     .carousel-btn {
       position: absolute; top: 50%; transform: translateY(-50%);
@@ -244,9 +227,7 @@
     .carousel-btn.prev { left: 0; }
     .carousel-btn.next { right: 0; }
     
-    .carousel-dots {
-      display: flex; justify-content: center; margin-top: 10px; gap: 5px;
-    }
+    .carousel-dots { display: flex; justify-content: center; margin-top: 10px; gap: 5px; }
     .dot { width: 10px; height: 10px; background: #ccc; border-radius: 50%; }
     .dot.active { background: var(--zaunk-blue); }
 
@@ -346,7 +327,10 @@
     <div id="modal-info">
       <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;"></h2>
       <div id="m-cats" style="margin-bottom:1rem;"></div>
-      <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px;"></h3>
+      <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px;">0 €</h3>
+      
+      <button id="m-btn-top" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 1rem; vertical-align: middle;">LO QUIERO</button>
+
       <p id="m-desc" style="white-space: pre-line; border-left: 3px solid var(--zaunk-blue); padding-left:1rem; margin-top:1rem; font-size:0.95rem; line-height:1.6;"></p>
       <br>
       <button id="m-btn" class="btn" style="width:100%" onclick="toggleFromModal()">LO QUIERO</button>
@@ -379,7 +363,6 @@
         <div class="admin-card">
           <h3>EDITOR DE PEDALES</h3>
           <input type="hidden" id="e-id">
-          
           <label>Nombre:</label> <input id="e-nombre">
           <label>Precio (€):</label> <input type="number" id="e-precio">
           <label>Categorías (separadas por coma):</label> 
@@ -563,6 +546,7 @@ function goToCheckout() {
   window.open(finalUrl, '_blank');
 }
 
+// === MODAL Y CARRUSEL ===
 function openModal(id) {
   const p = db.find(x => x.id === id);
   if(!p) return;
@@ -572,15 +556,24 @@ function openModal(id) {
   document.getElementById('m-cats').innerHTML = p.categoria.map(c => `<span style="background:var(--zaunk-blue); color:#fff; padding:2px 6px; margin-right:5px; font-size:0.8rem;">${c.toUpperCase()}</span>`).join('');
   document.getElementById('m-desc').innerText = p.descripcionLarga || '';
   
+  // Botones (arriba y abajo)
   const btn = document.getElementById('m-btn');
+  const btnTop = document.getElementById('m-btn-top');
+  
+  const buttons = [btn, btnTop];
+  
   if(p.agotado) {
-    btn.innerText = "AGOTADO"; btn.disabled = true; btn.style.opacity = 0.5;
+    buttons.forEach(b => {
+      b.innerText = "AGOTADO"; b.disabled = true; b.style.opacity = 0.5;
+    });
   } else {
-    btn.innerText = "LO QUIERO"; btn.disabled = false; btn.style.opacity = 1;
-    btn.onclick = () => {
-        if(cart.has(id)) { alert("Ya está en tu lista"); }
-        else { cart.add(id); renderFront(); updateFab(); closeModal(); }
-    };
+    buttons.forEach(b => {
+      b.innerText = "LO QUIERO"; b.disabled = false; b.style.opacity = 1;
+      b.onclick = () => {
+          if(cart.has(id)) { alert("Ya está en tu lista"); }
+          else { cart.add(id); renderFront(); updateFab(); closeModal(); }
+      };
+    });
   }
 
   const track = document.getElementById('carousel-track');
