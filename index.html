@@ -185,7 +185,7 @@
     .socials a {
       color: #fff; text-decoration: none; font-family: var(--font-title);
       font-size: 1.2rem; 
-      display: flex; align-items: center; gap: 8px; /* Espacio icono-texto */
+      display: flex; align-items: center; gap: 8px; 
       transition: 0.2s;
     }
     .socials a:hover { transform: scale(1.1); text-shadow: 2px 2px 0 #000; }
@@ -202,23 +202,18 @@
     
     .modal-box {
       background: #fff; border: 4px solid #fff;
-      /* MODAL MÁS ANCHO EN ESCRITORIO */
       width: 90%; max-width: 800px; 
       max-height: 90vh; overflow-y: auto;
       padding: 2rem; box-shadow: 20px 20px 0px var(--ink);
       
-      /* LAYOUT VERTICAL SIEMPRE */
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
     }
 
     /* CARRUSEL */
-    /* Centrado y ancho controlado */
     #modal-media-col {
-        width: 100%;
-        max-width: 500px; /* Tamaño máximo de la imagen para que no sea gigante */
-        margin: 0 auto;   /* Centrado horizontal */
+        width: 100%; max-width: 500px; margin: 0 auto; 
     }
 
     .carousel-container {
@@ -260,7 +255,7 @@
     .dot { width: 10px; height: 10px; background: #ccc; border-radius: 50%; }
     .dot.active { background: var(--zaunk-blue); }
 
-    /* ESTILOS DESCRIPCION (HTML permitido) */
+    /* INFO DETALLE */
     #m-desc {
         font-size: 1rem; line-height: 1.7;
         border-left: 3px solid var(--zaunk-blue); padding-left: 1.5rem;
@@ -298,7 +293,6 @@
     #admin input[type="checkbox"] { width: auto !important; display: inline-block; margin-right: 10px; transform: scale(1.5); }
     .hash-box { background: #000; color: #0f0; padding: 1rem; font-family: monospace; border: 2px solid red; margin-bottom: 2rem; }
 
-    /* FORMAT TOOLBAR */
     .format-toolbar { display: flex; gap: 5px; margin-bottom: 5px; }
     .format-btn { 
         padding: 5px 10px; font-weight: bold; cursor: pointer; 
@@ -339,17 +333,17 @@
 <footer>
   <div class="container">
     <div class="socials">
-      <a href="https://instagram.com" target="_blank">
+      <a id="link-insta" href="https://instagram.com" target="_blank">
         <svg class="social-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         INSTAGRAM
       </a>
       
-      <a href="https://youtube.com" target="_blank">
+      <a id="link-yt" href="https://youtube.com" target="_blank">
         <svg class="social-icon" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
         YOUTUBE
       </a>
       
-      <a href="mailto:info@zaunk.com">
+      <a id="link-email" href="mailto:info@zaunk.com">
         <svg class="social-icon" viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-11.179l4.623 5.467zm-4.488-6.353h21.73l-10.864 11.136-10.866-11.136zm7.393 7.06l3.473 3.56c.324.332.852.332 1.178 0l3.472-3.56 4.617 5.733h-17.356l4.616-5.733zm8.849-1.593l4.623-5.467v11.179l-4.623-5.712z"/></svg>
         EMAIL
       </a>
@@ -387,9 +381,8 @@
       <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;"></h2>
       <div id="m-cats" style="margin-bottom:1rem;"></div>
       
-      <div style="margin-bottom: 1rem; display:flex; align-items:center;">
+      <div style="margin-bottom: 1rem;">
         <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px; margin:0;">0 €</h3>
-        <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px;">LO QUIERO</button>
       </div>
 
       <div id="m-desc"></div>
@@ -458,10 +451,20 @@
 
       <div>
         <div class="admin-card" style="background:#eef;">
-          <h3>TEXTOS DE LA WEB</h3>
+          <h3>TEXTOS Y CONFIGURACIÓN</h3>
           <label>Título:</label> <input id="txt-title">
           <label>Subtítulo:</label> <input id="txt-subtitle">
           <label>Footer:</label> <input id="txt-footer">
+          
+          <h4 style="margin:1.5rem 0 0.5rem 0; border-top:1px solid #999; padding-top:1rem;">GOOGLE FORMS</h4>
+          <label>Form URL (Link largo):</label> <input id="txt-form-url" placeholder="https://docs.google.com/forms/...">
+          <label>Entry ID (Ej: entry.12345):</label> <input id="txt-form-entry" placeholder="entry.123456789">
+
+          <h4 style="margin:1.5rem 0 0.5rem 0; border-top:1px solid #999; padding-top:1rem;">REDES SOCIALES</h4>
+          <label>Instagram URL:</label> <input id="txt-insta">
+          <label>YouTube URL:</label> <input id="txt-youtube">
+          <label>Email Contacto:</label> <input id="txt-email">
+
           <button class="btn" style="width:100%; background:var(--ink); color:#fff; border-color:#000;" onclick="downloadHTML()">💾 DESCARGAR INDEX.HTML</button>
         </div>
 
@@ -480,6 +483,7 @@
 
 <script>
 /* ================= CONFIGURACIÓN ================= */
+// Estos valores se actualizarán al descargar desde el admin
 const FORM_URL = "https://docs.google.com/forms/d/e/TU_ID_AQUI/viewform"; 
 const FORM_ENTRY = "entry.123456789";
 
@@ -493,9 +497,20 @@ let keyBuffer = "";
 window.addEventListener('DOMContentLoaded', () => {
   loadData();
   setupKeys();
+  
+  // Cargar textos actuales
   document.getElementById('txt-title').value = document.getElementById('web-title').innerText;
   document.getElementById('txt-subtitle').value = document.getElementById('web-subtitle').innerText;
-  document.getElementById('txt-footer').value = document.getElementById('web-footer').innerText;
+  document.getElementById('txt-footer').value = document.getElementById('web-footer').innerText.replace('© 2024 ZAUNK EFFECTS. HECHO EN CASA.', '').trim();
+
+  // Cargar Configuración Forms
+  document.getElementById('txt-form-url').value = FORM_URL;
+  document.getElementById('txt-form-entry').value = FORM_ENTRY;
+
+  // Cargar Redes
+  document.getElementById('txt-insta').value = document.getElementById('link-insta').href;
+  document.getElementById('txt-youtube').value = document.getElementById('link-yt').href;
+  document.getElementById('txt-email').value = document.getElementById('link-email').href.replace('mailto:', '');
 });
 
 async function loadData() {
@@ -623,26 +638,18 @@ function openModal(id) {
   document.getElementById('m-title').innerText = p.nombre;
   document.getElementById('m-price').innerText = p.precio + " €";
   document.getElementById('m-cats').innerHTML = p.categoria.map(c => `<span style="background:var(--zaunk-blue); color:#fff; padding:2px 6px; margin-right:5px; font-size:0.8rem;">${c.toUpperCase()}</span>`).join('');
-  
-  // Renderizar HTML en la descripción
   document.getElementById('m-desc').innerHTML = p.descripcionLarga || '';
   
-  // Botones (lateral pequeño y abajo grande)
   const btn = document.getElementById('m-btn');
-  const btnSide = document.getElementById('m-btn-side');
-  const buttons = [btn, btnSide];
-  
-  buttons.forEach(b => {
-      if(p.agotado) {
-        b.innerText = "AGOTADO"; b.disabled = true; b.style.opacity = 0.5;
-      } else {
-        b.innerText = "LO QUIERO"; b.disabled = false; b.style.opacity = 1;
-        b.onclick = () => {
-            if(cart.has(id)) { alert("Ya está en tu lista"); }
-            else { cart.add(id); renderFront(); updateFab(); closeModal(); }
-        };
-      }
-  });
+  if(p.agotado) {
+    btn.innerText = "AGOTADO"; btn.disabled = true; btn.style.opacity = 0.5;
+  } else {
+    btn.innerText = "LO QUIERO"; btn.disabled = false; btn.style.opacity = 1;
+    btn.onclick = () => {
+        if(cart.has(id)) { alert("Ya está en tu lista"); }
+        else { cart.add(id); renderFront(); updateFab(); closeModal(); }
+    };
+  }
 
   const track = document.getElementById('carousel-track');
   const dots = document.getElementById('carousel-dots');
@@ -825,15 +832,33 @@ function downloadJson() {
 }
 
 function downloadHTML() {
+  // 1. Actualizar Textos
   document.getElementById('web-title').innerText = document.getElementById('txt-title').value;
   document.getElementById('web-subtitle').innerText = document.getElementById('txt-subtitle').value;
   document.getElementById('web-footer').innerText = document.getElementById('txt-footer').value;
   
+  // 2. Actualizar Enlaces Footer
+  document.getElementById('link-insta').href = document.getElementById('txt-insta').value;
+  document.getElementById('link-yt').href = document.getElementById('txt-youtube').value;
+  document.getElementById('link-email').href = 'mailto:' + document.getElementById('txt-email').value;
+
+  // 3. Preparar Clon
   const clone = document.documentElement.cloneNode(true);
   clone.querySelector('#catalog-root').innerHTML = '<div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div>';
   clone.querySelector('#modal').style.display = 'none';
   clone.querySelector('#admin').style.display = 'none';
   clone.querySelector('#lightbox').style.display = 'none';
+
+  // 4. Inyectar Configuración Google Forms
+  let scriptContent = clone.querySelector('script').innerHTML;
+  const newUrl = document.getElementById('txt-form-url').value;
+  const newEntry = document.getElementById('txt-form-entry').value;
+  
+  // Reemplazo seguro usando regex
+  scriptContent = scriptContent.replace(/const FORM_URL = ".*?";/, `const FORM_URL = "${newUrl}";`);
+  scriptContent = scriptContent.replace(/const FORM_ENTRY = ".*?";/, `const FORM_ENTRY = "${newEntry}";`);
+  
+  clone.querySelector('script').innerHTML = scriptContent;
 
   const htmlContent = "<!DOCTYPE html>\n" + clone.outerHTML;
   const blob = new Blob([htmlContent], {type: "text/html"});
