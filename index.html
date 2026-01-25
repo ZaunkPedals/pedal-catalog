@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ZAUNK! // PEDALES DE EFECTO</title>
   
+  <meta name="description" content="Pedales de efecto boutique hechos a mano. Fuzz, Overdrive y ruido analógico.">
+  <meta property="og:title" content="ZAUNK! Pedal Effects">
+  <meta property="og:image" content="img/Zaunk_Logo.png">
+  <link rel="icon" type="image/png" href="img/Zaunk_Logo.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
@@ -26,7 +31,9 @@
       background-color: var(--paper);
       color: var(--ink);
       font-family: var(--font-body);
+      /* Textura sutil */
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+      overflow-x: hidden;
     }
 
     /* === HEADER === */
@@ -46,7 +53,6 @@
     .logo-wrapper:hover { transform: scale(1.05) rotate(2deg); }
     .logo-wrapper img { width: 100%; display: block; }
 
-    /* === ESTRUCTURA === */
     .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
     
     h1, h2, h3 { 
@@ -87,69 +93,66 @@
       padding-bottom: 3rem;
     }
 
-    /* === TARJETAS === */
+    /* === TARJETAS ANIMADAS === */
     .card {
       background: #fff;
       border: 2px solid var(--ink);
       padding: 1rem;
       position: relative;
-      /* Transición suave para el movimiento */
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+      
+      /* ESTADO INICIAL (Invisible y desplazado abajo) */
+      opacity: 0;
+      transform: translateY(40px);
+      /* Transición suave al aparecer */
+      transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease;
     }
 
-    /* EFECTO MOVIMIENTO AL PASAR EL CURSOR (HOVER) 
-       Añadido translateX(4px) para el movimiento lateral
-    */
-    .card:hover {
-      transform: translateY(-6px) translateX(4px) rotate(1deg); 
-      box-shadow: 12px 12px 0px rgba(37, 52, 148, 0.25); 
-      z-index: 10;
+    /* CLASE VISIBLE (Se añade con JS al hacer scroll) */
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    /* --- IMAGEN CUADRADA CON GRANO --- */
+    /* MOVIMIENTO AL PASAR EL RATÓN (Solo Desktop) */
+    @media (hover: hover) {
+      .card:hover {
+        transform: translateY(-8px) translateX(4px); /* Sube y se mueve al lado */
+        box-shadow: 12px 12px 0px rgba(37, 52, 148, 0.2);
+        z-index: 10;
+        border-color: var(--zaunk-blue);
+      }
+    }
+
+    /* IMAGEN (SIN FILTROS - COLOR ORIGINAL) */
     .img-wrapper {
       position: relative;
-      width: 100%; aspect-ratio: 1 / 1; 
+      width: 100%; aspect-ratio: 1 / 1;
       border: 2px solid var(--ink);
       margin-bottom: 1rem;
       overflow: hidden;
       cursor: pointer;
+      background: #fff;
     }
 
     .card-img {
       width: 100%; height: 100%; object-fit: cover;
       display: block;
-      transition: 0.3s ease;
-      filter: saturate(0.6) contrast(1.1) sepia(0.2);
+      /* Sin filtros, imagen pura */
+      transition: transform 0.5s ease;
     }
-
-    /* CAPA DE RUIDO (GRANO) */
-    .img-wrapper::after {
-      content: "";
-      position: absolute; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
-      opacity: 0.5; mix-blend-mode: overlay; pointer-events: none; transition: opacity 0.3s ease;
-    }
-
-    /* --- ESTADOS INTERACTIVOS --- */
     
-    .card:hover .card-img { filter: none; }
-    .card:hover .img-wrapper::after { opacity: 0; }
-    
-    /* ESTADO ACTIVO */
+    /* Zoom suave al pasar ratón */
+    .card:hover .card-img { transform: scale(1.05); }
+
+    /* ESTADO SELECCIONADO */
     .card.active {
       border: 4px solid var(--zaunk-blue);
-      transform: scale(1.02);
-      box-shadow: 10px 10px 0px rgba(37, 52, 148, 0.2);
-      z-index: 10;
+      box-shadow: 10px 10px 0px rgba(37, 52, 148, 0.3) !important;
+      opacity: 1 !important; transform: translateY(0) !important; /* Forza posición */
+      z-index: 5;
     }
-    .card.active:hover { transform: scale(1.02); }
-
-    .card.active .card-img { filter: none; }
-    .card.active .img-wrapper::after { opacity: 0; }
     .card.active .img-wrapper { border-color: var(--zaunk-blue); }
 
-    /* PRECIO */
     .price-tag {
       position: absolute; top: -15px; right: -10px;
       background: var(--ink); color: #fff;
@@ -162,8 +165,8 @@
 
     /* AGOTADO */
     .card.agotado { pointer-events: none; opacity: 0.6; }
-    .card.agotado .card-img { filter: grayscale(100%) blur(2px); opacity: 0.5; }
-
+    .card.agotado .card-img { filter: grayscale(100%); } /* Solo B/N si está agotado */
+    
     .sold-out-badge {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
       border: 3px solid red; color: red; font-size: 2rem; font-family: var(--font-title);
@@ -206,26 +209,24 @@
     }
     @media(max-width: 700px) { .modal-box { grid-template-columns: 1fr; } }
     
-    /* FOTOS EN MODAL */
     .modal-zoom-img {
       width: 100%; border: 2px solid #000; margin-bottom: 10px;
       cursor: zoom-in; transition: transform 0.2s;
     }
-    .modal-zoom-img:hover { border-color: var(--zaunk-blue); opacity: 0.9; }
+    .modal-zoom-img:hover { border-color: var(--zaunk-blue); opacity: 0.8; }
 
-    /* === LIGHTBOX (Zoom de imagen) === */
+    /* === LIGHTBOX (Zoom) === */
     #lightbox {
       position: fixed; inset: 0; z-index: 5000;
-      background: rgba(0,0,0,0.95);
+      background: rgba(0,0,0,0.95); /* Fondo muy oscuro */
       display: none; align-items: center; justify-content: center;
       cursor: zoom-out;
     }
     
-    /* IMAGEN EN LIGHTBOX SIN MARCO */
     #lightbox img {
-      max-width: 90%; max-height: 90%;
-      border: none; /* Sin borde blanco */
-      box-shadow: 0 0 50px rgba(0,0,0,0.8); /* Sombra difusa */
+      max-width: 95%; max-height: 95%;
+      border: none; /* SIN MARCO */
+      box-shadow: 0 0 50px rgba(0,0,0,0.8);
       object-fit: contain;
     }
     
@@ -434,7 +435,21 @@ async function loadData() {
     renderFront();
     updateAutocomplete(); 
     renderAdminList();
+    initScrollAnimation(); // INICIA ANIMACION
   } catch(e) { console.error(e); }
+}
+
+// === SCROLL REVEAL ANIMATION ===
+function initScrollAnimation() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.card').forEach(el => observer.observe(el));
 }
 
 function renderFront() {
@@ -486,6 +501,8 @@ function renderFront() {
       root.appendChild(section);
     }
   });
+  
+  initScrollAnimation();
 }
 
 function toggleCart(id, chk) {
