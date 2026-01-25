@@ -11,9 +11,10 @@
 
   <style>
     :root {
-      --bg-paper: #f4f4f4; /* Blanco roto */
-      --ink: #111;         /* Tinta negra */
       --brand-blue: #253494; /* AZUL ZAUNK */
+      --paper: #ffffff;      /* Blanco Puro */
+      --ink: #111111;        /* Negro Tinta */
+      
       --font-body: 'Courier Prime', monospace;
       --font-title: 'Anton', sans-serif;
     }
@@ -22,11 +23,12 @@
 
     body {
       margin: 0;
-      background-color: var(--bg-paper);
-      /* Textura de ruido sutil */
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
-      color: var(--ink);
+      /* FONDO AZUL GLOBAL */
+      background-color: var(--brand-blue);
+      color: var(--paper);
       font-family: var(--font-body);
+      /* Ruido para textura de cartulina */
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
       display: flex;
       flex-direction: column;
       min-height: 100vh;
@@ -42,53 +44,78 @@
 
     /* HEADER */
     header {
-      padding: 2rem 1rem;
+      padding: 3rem 1rem;
       text-align: center;
-      border-bottom: 4px solid var(--brand-blue);
-      background: #fff;
-      position: relative;
+      /* Sin borde, integrado en el azul */
     }
     
     .logo-container {
       display: inline-block;
-      max-width: 250px;
-      transform: rotate(-1deg);
+      max-width: 180px; /* LOGO MÁS PEQUEÑO */
+      transform: rotate(-2deg);
       transition: transform 0.3s;
+      filter: drop-shadow(5px 5px 0px rgba(0,0,0,0.3));
     }
-    .logo-container:hover { transform: scale(1.05) rotate(1deg); }
+    .logo-container:hover { transform: scale(1.05) rotate(2deg); }
     .logo-container img { width: 100%; height: auto; display: block; }
 
-    /* LAYOUT & SECCIONES */
+    /* LAYOUT */
     .container { max-width: 1200px; margin: auto; padding: 0 1.5rem; }
-    section { padding: 4rem 0; border-bottom: 2px dashed var(--ink); }
-    
     .main-content { flex: 1; }
 
-    /* BOTONES */
+    /* SECCIONES */
+    section { padding: 2rem 0; }
+
+    /* ESTILO DE CATEGORÍAS (Cinta Negra) */
+    .cat-title-wrapper {
+      margin-top: 4rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px dashed rgba(255,255,255,0.3);
+      padding-bottom: 10px;
+    }
+    .cat-title {
+      background: var(--ink);
+      color: var(--paper);
+      display: inline-block;
+      padding: 5px 15px;
+      font-size: 2rem;
+      transform: rotate(-1deg);
+      box-shadow: 4px 4px 0px rgba(255,255,255,0.2);
+    }
+
+    /* BOTONES (INVERTIDOS: Blanco sobre Azul) */
     .btn {
-      background: #fff;
-      color: var(--ink);
-      border: 2px solid var(--ink);
-      padding: 10px 20px;
+      background: var(--paper);
+      color: var(--brand-blue);
+      border: 2px solid var(--paper);
+      padding: 10px 25px;
       font-family: var(--font-title);
       font-size: 1.1rem;
-      letter-spacing: 1px;
       cursor: pointer;
-      box-shadow: 4px 4px 0px var(--ink);
+      box-shadow: 5px 5px 0px var(--ink); /* Sombra negra para contraste */
       transition: transform 0.1s;
     }
-    .btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--ink); }
-    .btn:hover { background: var(--ink); color: #fff; }
-    
-    /* Botones de acento (Azules) */
-    .btn-brand { 
-      border-color: var(--brand-blue); 
-      color: var(--brand-blue); 
-      box-shadow: 4px 4px 0px var(--brand-blue); 
+    .btn:hover {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+      box-shadow: 0 0 0;
+      transform: translate(2px, 2px);
     }
-    .btn-brand:hover { background: var(--brand-blue); color: #fff; }
+    
+    /* Botones dentro de tarjetas (Negros) */
+    .btn-card {
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      box-shadow: 3px 3px 0px var(--brand-blue);
+    }
+    .btn-card:hover {
+      background: var(--brand-blue);
+      color: var(--paper);
+    }
 
-    /* TARJETAS DE PEDALES */
+    /* TARJETAS DE PEDALES (Papel blanco sobre fondo azul) */
     .grid-pedales {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -96,23 +123,23 @@
     }
     
     .card {
-      background: #fff;
-      border: 2px solid var(--ink);
-      padding: 15px;
-      box-shadow: 8px 8px 0px rgba(37, 52, 148, 0.15); 
+      background: var(--paper);
+      color: var(--ink); /* Texto negro dentro de la tarjeta */
+      padding: 15px 15px 20px 15px;
       transform: rotate(var(--rot, 0deg));
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s;
       position: relative;
+      /* Efecto de papel recortado */
+      box-shadow: 10px 10px 0px rgba(0,0,0,0.5); 
     }
     .card:hover {
-      transform: scale(1.02) rotate(0deg) !important;
-      box-shadow: 10px 10px 0px var(--brand-blue);
+      transform: scale(1.03) rotate(0deg) !important;
       z-index: 10;
-      border-color: var(--brand-blue);
+      box-shadow: 15px 15px 0px rgba(0,0,0,0.3); 
     }
 
     .card-img-wrapper {
-      border: 2px solid var(--ink);
+      border: 3px solid var(--ink);
       margin-bottom: 1rem;
       filter: grayscale(100%) contrast(1.1);
       transition: filter 0.3s;
@@ -125,7 +152,7 @@
     .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 
     .card h3 { 
-      font-size: 1.8rem; margin-bottom: 0.5rem; 
+      font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--brand-blue);
       border-bottom: 3px solid var(--brand-blue); 
       display: inline-block; cursor: pointer;
     }
@@ -134,7 +161,7 @@
     /* CHECKBOX MANUAL */
     .checkbox-wrapper {
       display: flex; align-items: center; gap: 10px; margin-top: 1rem;
-      font-weight: bold; cursor: pointer; user-select: none;
+      font-weight: bold; cursor: pointer; user-select: none; color: var(--ink);
     }
     .custom-check {
       width: 24px; height: 24px; border: 2px solid var(--ink);
@@ -143,77 +170,67 @@
     input[type="checkbox"] { display: none; }
     input[type="checkbox"]:checked + .custom-check { background: var(--brand-blue); border-color: var(--brand-blue); }
     input[type="checkbox"]:checked + .custom-check::after {
-      content: "✓"; font-family: var(--font-title); color: #fff; font-size: 1.2rem;
+      content: "X"; font-family: var(--font-title); color: #fff; font-size: 1.2rem;
     }
 
-    /* SOCIAL FOOTER - AZUL COMPLETO */
+    /* FOOTER */
     .social-bar {
-      background: var(--brand-blue);
+      background: var(--ink);
       color: #fff;
       padding: 3rem 0;
-      margin-top: 4rem;
-      border-top: 4px solid var(--ink); /* Borde negro para contraste fanzine */
+      margin-top: 5rem;
+      border-top: 2px dashed rgba(255,255,255,0.3);
     }
-    .social-links {
-      display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;
-    }
+    .social-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
     .social-link {
       color: #fff; text-decoration: none; font-family: var(--font-title);
-      font-size: 1.5rem; letter-spacing: 1px; border: 2px solid transparent;
-      padding: 5px 15px; transition: 0.3s;
+      font-size: 1.5rem; padding: 5px 15px; transition: 0.3s;
     }
-    .social-link:hover {
-      background: #fff; color: var(--brand-blue); border-color: #fff; transform: skew(-5deg);
-    }
+    .social-link:hover { color: var(--brand-blue); transform: scale(1.1) rotate(-3deg); background: #fff; }
 
     /* MODAL */
     .modal {
-      position: fixed; inset: 0; background: rgba(255,255,255,0.95);
+      position: fixed; inset: 0; background: rgba(37, 52, 148, 0.95); /* Azul translúcido */
       display: none; align-items: center; justify-content: center; z-index: 1000;
-      background-image: radial-gradient(var(--brand-blue) 1px, transparent 1px);
-      background-size: 20px 20px;
     }
     .modal-content {
-      background: #fff; border: 4px solid var(--brand-blue);
+      background: var(--paper); color: var(--ink);
       width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto;
-      padding: 2rem; box-shadow: 15px 15px 0px var(--ink);
-      position: relative;
+      padding: 2rem; box-shadow: 20px 20px 0px var(--ink);
+      position: relative; border: 4px solid var(--ink);
     }
     .close-modal {
-      position: absolute; top: 0; right: 0; background: var(--brand-blue); color: #fff;
-      padding: 5px 15px; font-weight: bold; cursor: pointer; font-size: 1.5rem; font-family: var(--font-title);
+      position: absolute; top: 0; right: 0; background: var(--ink); color: #fff;
+      padding: 10px 20px; font-weight: bold; cursor: pointer; font-size: 1.5rem; font-family: var(--font-title);
     }
-    .close-modal:hover { background: var(--ink); }
+    .close-modal:hover { background: var(--brand-blue); }
 
     .video-frame {
-      width: 100%; aspect-ratio: 16/9; background: #000; border: 2px solid var(--ink); margin-top: 1rem;
+      width: 100%; aspect-ratio: 16/9; background: #000; border: 3px solid var(--ink); margin-top: 1rem;
     }
 
-    /* BOTON FLOTANTE */
+    /* FAB */
     #cart-fab {
       position: fixed; bottom: 2rem; right: 2rem;
-      background: var(--brand-blue); color: #fff;
-      padding: 1rem 2rem; font-family: var(--font-title); font-size: 1.2rem; letter-spacing: 1px;
-      transform: rotate(-3deg); border: 2px solid #fff; box-shadow: 5px 5px 0px var(--ink);
-      cursor: pointer; display: none; z-index: 100;
+      background: var(--paper); color: var(--brand-blue); border: 3px solid var(--ink);
+      padding: 1rem 2rem; font-family: var(--font-title); font-size: 1.2rem;
+      box-shadow: 8px 8px 0px var(--ink); cursor: pointer; display: none; z-index: 100;
     }
-    #cart-fab:hover { transform: scale(1.1) rotate(0deg); }
+    #cart-fab:hover { transform: scale(1.05); background: var(--ink); color: var(--paper); border-color: var(--paper); }
 
-    /* ADMIN PANEL */
+    /* ADMIN PANEL (Mantener limpio para uso) */
     #admin-panel {
-      position: fixed; inset: 0; background: #e0e0e0; z-index: 2000;
-      padding: 2rem; overflow-y: auto; display: none;
-      font-family: monospace;
+      position: fixed; inset: 0; background: #ddd; z-index: 2000;
+      padding: 2rem; overflow-y: auto; display: none; color: #000; font-family: monospace;
     }
     .admin-box { 
       background: #fff; border: 2px solid #000; padding: 1.5rem; 
-      margin-bottom: 2rem; box-shadow: 8px 8px 0 var(--brand-blue); 
+      margin-bottom: 2rem; box-shadow: 5px 5px 0 #666; 
     }
     input, select, textarea {
-      width: 100%; background: #f0f0f0; border: 1px solid #999; padding: 10px;
-      font-family: monospace; margin-bottom: 12px; font-size: 0.9rem;
+      width: 100%; background: #eee; border: 1px solid #999; padding: 10px;
+      font-family: monospace; margin-bottom: 12px;
     }
-    input:focus, textarea:focus { border-color: var(--brand-blue); outline: none; background: #fff; }
     
   </style>
 </head>
@@ -230,7 +247,7 @@
 <div class="main-content">
   <section id="catalogo">
     <div class="container" id="pedal-container">
-      <p style="text-align:center; font-size:1.5rem; padding: 2rem;">[ CARGANDO EFECTOS... ]</p>
+      <p style="text-align:center; font-size:1.5rem; padding: 2rem; border: 2px dashed #fff;">[ CARGANDO ARTEFACTOS SONOROS... ]</p>
     </div>
   </section>
 </div>
@@ -238,38 +255,39 @@
 <footer class="social-bar">
   <div class="container">
     <div style="text-align: center; margin-bottom: 1rem;">
-      <h3 style="margin:0; color:#fff;">SÍGUENOS EN LA RED</h3>
+      <h3 style="margin:0;">// CONECTA CON EL RUIDO</h3>
     </div>
     <div class="social-links">
       <a href="https://instagram.com" target="_blank" class="social-link">INSTAGRAM</a>
       <a href="https://youtube.com" target="_blank" class="social-link">YOUTUBE</a>
       <a href="mailto:contacto@zaunk.com" class="social-link">EMAIL</a>
-      <a href="#" target="_blank" class="social-link">TIKTOK</a>
     </div>
-    <div style="text-align:center; margin-top: 2rem; opacity: 0.7; font-size: 0.8rem;">
-      &copy; 2024 ZAUNK! PEDAL EFFECTS. HANDMADE NOISE.
+    <div style="text-align:center; margin-top: 2rem; opacity: 0.6; font-size: 0.8rem;">
+      &copy; 2024 ZAUNK! PEDAL EFFECTS.
     </div>
   </div>
 </footer>
 
 <div id="cart-fab" onclick="checkout()">
-  <span id="cart-count">0</span> -> PEDIR AHORA
+  <span id="cart-count">0</span> -> CONFIRMAR PEDIDO
 </div>
 
 <div class="modal" id="product-modal">
   <div class="modal-content">
     <div class="close-modal" onclick="closeModal()">X CERRAR</div>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem; margin-top: 1rem;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem; margin-top: 2rem;">
       <div>
-        <div id="modal-imgs" style="display:flex; flex-direction:column; gap:10px;"></div>
+        <div id="modal-imgs" style="display:flex; flex-direction:column; gap:15px;"></div>
         <div id="modal-video-container"></div>
       </div>
       <div>
-        <h2 id="modal-title" style="background:var(--brand-blue); color:#fff; display:inline-block; padding:5px 10px; transform: rotate(-1deg);">TITULO</h2>
-        <h4 id="modal-cat" style="color:var(--ink); border: 2px solid var(--ink); display:inline-block; padding: 2px 5px; margin-top:0.5rem;">CATEGORIA</h4>
-        <p id="modal-desc" style="white-space: pre-line; padding:1rem; border-left: 4px solid var(--brand-blue); background: #f9f9f9; margin-top: 1rem;"></p>
+        <h2 id="modal-title" style="background:var(--ink); color:#fff; display:inline-block; padding:5px 15px; transform: rotate(-1deg);">TITULO</h2>
+        <div style="margin: 1rem 0;">
+          <span id="modal-cat" style="background:var(--brand-blue); color:#fff; padding: 2px 8px; font-weight:bold; font-family:var(--font-body);">CATEGORIA</span>
+        </div>
+        <p id="modal-desc" style="white-space: pre-line; padding:1rem; border: 2px solid var(--ink); background: #f4f4f4; margin-top: 1rem; box-shadow: 5px 5px 0 rgba(0,0,0,0.1);"></p>
         <br>
-        <button class="btn btn-brand" onclick="toggleSelectFromModal()">[ ] AÑADIR AL PEDIDO</button>
+        <button class="btn" style="border:2px solid var(--brand-blue); color:var(--brand-blue); width:100%;" onclick="toggleSelectFromModal()">[ ] AÑADIR A LA LISTA</button>
       </div>
     </div>
   </div>
@@ -278,29 +296,29 @@
 <div id="admin-panel">
   <div class="container">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h1>// ZAUNK CONTROL PANEL</h1>
-      <button class="btn" style="background:var(--ink); color:#fff;" onclick="closeAdmin()">X CERRAR PANEL</button>
+      <h1 style="color:#000;">// BACKSTAGE CONTROL</h1>
+      <button class="btn" style="background:var(--ink); color:#fff;" onclick="closeAdmin()">SALIR</button>
     </div>
 
     <div class="admin-box" style="border-color: var(--brand-blue);">
-      <h3 style="color:var(--brand-blue)">SEGURIDAD</h3>
-      <p style="font-size:0.8rem">Genera un nuevo hash si quieres cambiar la contraseña en el código.</p>
+      <h3 style="color:var(--brand-blue)">GESTIÓN DE LLAVES</h3>
+      <p style="font-size:0.8rem">Genera hash SHA-256 para nuevas contraseñas.</p>
       <div style="display:flex; gap:10px;">
-        <input type="text" id="new-pass-input" placeholder="Nueva contraseña..." style="width:auto; flex:1;">
-        <button class="btn" onclick="generateHashTool()">GENERAR HASH</button>
+        <input type="text" id="new-pass-input" placeholder="Contraseña nueva..." style="width:auto; flex:1;">
+        <button class="btn" onclick="generateHashTool()" style="font-size:0.9rem;">GENERAR</button>
       </div>
-      <div id="hash-result" style="background:#000; color:#0f0; padding:10px; margin-top:10px; display:none; font-family:monospace; word-break:break-all;"></div>
+      <div id="hash-result" style="background:#000; color:#0f0; padding:10px; margin-top:10px; display:none; word-break:break-all;"></div>
     </div>
 
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem;">
       <div class="admin-box">
-        <h3>EDITOR DE ARTEFACTOS</h3>
+        <h3>CREAR / EDITAR</h3>
         <input type="hidden" id="admin-id">
         
-        <label><strong>Nombre del Pedal:</strong></label>
+        <label>Nombre:</label>
         <input type="text" id="admin-nombre">
         
-        <label><strong>Categoría:</strong></label>
+        <label>Categoría:</label>
         <select id="admin-categoria">
           <option value="fuzz">FUZZ</option>
           <option value="overdrive">OVERDRIVE</option>
@@ -310,271 +328,35 @@
           <option value="otros">OTROS</option>
         </select>
         
-        <label><strong>Imágenes (URLs):</strong> <small>Una URL por línea</small></label>
-        <textarea id="admin-imgs-text" rows="4" placeholder="https://ejemplo.com/foto1.jpg&#10;https://ejemplo.com/foto2.jpg"></textarea>
+        <label>Imágenes (1 por línea):</label>
+        <textarea id="admin-imgs-text" rows="4"></textarea>
         
-        <label><strong>ID Video Youtube:</strong> (Ej: dQw4w9WgXcQ)</label>
+        <label>ID Youtube:</label>
         <input type="text" id="admin-video">
         
-        <label><strong>Descripción Corta:</strong></label>
+        <label>Intro Corta:</label>
         <textarea id="admin-short" rows="2"></textarea>
         
-        <label><strong>Descripción Técnica Completa:</strong></label>
+        <label>Detalle Completo:</label>
         <textarea id="admin-long" rows="6"></textarea>
         
         <div style="display:flex; gap:10px; margin-top:1rem;">
-          <button class="btn btn-brand" style="flex:1;" onclick="savePedal()">GUARDAR</button>
-          <button class="btn" onclick="clearForm()">LIMPIAR</button>
+          <button class="btn" style="background:var(--brand-blue); color:#fff; flex:1;" onclick="savePedal()">GUARDAR</button>
+          <button class="btn" style="background:#999; color:#fff;" onclick="clearForm()">LIMPIAR</button>
         </div>
       </div>
 
       <div class="admin-box">
-        <h3>INVENTARIO ACTUAL</h3>
-        <div id="admin-list" style="max-height:400px; overflow-y:auto; border:1px solid #ccc; padding:5px; background:#fff;"></div>
-        <br>
-        <p style="font-size:0.8rem; background:#ffffaa; padding:5px;">⚠️ IMPORTANTE: Descarga el archivo y súbelo a GitHub.</p>
-        <button class="btn" style="width:100%; background:var(--brand-blue); color:#fff;" onclick="downloadJSON()">DESCARGAR PEDALES.JSON</button>
+        <h3>INVENTARIO</h3>
+        <div id="admin-list" style="max-height:400px; overflow-y:auto; border:1px solid #ccc; padding:5px; margin-bottom:1rem;"></div>
+        <button class="btn" style="width:100%; background:#000; color:#fff;" onclick="downloadJSON()">DESCARGAR JSON</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  /* ================= CONFIGURACIÓN ================= */
-  // URL DE GOOGLE FORMS
+  /* CONFIG */
   const GFORM_URL = "https://docs.google.com/forms/d/e/TU_ID_AQUI/viewform";
   const GFORM_ENTRY = "entry.123456789";
-
-  // SEGURIDAD (Hashes actuales: nagusi / admin)
-  const HASH_SECRET = "8056214555075677813083110295627771746654160408542454559888927878"; 
-  const HASH_PASS   = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"; 
-
-  /* ================= LÓGICA ================= */
-  let allPedals = [];
-  let selectedPedals = new Set();
-  let keyBuffer = "";
-
-  window.addEventListener('DOMContentLoaded', () => {
-    fetchPedales();
-    setupSecuritySimplified();
-  });
-
-  async function sha256(str) {
-    const buf = new TextEncoder().encode(str);
-    const hash = await crypto.subtle.digest('SHA-256', buf);
-    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
-  }
-
-  // 1. CARGA
-  async function fetchPedales() {
-    try {
-      const r = await fetch('pedales.json');
-      allPedals = await r.json();
-      renderCatalog();
-      renderAdminList();
-    } catch(e) { console.error(e); }
-  }
-
-  // 2. CATALOGO
-  function renderCatalog() {
-    const container = document.getElementById('pedal-container');
-    container.innerHTML = "";
-    
-    const groups = {};
-    allPedals.forEach(p => {
-      const cat = p.categoria || 'otros';
-      if(!groups[cat]) groups[cat] = [];
-      groups[cat].push(p);
-    });
-
-    for(const cat in groups) {
-      container.innerHTML += `<h2 style="border-bottom:4px solid var(--brand-blue); margin-top:3rem; color:var(--brand-blue);">// ${cat.toUpperCase()}</h2>`;
-      const grid = document.createElement('div');
-      grid.className = 'grid-pedales';
-
-      groups[cat].forEach(p => {
-        const rot = (Math.random() * 4 - 2).toFixed(1); 
-        const isSel = selectedPedals.has(p.id);
-        const mainImg = (p.imagenes && p.imagenes.length > 0) ? p.imagenes[0] : '';
-
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.style.setProperty('--rot', rot + 'deg');
-        card.innerHTML = `
-          <div class="card-img-wrapper" onclick="openModal('${p.id}')">
-            <img src="${mainImg}" alt="${p.nombre}">
-          </div>
-          <h3 onclick="openModal('${p.id}')">${p.nombre}</h3>
-          <p>${p.descripcionCorta}</p>
-          <label class="checkbox-wrapper">
-            <input type="checkbox" onchange="toggleSel('${p.id}', this)" ${isSel?'checked':''}>
-            <span class="custom-check"></span>
-            LO QUIERO
-          </label>
-        `;
-        grid.appendChild(card);
-      });
-      container.appendChild(grid);
-    }
-  }
-
-  // 3. CARRITO
-  function toggleSel(id, chk) {
-    if(chk.checked) selectedPedals.add(id); else selectedPedals.delete(id);
-    updateFab();
-  }
-  function updateFab() {
-    const fab = document.getElementById('cart-fab');
-    const c = selectedPedals.size;
-    fab.style.display = c > 0 ? 'block' : 'none';
-    document.getElementById('cart-count').innerText = `${c} ITEM${c!==1?'S':''}`;
-  }
-  function checkout() {
-    const items = allPedals.filter(p => selectedPedals.has(p.id)).map(p => `- ${p.nombre}`).join('\n');
-    const url = `${GFORM_URL}?usp=pp_url&${GFORM_ENTRY}=${encodeURIComponent(items)}`;
-    window.open(url, '_blank');
-  }
-
-  // 4. MODAL & VIDEO
-  function openModal(id) {
-    const p = allPedals.find(x => x.id === id);
-    if(!p) return;
-    
-    document.getElementById('modal-title').innerText = p.nombre;
-    document.getElementById('modal-cat').innerText = p.categoria;
-    document.getElementById('modal-desc').innerText = p.descripcionLarga;
-    
-    const imgsContainer = document.getElementById('modal-imgs');
-    imgsContainer.innerHTML = "";
-    if(p.imagenes && p.imagenes.length > 0) {
-      imgsContainer.innerHTML = p.imagenes.map(src => 
-        `<img src="${src}" style="width:100%; border:2px solid var(--ink); box-shadow:5px 5px 0 rgba(0,0,0,0.1);">`
-      ).join('');
-    } else {
-      imgsContainer.innerHTML = "<p>Sin imágenes</p>";
-    }
-    
-    const vidCont = document.getElementById('modal-video-container');
-    if(p.videoID) {
-      vidCont.innerHTML = `<iframe class="video-frame" src="https://www.youtube.com/embed/${p.videoID}" allowfullscreen></iframe>`;
-    } else {
-      vidCont.innerHTML = "";
-    }
-    document.getElementById('product-modal').style.display = 'flex';
-  }
-  function closeModal() {
-    document.getElementById('product-modal').style.display = 'none';
-    document.getElementById('modal-video-container').innerHTML = ""; 
-  }
-
-  // 5. SEGURIDAD
-  function setupSecuritySimplified() {
-    window.addEventListener("keydown", async e => {
-      keyBuffer += e.key.toLowerCase();
-      if (keyBuffer.length > 50) keyBuffer = keyBuffer.slice(-50);
-      if (keyBuffer.endsWith("nagusi")) {
-        keyBuffer = "";
-        setTimeout(async () => {
-          const pass = prompt("PASSWORD ADMIN:");
-          if (!pass) return;
-          const h = await sha256(pass);
-          if (h === HASH_PASS) {
-            document.getElementById('admin-panel').style.display = 'block';
-          } else {
-            alert("ACCESO DENEGADO.");
-          }
-        }, 100);
-      }
-    });
-  }
-
-  function closeAdmin() {
-    document.getElementById('admin-panel').style.display = 'none';
-    renderCatalog();
-  }
-
-  // 6. ADMIN & IMAGENES
-  async function generateHashTool() {
-    const val = document.getElementById('new-pass-input').value;
-    if(!val) return;
-    const h = await sha256(val);
-    const box = document.getElementById('hash-result');
-    box.style.display = 'block';
-    box.innerHTML = `HASH: ${h}`;
-  }
-
-  function savePedal() {
-    const idField = document.getElementById('admin-id').value;
-    const nombre = document.getElementById('admin-nombre').value;
-    const id = idField || nombre.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-    
-    const imgsText = document.getElementById('admin-imgs-text').value;
-    const imgsArray = imgsText.split('\n').map(url => url.trim()).filter(url => url !== "");
-
-    const nuevo = {
-      id,
-      nombre,
-      categoria: document.getElementById('admin-categoria').value,
-      videoID: document.getElementById('admin-video').value,
-      descripcionCorta: document.getElementById('admin-short').value,
-      descripcionLarga: document.getElementById('admin-long').value,
-      imagenes: imgsArray 
-    };
-    
-    const idx = allPedals.findIndex(p => p.id === id);
-    if(idx >= 0) allPedals[idx] = nuevo;
-    else allPedals.push(nuevo);
-    
-    renderAdminList();
-    alert("Guardado en memoria. Recuerda descargar el JSON.");
-    clearForm();
-  }
-
-  function editPedal(id) {
-    const p = allPedals.find(x => x.id === id);
-    document.getElementById('admin-id').value = p.id;
-    document.getElementById('admin-nombre').value = p.nombre;
-    document.getElementById('admin-categoria').value = p.categoria;
-    document.getElementById('admin-video').value = p.videoID || "";
-    document.getElementById('admin-short').value = p.descripcionCorta;
-    document.getElementById('admin-long').value = p.descripcionLarga;
-    
-    if(p.imagenes && Array.isArray(p.imagenes)) {
-      document.getElementById('admin-imgs-text').value = p.imagenes.join('\n');
-    } else {
-      document.getElementById('admin-imgs-text').value = "";
-    }
-  }
-  
-  function deletePedal(id) {
-    if(confirm("¿Eliminar?")) {
-      allPedals = allPedals.filter(p => p.id !== id);
-      renderAdminList();
-    }
-  }
-
-  function renderAdminList() {
-    document.getElementById('admin-list').innerHTML = allPedals.map(p => 
-      `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #ddd; padding:5px;">
-         <span>${p.nombre}</span>
-         <div>
-           <button onclick="editPedal('${p.id}')">EDIT</button>
-           <button onclick="deletePedal('${p.id}')" style="color:red">X</button>
-         </div>
-       </div>`
-    ).join('');
-  }
-  
-  function clearForm() {
-    document.querySelectorAll('#admin-panel input, #admin-panel textarea').forEach(i => i.value='');
-  }
-
-  function downloadJSON() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allPedals, null, 2));
-    const a = document.createElement('a');
-    a.href = dataStr; a.download = "pedales.json";
-    a.click();
-  }
-</script>
-</body>
-</html>
+  const HASH_SECRET = "8056214555075677813083110295627771746654160408542454
