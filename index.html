@@ -13,7 +13,7 @@
     :root {
       --bg-paper: #f4f4f4; /* Blanco roto */
       --ink: #111;         /* Tinta negra */
-      --brand-blue: #253494; /* AZUL ZAUNK (Extraído del logo) */
+      --brand-blue: #253494; /* AZUL ZAUNK */
       --font-body: 'Courier Prime', monospace;
       --font-title: 'Anton', sans-serif;
     }
@@ -62,7 +62,6 @@
     .container { max-width: 1200px; margin: auto; padding: 0 1.5rem; }
     section { padding: 4rem 0; border-bottom: 2px dashed var(--ink); }
     
-    /* CONTENT WRAPPER para empujar el footer abajo */
     .main-content { flex: 1; }
 
     /* BOTONES */
@@ -81,7 +80,7 @@
     .btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--ink); }
     .btn:hover { background: var(--ink); color: #fff; }
     
-    /* Botones de acento (Azules ahora) */
+    /* Botones de acento (Azules) */
     .btn-brand { 
       border-color: var(--brand-blue); 
       color: var(--brand-blue); 
@@ -100,7 +99,7 @@
       background: #fff;
       border: 2px solid var(--ink);
       padding: 15px;
-      box-shadow: 8px 8px 0px rgba(37, 52, 148, 0.15); /* Sombra azulada muy sutil */
+      box-shadow: 8px 8px 0px rgba(37, 52, 148, 0.15); 
       transform: rotate(var(--rot, 0deg));
       transition: transform 0.2s, box-shadow 0.2s;
       position: relative;
@@ -147,13 +146,13 @@
       content: "✓"; font-family: var(--font-title); color: #fff; font-size: 1.2rem;
     }
 
-    /* SOCIAL FOOTER */
+    /* SOCIAL FOOTER - AZUL COMPLETO */
     .social-bar {
-      background: var(--ink);
+      background: var(--brand-blue);
       color: #fff;
-      padding: 2rem 0;
+      padding: 3rem 0;
       margin-top: 4rem;
-      border-top: 4px solid var(--brand-blue);
+      border-top: 4px solid var(--ink); /* Borde negro para contraste fanzine */
     }
     .social-links {
       display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;
@@ -164,7 +163,7 @@
       padding: 5px 15px; transition: 0.3s;
     }
     .social-link:hover {
-      border-color: var(--brand-blue); color: var(--brand-blue); transform: skew(-5deg);
+      background: #fff; color: var(--brand-blue); border-color: #fff; transform: skew(-5deg);
     }
 
     /* MODAL */
@@ -247,7 +246,7 @@
       <a href="mailto:contacto@zaunk.com" class="social-link">EMAIL</a>
       <a href="#" target="_blank" class="social-link">TIKTOK</a>
     </div>
-    <div style="text-align:center; margin-top: 2rem; opacity: 0.5; font-size: 0.8rem;">
+    <div style="text-align:center; margin-top: 2rem; opacity: 0.7; font-size: 0.8rem;">
       &copy; 2024 ZAUNK! PEDAL EFFECTS. HANDMADE NOISE.
     </div>
   </div>
@@ -396,7 +395,6 @@
       groups[cat].forEach(p => {
         const rot = (Math.random() * 4 - 2).toFixed(1); 
         const isSel = selectedPedals.has(p.id);
-        // Usar primera imagen o placeholder
         const mainImg = (p.imagenes && p.imagenes.length > 0) ? p.imagenes[0] : '';
 
         const card = document.createElement('div');
@@ -446,7 +444,6 @@
     document.getElementById('modal-cat').innerText = p.categoria;
     document.getElementById('modal-desc').innerText = p.descripcionLarga;
     
-    // Renderizar imágenes
     const imgsContainer = document.getElementById('modal-imgs');
     imgsContainer.innerHTML = "";
     if(p.imagenes && p.imagenes.length > 0) {
@@ -457,7 +454,6 @@
       imgsContainer.innerHTML = "<p>Sin imágenes</p>";
     }
     
-    // Video
     const vidCont = document.getElementById('modal-video-container');
     if(p.videoID) {
       vidCont.innerHTML = `<iframe class="video-frame" src="https://www.youtube.com/embed/${p.videoID}" allowfullscreen></iframe>`;
@@ -494,10 +490,10 @@
 
   function closeAdmin() {
     document.getElementById('admin-panel').style.display = 'none';
-    renderCatalog(); // Refrescar por si hubo cambios
+    renderCatalog();
   }
 
-  // 6. ADMIN & IMAGENES MULTIPLES
+  // 6. ADMIN & IMAGENES
   async function generateHashTool() {
     const val = document.getElementById('new-pass-input').value;
     if(!val) return;
@@ -512,7 +508,6 @@
     const nombre = document.getElementById('admin-nombre').value;
     const id = idField || nombre.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
     
-    // PROCESAR TEXTAREA DE IMÁGENES (Dividir por saltos de línea)
     const imgsText = document.getElementById('admin-imgs-text').value;
     const imgsArray = imgsText.split('\n').map(url => url.trim()).filter(url => url !== "");
 
@@ -523,7 +518,7 @@
       videoID: document.getElementById('admin-video').value,
       descripcionCorta: document.getElementById('admin-short').value,
       descripcionLarga: document.getElementById('admin-long').value,
-      imagenes: imgsArray // Guardamos el array procesado
+      imagenes: imgsArray 
     };
     
     const idx = allPedals.findIndex(p => p.id === id);
@@ -544,7 +539,6 @@
     document.getElementById('admin-short').value = p.descripcionCorta;
     document.getElementById('admin-long').value = p.descripcionLarga;
     
-    // Convertir array de imágenes de vuelta a texto con saltos de línea
     if(p.imagenes && Array.isArray(p.imagenes)) {
       document.getElementById('admin-imgs-text').value = p.imagenes.join('\n');
     } else {
