@@ -32,6 +32,7 @@
       color: var(--ink);
       font-family: var(--font-body);
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+      overflow-x: hidden; /* Evita scroll horizontal indeseado */
     }
 
     /* === HEADER === */
@@ -91,49 +92,58 @@
       padding-bottom: 3rem;
     }
 
-    /* === TARJETAS === */
+    /* === TARJETAS CON ANIMACIÓN DE ENTRADA === */
     .card {
       background: #fff;
       border: 2px solid var(--ink);
       padding: 1rem;
       position: relative;
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+      
+      /* Estado inicial para Scroll Reveal (Invisible y desplazado) */
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
+      
+      /* Sombra dura inicial */
+      box-shadow: 5px 5px 0px rgba(0,0,0,0.1);
     }
 
+    /* CLASE QUE AÑADE EL JS AL HACER SCROLL */
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* EFECTO DINÁMICO (HOVER) */
     .card:hover {
-      transform: translateY(-5px) rotate(1deg);
-      box-shadow: 12px 12px 0px rgba(37, 52, 148, 0.2);
+      transform: translateY(-8px) !important; /* Salta hacia arriba */
+      border-color: var(--zaunk-blue);
+      box-shadow: 12px 12px 0px rgba(37, 52, 148, 0.3); /* La sombra crece */
       z-index: 10;
     }
 
+    /* IMAGEN (Limpia, sin filtros raros) */
     .img-wrapper {
       position: relative; width: 100%; aspect-ratio: 1 / 1;
       border: 2px solid var(--ink); margin-bottom: 1rem;
-      overflow: hidden; cursor: pointer;
+      overflow: hidden; cursor: pointer; background: #eee;
     }
 
     .card-img {
       width: 100%; height: 100%; object-fit: cover; display: block;
-      transition: 0.3s ease;
-      filter: saturate(0.6) contrast(1.1) sepia(0.2);
+      transition: transform 0.5s ease;
     }
+    
+    /* Zoom suave de la foto al pasar el ratón */
+    .card:hover .card-img { transform: scale(1.05); }
 
-    .img-wrapper::after {
-      content: ""; position: absolute; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
-      opacity: 0.5; mix-blend-mode: overlay; pointer-events: none; transition: opacity 0.3s ease;
-    }
-
-    .card:hover .card-img { filter: none; }
-    .card:hover .img-wrapper::after { opacity: 0; }
-
+    /* ESTADO: ACTIVO (Seleccionado para comprar) */
     .card.active {
-      border: 4px solid var(--zaunk-blue); transform: scale(1.02);
-      box-shadow: 10px 10px 0px rgba(37, 52, 148, 0.2); z-index: 10;
+      border: 4px solid var(--zaunk-blue);
+      transform: scale(1.02) !important;
+      box-shadow: 15px 15px 0px rgba(37, 52, 148, 0.4);
+      z-index: 10;
     }
-    .card.active:hover { transform: scale(1.02); }
-    .card.active .card-img { filter: none; }
-    .card.active .img-wrapper::after { opacity: 0; }
     .card.active .img-wrapper { border-color: var(--zaunk-blue); }
 
     .price-tag {
@@ -144,8 +154,9 @@
     }
     .card.active .price-tag { background: var(--zaunk-blue); }
 
+    /* AGOTADO */
     .card.agotado { pointer-events: none; opacity: 0.6; }
-    .card.agotado .card-img { filter: grayscale(100%) blur(2px); opacity: 0.5; }
+    .card.agotado .card-img { filter: grayscale(100%); } /* Solo B/N si está agotado */
     .sold-out-badge {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
       border: 3px solid red; color: red; font-size: 2rem; font-family: var(--font-title);
@@ -158,12 +169,13 @@
     }
     .box {
       width: 24px; height: 24px; border: 2px solid var(--zaunk-blue);
-      display: flex; justify-content: center; align-items: center; background: #fff;
+      display: flex; justify-content: center; align-items: center; background: #fff; transition: 0.2s;
     }
     input[type="checkbox"] { display: none; }
-    input[type="checkbox"]:checked + .box { background: var(--zaunk-blue); }
+    input[type="checkbox"]:checked + .box { background: var(--zaunk-blue); transform: rotate(90deg); } /* Pequeña animación al marcar */
     input[type="checkbox"]:checked + .box::after { content: 'X'; color: #fff; font-weight: bold; }
 
+    /* === FOOTER === */
     footer {
       background: var(--zaunk-blue); color: #fff;
       padding: 3rem 1rem; margin-top: auto; text-align: center;
@@ -178,26 +190,31 @@
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(37,52,148,0.95);
       display: none; align-items: center; justify-content: center; z-index: 100;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s; /* Animación fade modal */
     }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    
     .modal-box {
       background: #fff; border: 4px solid #fff;
       width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto;
       padding: 2rem; box-shadow: 20px 20px 0px var(--ink);
       display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+      transform: scale(0.9); transition: transform 0.3s;
     }
+    .modal-overlay.open .modal-box { transform: scale(1); }
+
     @media(max-width: 700px) { .modal-box { grid-template-columns: 1fr; } }
     
-    /* ESTILO PARA FOTOS DENTRO DEL MODAL (Clickeables) */
     .modal-zoom-img {
       width: 100%; border: 2px solid #000; margin-bottom: 10px;
       cursor: zoom-in; transition: transform 0.2s;
     }
-    .modal-zoom-img:hover { border-color: var(--zaunk-blue); }
+    .modal-zoom-img:hover { border-color: var(--zaunk-blue); opacity: 0.9; }
 
-    /* === LIGHTBOX (Zoom de imagen) === */
+    /* === LIGHTBOX === */
     #lightbox {
       position: fixed; inset: 0; z-index: 5000;
-      background: rgba(0,0,0,0.95); /* Fondo oscuro */
+      background: rgba(0,0,0,0.95);
       display: none; align-items: center; justify-content: center;
       cursor: zoom-out;
     }
@@ -411,7 +428,21 @@ async function loadData() {
     renderFront();
     updateAutocomplete(); 
     renderAdminList();
+    initScrollObserver(); // INICIA EL EFECTO SCROLL
   } catch(e) { console.error(e); }
+}
+
+// === LÓGICA DE SCROLL REVEAL ===
+function initScrollObserver() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 }); // Se activa cuando se ve el 10% de la tarjeta
+
+  document.querySelectorAll('.card').forEach(el => observer.observe(el));
 }
 
 function renderFront() {
@@ -442,6 +473,7 @@ function renderFront() {
         const chkDisabled = p.agotado ? 'disabled' : '';
 
         const card = document.createElement('div');
+        // NOTA: No añadimos 'visible' aquí, el observer lo hará
         card.className = `card ${activeClass} ${agotadoClass}`;
         card.innerHTML = `
           ${soldOutBadge}
@@ -463,6 +495,9 @@ function renderFront() {
       root.appendChild(section);
     }
   });
+  
+  // Si llamamos a renderFront después de la carga inicial, reiniciamos el observer
+  initScrollObserver();
 }
 
 function toggleCart(id, chk) {
@@ -496,7 +531,6 @@ function goToCheckout() {
   window.open(finalUrl, '_blank');
 }
 
-// 4. MODAL & LIGHTBOX
 function openModal(id) {
   const p = db.find(x => x.id === id);
   if(!p) return;
@@ -523,14 +557,22 @@ function openModal(id) {
     html += `<iframe style="width:100%; aspect-ratio:16/9; border:2px solid #000;" src="https://www.youtube.com/embed/${p.videoID}" allowfullscreen></iframe>`;
   }
   mediaDiv.innerHTML = html;
-  document.getElementById('modal').style.display = 'flex';
-}
-function closeModal() {
-  document.getElementById('modal').style.display = 'none';
-  document.getElementById('modal-media').innerHTML = "";
+  
+  // Fade in animation class
+  const modal = document.getElementById('modal');
+  modal.style.display = 'flex';
+  setTimeout(() => modal.classList.add('open'), 10);
 }
 
-// NUEVAS FUNCIONES LIGHTBOX
+function closeModal() {
+  const modal = document.getElementById('modal');
+  modal.classList.remove('open');
+  setTimeout(() => {
+    modal.style.display = 'none';
+    document.getElementById('modal-media').innerHTML = "";
+  }, 300);
+}
+
 function viewImage(src) {
   const lb = document.getElementById('lightbox');
   document.getElementById('lightbox-img').src = src;
@@ -540,7 +582,6 @@ function closeLightbox() {
   document.getElementById('lightbox').style.display = 'none';
 }
 
-// 5. SEGURIDAD
 async function hash(s) {
   const b = new TextEncoder().encode(s);
   const h = await crypto.subtle.digest('SHA-256', b);
@@ -562,7 +603,6 @@ async function forceLogin() {
 }
 function closeAdmin() { document.getElementById('admin').style.display = 'none'; renderFront(); }
 
-// 6. ADMIN
 async function genHash() {
   const v = document.getElementById('hash-input').value;
   if(!v) return;
