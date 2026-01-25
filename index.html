@@ -123,7 +123,6 @@
       transition: 0.3s ease;
     }
 
-    /* GRANO SUTIL */
     .img-wrapper::after {
       content: ""; position: absolute; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
@@ -133,7 +132,6 @@
     .card:hover .card-img { transform: scale(1.05); }
     .card:hover .img-wrapper::after { opacity: 0; }
 
-    /* ESTADO SELECCIONADO */
     .card.active {
       border: 4px solid var(--zaunk-blue);
       transform: scale(1.02) rotate(-2deg) !important;
@@ -241,6 +239,14 @@
     .dot { width: 10px; height: 10px; background: #ccc; border-radius: 50%; }
     .dot.active { background: var(--zaunk-blue); }
 
+    /* ESTILOS DESCRIPCION (HTML permitido) */
+    #m-desc {
+        font-size: 0.95rem; line-height: 1.6;
+        border-left: 3px solid var(--zaunk-blue); padding-left: 1rem;
+    }
+    #m-desc ul { margin: 0; padding-left: 1rem; }
+    #m-desc li { margin-bottom: 5px; }
+
     /* LIGHTBOX */
     #lightbox {
       position: fixed; inset: 0; z-index: 5000;
@@ -269,6 +275,14 @@
     input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid #ccc; }
     #admin input[type="checkbox"] { width: auto !important; display: inline-block; margin-right: 10px; transform: scale(1.5); }
     .hash-box { background: #000; color: #0f0; padding: 1rem; font-family: monospace; border: 2px solid red; margin-bottom: 2rem; }
+
+    /* FORMAT TOOLBAR */
+    .format-toolbar { display: flex; gap: 5px; margin-bottom: 5px; }
+    .format-btn { 
+        padding: 5px 10px; font-weight: bold; cursor: pointer; 
+        background: #eee; border: 1px solid #999;
+    }
+    .format-btn:hover { background: #ddd; }
 
     #fab {
       position: fixed; bottom: 20px; right: 20px;
@@ -338,12 +352,11 @@
       <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;"></h2>
       <div id="m-cats" style="margin-bottom:1rem;"></div>
       
-      <div style="margin-bottom: 1rem; display:flex; align-items:center;">
+      <div style="margin-bottom: 1rem;">
         <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px; margin:0;">0 €</h3>
-        <button id="m-btn-top" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px;">LO QUIERO</button>
       </div>
 
-      <p id="m-desc" style="white-space: pre-line; border-left: 3px solid var(--zaunk-blue); padding-left:1rem; margin-top:1rem; font-size:0.95rem; line-height:1.6;"></p>
+      <div id="m-desc"></div>
       <br>
       
       <button id="m-btn" class="btn" style="width:100%" onclick="toggleFromModal()">LO QUIERO</button>
@@ -390,7 +403,15 @@
           <label>Imágenes (1 URL por línea):</label> <textarea id="e-imgs" rows="3"></textarea>
           <label>Youtube ID:</label> <input id="e-video">
           <label>Intro Corta:</label> <textarea id="e-short"></textarea>
-          <label>Descripción Larga:</label> <textarea id="e-long" rows="4"></textarea>
+          
+          <label>Descripción Larga (HTML permitido):</label> 
+          <div class="format-toolbar">
+              <button class="format-btn" onclick="insertTag('b')" title="Negrita">B</button>
+              <button class="format-btn" onclick="insertTag('i')" title="Cursiva">I</button>
+              <button class="format-btn" onclick="insertTag('ul')" title="Lista">Lista</button>
+              <button class="format-btn" onclick="insertTag('br')" title="Salto de línea">Salto</button>
+          </div>
+          <textarea id="e-long" rows="6"></textarea>
           
           <div style="display:flex; gap:10px;">
             <button class="btn" style="flex:1" onclick="saveData()">GUARDAR</button>
@@ -566,25 +587,21 @@ function openModal(id) {
   document.getElementById('m-title').innerText = p.nombre;
   document.getElementById('m-price').innerText = p.precio + " €";
   document.getElementById('m-cats').innerHTML = p.categoria.map(c => `<span style="background:var(--zaunk-blue); color:#fff; padding:2px 6px; margin-right:5px; font-size:0.8rem;">${c.toUpperCase()}</span>`).join('');
-  document.getElementById('m-desc').innerText = p.descripcionLarga || '';
   
-  // Botones (arriba y abajo)
+  // Renderizar HTML en la descripción
+  document.getElementById('m-desc').innerHTML = p.descripcionLarga || '';
+  
   const btn = document.getElementById('m-btn');
-  const btnTop = document.getElementById('m-btn-top');
   
-  const buttons = [btn, btnTop];
-  
-  buttons.forEach(b => {
-      if(p.agotado) {
-        b.innerText = "AGOTADO"; b.disabled = true; b.style.opacity = 0.5;
-      } else {
-        b.innerText = "LO QUIERO"; b.disabled = false; b.style.opacity = 1;
-        b.onclick = () => {
-            if(cart.has(id)) { alert("Ya está en tu lista"); }
-            else { cart.add(id); renderFront(); updateFab(); closeModal(); }
-        };
-      }
-  });
+  if(p.agotado) {
+    btn.innerText = "AGOTADO"; btn.disabled = true; btn.style.opacity = 0.5;
+  } else {
+    btn.innerText = "LO QUIERO"; btn.disabled = false; btn.style.opacity = 1;
+    btn.onclick = () => {
+        if(cart.has(id)) { alert("Ya está en tu lista"); }
+        else { cart.add(id); renderFront(); updateFab(); closeModal(); }
+    };
+  }
 
   const track = document.getElementById('carousel-track');
   const dots = document.getElementById('carousel-dots');
@@ -701,6 +718,22 @@ function editP(id) {
   document.getElementById('e-video').value = p.videoID || '';
   document.getElementById('e-short').value = p.descripcionCorta || '';
   document.getElementById('e-long').value = p.descripcionLarga || '';
+}
+
+function insertTag(tag) {
+    const el = document.getElementById('e-long');
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const text = el.value;
+    const selection = text.substring(start, end);
+    let replace = "";
+
+    if (tag === 'b') replace = `<b>${selection}</b>`;
+    if (tag === 'i') replace = `<i>${selection}</i>`;
+    if (tag === 'ul') replace = `<ul>\n<li>${selection}</li>\n</ul>`;
+    if (tag === 'br') replace = `<br>`;
+
+    el.value = text.substring(0, start) + replace + text.substring(end);
 }
 
 function saveData() {
