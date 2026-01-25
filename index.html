@@ -104,7 +104,7 @@
 
     .card.visible { opacity: 1; transform: translateY(0); }
 
-    /* Hover Dinámico (Solo si no está activo) */
+    /* Hover Dinámico */
     @media (hover: hover) {
       .card:not(.active):hover {
         transform: translateY(-8px) translateX(4px);
@@ -114,7 +114,7 @@
       }
     }
 
-    /* --- IMAGEN --- */
+    /* --- IMAGEN (SIN FILTROS DE COLOR) --- */
     .img-wrapper {
       position: relative; width: 100%; aspect-ratio: 1 / 1;
       border: 2px solid var(--ink); margin-bottom: 1rem;
@@ -124,31 +124,29 @@
     .card-img {
       width: 100%; height: 100%; object-fit: cover; display: block;
       transition: 0.3s ease;
-      filter: saturate(0.6) contrast(1.1) sepia(0.2);
+      /* Eliminados todos los filtros de color/saturación */
     }
 
-    /* GRANO */
+    /* GRANO (Mantenemos el ruido porque da textura física, pero sin afectar color) */
     .img-wrapper::after {
       content: ""; position: absolute; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
-      opacity: 0.5; mix-blend-mode: overlay; pointer-events: none; transition: opacity 0.3s ease;
+      opacity: 0.4; mix-blend-mode: overlay; pointer-events: none; transition: opacity 0.3s ease;
     }
 
     /* ESTADOS VISUALES */
-    .card:hover .card-img { filter: none; transform: scale(1.05); }
+    .card:hover .card-img { transform: scale(1.05); }
     .card:hover .img-wrapper::after { opacity: 0; }
 
     /* === ESTADO SELECCIONADO (CON INCLINACIÓN) === */
     .card.active {
       border: 4px solid var(--zaunk-blue);
-      /* AQUÍ ESTÁ EL CAMBIO: rotate(-2deg) */
       transform: scale(1.02) rotate(-2deg) !important;
       box-shadow: 12px 12px 0px rgba(37, 52, 148, 0.3) !important;
       opacity: 1 !important;
       z-index: 20;
     }
     
-    .card.active .card-img { filter: none; }
     .card.active .img-wrapper::after { opacity: 0; }
     .card.active .img-wrapper { border-color: var(--zaunk-blue); }
 
@@ -195,24 +193,41 @@
       font-size: 1.5rem; margin: 0 15px;
     }
 
-    /* === MODAL === */
+    /* === MODAL (ARREGLADO DESBORDAMIENTO) === */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(37,52,148,0.95);
       display: none; align-items: center; justify-content: center; z-index: 100;
     }
+    
     .modal-box {
       background: #fff; border: 4px solid #fff;
-      width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto;
+      width: 90%; max-width: 900px; 
+      /* Importante: altura máxima y scroll */
+      max-height: 90vh; 
+      overflow-y: auto; 
       padding: 2rem; box-shadow: 20px 20px 0px var(--ink);
-      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+      
+      /* Grid Desktop */
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 2rem;
+      align-items: start; /* Evita que las columnas se estiren */
     }
-    @media(max-width: 700px) { .modal-box { grid-template-columns: 1fr; } }
+
+    /* MÓVIL: Cambiamos a bloque para que fluya hacia abajo sin cortarse */
+    @media(max-width: 768px) { 
+      .modal-box { 
+        display: block; 
+        padding: 1.5rem;
+      } 
+      #modal-media { margin-bottom: 2rem; }
+    }
     
     .modal-zoom-img {
       width: 100%; border: 2px solid #000; margin-bottom: 10px;
       cursor: zoom-in; transition: transform 0.2s;
     }
-    .modal-zoom-img:hover { border-color: var(--zaunk-blue); opacity: 0.8; }
+    .modal-zoom-img:hover { border-color: var(--zaunk-blue); opacity: 0.9; }
 
     /* === LIGHTBOX (SIN MARCO) === */
     #lightbox {
@@ -455,6 +470,7 @@ function renderFront() {
 
   sortedCats.forEach(cat => {
     const items = db.filter(p => p.categoria.some(c => c.toLowerCase() === cat));
+    
     if(items.length > 0) {
       const section = document.createElement('div');
       section.innerHTML = `
@@ -462,6 +478,7 @@ function renderFront() {
         <div class="grid"></div>
       `;
       const grid = section.querySelector('.grid');
+      
       items.forEach(p => {
         const isSel = cart.has(p.id);
         const img = p.imagenes[0] || ''; 
@@ -480,6 +497,7 @@ function renderFront() {
           </div>
           <h3 onclick="openModal('${p.id}')" style="cursor:pointer">${p.nombre}</h3>
           <p>${p.descripcionCorta || ''}</p>
+          
           <label class="check-area">
             <input type="checkbox" onchange="toggleCart('${p.id}', this)" ${isSel?'checked':''} ${chkDisabled}>
             <span class="box"></span>
@@ -525,6 +543,7 @@ function goToCheckout() {
   window.open(finalUrl, '_blank');
 }
 
+// 4. MODAL & LIGHTBOX
 function openModal(id) {
   const p = db.find(x => x.id === id);
   if(!p) return;
@@ -567,6 +586,7 @@ function closeLightbox() {
   document.getElementById('lightbox').style.display = 'none';
 }
 
+// 5. SEGURIDAD
 async function hash(s) {
   const b = new TextEncoder().encode(s);
   const h = await crypto.subtle.digest('SHA-256', b);
@@ -588,6 +608,7 @@ async function forceLogin() {
 }
 function closeAdmin() { document.getElementById('admin').style.display = 'none'; renderFront(); }
 
+// 6. ADMIN
 async function genHash() {
   const v = document.getElementById('hash-input').value;
   if(!v) return;
