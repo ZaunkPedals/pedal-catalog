@@ -3,15 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pedales Boutique</title>
+  <title>Pedales Boutique | Efectos Artesanales</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #0f1115;
-      --card: #1a1d24;
-      --text: #eaeaea;
-      --muted: #9aa0aa;
-      --accent: #4da3ff;
+      --bg: #121212;
+      --card-bg: #1e1e1e;
+      --text-main: #e0e0e0;
+      --text-muted: #a0a0a0;
+      --accent: #d4af37; /* Oro envejecido para toque boutique */
+      --accent-hover: #b5952f;
+      --border: #333;
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'Lato', sans-serif;
     }
 
     * { box-sizing: border-box; }
@@ -19,227 +27,540 @@
     body {
       margin: 0;
       background: var(--bg);
-      color: var(--text);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-main);
+      font-family: var(--font-body);
+      line-height: 1.6;
     }
 
-    header {
-      padding: 2rem;
-      text-align: center;
-    }
-
-    header img {
-      max-width: 160px;
-      margin-bottom: 1rem;
-    }
-
-    section {
-      padding: 2rem;
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    h2 {
-      border-bottom: 1px solid #2a2e38;
-      padding-bottom: .5rem;
-    }
-
-    .pedales {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1.5rem;
-    }
-
-    .pedal {
-      background: var(--card);
-      border-radius: 14px;
-      padding: 1rem;
+    h1, h2, h3 { font-family: var(--font-heading); color: var(--accent); margin-top: 0; }
+    
+    /* UTILS */
+    .container { max-width: 1100px; margin: auto; padding: 0 1.5rem; }
+    .btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: .6rem 1.2rem;
+      font-weight: bold;
       cursor: pointer;
-      transition: transform .2s ease, box-shadow .2s ease;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.8rem;
+      transition: background .3s;
+    }
+    .btn:hover { background: var(--accent-hover); }
+    .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+    .btn-outline:hover { background: var(--accent); color: #000; }
+
+    /* HEADER */
+    header {
+      padding: 3rem 0;
+      text-align: center;
+      background: radial-gradient(circle at center, #1a1a1a 0%, #121212 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    header img { max-width: 140px; margin-bottom: 1rem; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
+    header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: #fff; }
+    header p { color: var(--text-muted); font-style: italic; }
+
+    /* SECTIONS */
+    section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+    
+    /* CATALOGO */
+    .category-title {
+      font-size: 1.8rem;
+      border-bottom: 1px solid var(--accent);
+      display: inline-block;
+      margin-bottom: 2rem;
+      padding-bottom: 0.5rem;
     }
 
-    .pedal:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.6);
+    .grid-pedales {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
     }
 
-    .pedal img {
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform .3s ease, box-shadow .3s ease;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+      border-color: var(--accent);
+    }
+
+    .card-img {
+      height: 200px;
       width: 100%;
-      border-radius: 10px;
-      margin-bottom: .5rem;
+      object-fit: cover;
+      background: #000;
     }
 
-    .pedal p {
-      color: var(--muted);
-      font-size: .9rem;
+    .card-body { padding: 1.5rem; }
+    .card h3 { font-size: 1.4rem; margin-bottom: 0.5rem; color: #fff; }
+    .card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; height: 3em; overflow: hidden; }
+
+    .card-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
     }
 
-    .pedal label {
-      display: block;
-      margin-top: .5rem;
-      font-size: .85rem;
+    .select-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      font-size: 0.9rem;
     }
+    
+    input[type="checkbox"] { accent-color: var(--accent); transform: scale(1.2); }
 
-    /* MODAL */
-    #modal {
+    /* CART FAB (Floating Action Button) */
+    #cart-fab {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--accent);
+      color: #000;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+      display: none; /* Oculto por defecto */
+      align-items: center;
+      gap: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 100;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+
+    /* MODAL DETALLE */
+    .modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.85);
+      background: rgba(0,0,0,0.9);
       display: none;
-      align-items: center;
       justify-content: center;
-      z-index: 10;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
     }
-
     .modal-content {
-      background: var(--card);
-      max-width: 800px;
+      background: var(--card-bg);
       width: 90%;
-      padding: 2rem;
-      border-radius: 16px;
-      overflow-y: auto;
+      max-width: 900px;
       max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
     }
+    @media(max-width: 768px) { .modal-content { grid-template-columns: 1fr; } }
+    
+    .modal-gallery { background: #000; padding: 1rem; display: flex; flex-direction: column; gap: 1rem; }
+    .modal-gallery img { width: 100%; border-radius: 4px; }
+    
+    .modal-info { padding: 2rem; }
+    .close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 2rem; cursor: pointer; color: #fff; line-height: 1; z-index: 10; }
 
-    .modal-content img {
-      width: 100%;
-      border-radius: 10px;
-      margin-bottom: 1rem;
-    }
-
-    .close {
-      float: right;
-      cursor: pointer;
-      font-size: 1.5rem;
-    }
-
-    /* ADMIN */
+    /* ADMIN PANEL */
     #admin-panel {
-      display: none;
       position: fixed;
-      bottom: 1rem;
-      right: 1rem;
-      background: #000;
-      padding: 1rem;
-      border-radius: 10px;
-      font-size: .8rem;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: #111;
+      z-index: 2000;
+      padding: 2rem;
+      overflow-y: auto;
+      display: none;
     }
+    #admin-panel input, #admin-panel textarea, #admin-panel select {
+      width: 100%; padding: 10px; margin-bottom: 10px;
+      background: #222; border: 1px solid #444; color: #fff;
+    }
+    .admin-row { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 10px; margin-bottom: 5px; }
+
+    /* FOOTER */
+    footer { text-align: center; padding: 3rem; color: var(--text-muted); font-size: 0.9rem; }
+    .social-links a { color: var(--accent); text-decoration: none; margin: 0 10px; font-weight: bold; }
+
   </style>
 </head>
 <body>
 
 <header>
-  <img src="img/logo.png" alt="Logo" />
-  <p>Pedales artesanales hechos a mano</p>
+  <div class="container">
+    <img src="img/logo.png" alt="Logo Pedales" onerror="this.style.display='none'"> 
+    <h1>Pedales Boutique</h1>
+    <p>Carácter, personalidad y sonido artesanal.</p>
+  </div>
 </header>
 
-<section>
-  <h2>Pedales</h2>
-  <div class="pedales"></div>
+<section id="about">
+  <div class="container" style="text-align: center; max-width: 700px;">
+    <h2>Filosofía Sonora</h2>
+    <p>Diseño y construyo pedales boutique buscando ese tono que no se encuentra en las cadenas de montaje masivas. Cada circuito es soldado a mano, probado y ajustado hasta encontrar el punto dulce. Desde fuzzes destructivos hasta modulaciones oníricas.</p>
+  </div>
 </section>
 
-<section>
-  <h2>Sobre mí</h2>
-  <p>Diseño y construyo pedales boutique buscando carácter, personalidad y sonido.</p>
+<section id="catalogo">
+  <div class="container" id="pedal-container">
+    <p style="text-align:center">Cargando catálogo...</p>
+  </div>
 </section>
 
-<section>
-  <h2>Contacto</h2>
-  <p>Email: contacto@tudominio.com</p>
+<section id="contacto">
+  <div class="container" style="text-align: center;">
+    <h2>Contacto</h2>
+    <p>¿Tienes dudas o quieres un diseño personalizado?</p>
+    <p>Email: <a href="mailto:contacto@tudominio.com" style="color:var(--accent)">contacto@tudominio.com</a></p>
+    <div class="social-links">
+      <a href="#">Instagram</a>
+      <a href="#">YouTube</a>
+    </div>
+  </div>
 </section>
 
-<div id="modal"></div>
+<footer>
+  &copy; 2024 Pedales Boutique. Hecho a mano.
+</footer>
+
+<div id="cart-fab" onclick="checkout()">
+  <span>0 Pedales seleccionados</span>
+  <span style="background:#000; color:var(--accent); padding:2px 8px; border-radius:4px;">Pedir →</span>
+</div>
+
+<div class="modal" id="product-modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+    <div class="modal-gallery" id="modal-imgs"></div>
+    <div class="modal-info">
+      <small style="color:var(--accent); text-transform:uppercase;" id="modal-cat">Fuzz</small>
+      <h2 id="modal-title" style="margin-top:0.5rem;">Nombre</h2>
+      <p id="modal-desc" style="white-space: pre-line;"></p>
+      <br>
+      <button class="btn" onclick="toggleSelectFromModal()">Seleccionar / Deseleccionar</button>
+    </div>
+  </div>
+</div>
 
 <div id="admin-panel">
-  <strong>Panel admin activo</strong>
+  <div class="container">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h2>Panel de Administración</h2>
+      <button class="btn btn-outline" onclick="closeAdmin()">Salir</button>
+    </div>
+    <hr style="border-color:#333">
+    
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem;">
+      <div>
+        <h3>Agregar / Editar Pedal</h3>
+        <input type="hidden" id="admin-id">
+        <input type="text" id="admin-nombre" placeholder="Nombre del Pedal">
+        <select id="admin-categoria">
+          <option value="fuzz">Fuzz</option>
+          <option value="overdrive">Overdrive</option>
+          <option value="distorsion">Distorsión</option>
+          <option value="modulacion">Modulación</option>
+          <option value="preamp">Preamp</option>
+          <option value="bajo">Bajo</option>
+          <option value="sintetizador">Sintetizador</option>
+          <option value="otros">Otros</option>
+        </select>
+        <textarea id="admin-short" rows="2" placeholder="Descripción Corta (Catálogo)"></textarea>
+        <textarea id="admin-long" rows="6" placeholder="Descripción Larga (Detalle)"></textarea>
+        <input type="text" id="admin-img1" placeholder="Ruta imagen 1 (ej: img/fuzz1.jpg)">
+        <input type="text" id="admin-img2" placeholder="Ruta imagen 2">
+        
+        <button class="btn" onclick="savePedal()">Guardar en Memoria</button>
+        <button class="btn btn-outline" onclick="clearForm()">Limpiar Formulario</button>
+      </div>
+
+      <div>
+        <h3>Lista Actual (En Memoria)</h3>
+        <div id="admin-list" style="max-height: 400px; overflow-y:auto; margin-bottom:1rem;"></div>
+        
+        <div style="background: #222; padding: 1rem; border: 1px solid var(--accent);">
+          <h4 style="margin-top:0">⚠️ Paso Final</h4>
+          <p style="font-size:0.9rem">GitHub Pages no guarda datos. Descarga el JSON y súbelo a tu repositorio manualmante.</p>
+          <button class="btn" onclick="downloadJSON()">⬇ Descargar pedales.json actualizado</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-/* =====================
-   ADMIN CONFIG
-===================== */
-const ADMIN_USER = "admin";
-const ADMIN_PASS_HASH = "8b2f8b6f5c8e7b2bbf9f6c3b6bfe1e0c4e9c6b6b7f8b5b0f3a4d6d5e4c3b2a1";
+  /* ================= VARIABLES GLOBALES ================= */
+  let allPedals = [];
+  let selectedPedals = new Set();
+  let currentModalPedalId = null;
 
-async function sha256(text) {
-  const data = new TextEncoder().encode(text);
-  const hash = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
-}
+  // Orden deseado de categorías
+  const CAT_ORDER = ["fuzz", "overdrive", "distorsion", "preamp", "modulacion", "sintetizador", "bajo", "otros"];
+  
+  // Mapeo de nombres bonitos
+  const CAT_NAMES = {
+    fuzz: "Fuzz", overdrive: "Overdrive", distorsion: "Distorsión", 
+    preamp: "Preamps & EQ", modulacion: "Modulación & Tiempo", 
+    sintetizador: "Sintetizadores", bajo: "Bajo", otros: "Utilidades & Otros"
+  };
 
-/* =====================
-   SECUENCIA SECRETA
-   N A G U S I
-===================== */
-const SECRET = "nagusi";
-let buffer = "";
-
-window.addEventListener("keydown", async e => {
-  buffer += e.key.toLowerCase();
-  buffer = buffer.slice(-SECRET.length);
-
-  if (buffer === SECRET) {
-    buffer = "";
-    const user = prompt("Usuario admin:");
-    const pass = prompt("Contraseña:");
-    if (!user || !pass) return;
-
-    const hash = await sha256(pass);
-    if (user === ADMIN_USER && hash === ADMIN_PASS_HASH) {
-      document.getElementById("admin-panel").style.display = "block";
-      alert("Panel admin activado");
-    } else {
-      alert("Credenciales incorrectas");
-    }
-  }
-});
-
-/* =====================
-   CARGA PEDALES
-===================== */
-fetch("pedales.json")
-  .then(r => r.json())
-  .then(pedales => {
-    const cont = document.querySelector(".pedales");
-
-    pedales.forEach(p => {
-      const card = document.createElement("div");
-      card.className = "pedal";
-
-      card.innerHTML = `
-        <img src="${p.imagenes[0]}" alt="${p.nombre}">
-        <h3>${p.nombre}</h3>
-        <p>${p.descripcionCorta}</p>
-        <label>
-          <input type="checkbox" value="${p.nombre}"> Me interesa
-        </label>
-      `;
-
-      const checkbox = card.querySelector("input");
-      checkbox.addEventListener("click", e => e.stopPropagation());
-
-      card.addEventListener("click", () => abrirModal(p));
-      cont.appendChild(card);
-    });
+  /* ================= INICIO ================= */
+  window.addEventListener('DOMContentLoaded', () => {
+    fetchPedales();
+    setupKonamiCode();
   });
 
-function abrirModal(p) {
-  const modal = document.getElementById("modal");
-  modal.innerHTML = `
-    <div class="modal-content">
-      <span class="close" onclick="cerrarModal()">×</span>
-      <h2>${p.nombre}</h2>
-      ${p.imagenes.map(i => `<img src="${i}">`).join("")}
-      <p>${p.descripcionLarga}</p>
-    </div>
-  `;
-  modal.style.display = "flex";
-}
+  /* ================= LÓGICA PRINCIPAL ================= */
+  async function fetchPedales() {
+    try {
+      const res = await fetch('pedales.json');
+      allPedals = await res.json();
+      renderCatalog();
+      renderAdminList();
+    } catch (e) {
+      console.error("Error cargando pedales", e);
+      document.getElementById('pedal-container').innerHTML = "<p>Error cargando el catálogo.</p>";
+    }
+  }
 
-function cerrarModal() {
-  document.getElementById("modal").style.display = "none";
-}
+  function renderCatalog() {
+    const container = document.getElementById('pedal-container');
+    container.innerHTML = "";
+
+    // Agrupar por categoría
+    const grouped = {};
+    allPedals.forEach(p => {
+      const cat = p.categoria || 'otros';
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(p);
+    });
+
+    // Renderizar en orden específico
+    CAT_ORDER.forEach(catKey => {
+      if (grouped[catKey] && grouped[catKey].length > 0) {
+        // Título Categoría
+        const sectionTitle = document.createElement('div');
+        sectionTitle.innerHTML = `<h3 class="category-title">${CAT_NAMES[catKey] || catKey.toUpperCase()}</h3>`;
+        container.appendChild(sectionTitle);
+
+        // Grid
+        const grid = document.createElement('div');
+        grid.className = 'grid-pedales';
+
+        grouped[catKey].forEach(p => {
+          const isSelected = selectedPedals.has(p.id);
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <img src="${p.imagenes[0] || 'img/placeholder.jpg'}" class="card-img" alt="${p.nombre}" onclick="openModal('${p.id}')">
+            <div class="card-body">
+              <h3 onclick="openModal('${p.id}')" style="cursor:pointer">${p.nombre}</h3>
+              <p>${p.descripcionCorta}</p>
+              <div class="card-actions">
+                <button class="btn btn-outline" onclick="openModal('${p.id}')">+ Info</button>
+                <label class="select-label">
+                  <input type="checkbox" onchange="toggleSelection('${p.id}', this)" ${isSelected ? 'checked' : ''}>
+                  Me interesa
+                </label>
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+        container.appendChild(grid);
+      }
+    });
+  }
+
+  /* ================= CARRITO Y SELECCIÓN ================= */
+  function toggleSelection(id, checkbox) {
+    if (checkbox.checked) selectedPedals.add(id);
+    else selectedPedals.delete(id);
+    updateFab();
+  }
+
+  function toggleSelectFromModal() {
+    if (!currentModalPedalId) return;
+    
+    // Buscar checkbox en el DOM para sincronizar visualmente si está visible
+    if (selectedPedals.has(currentModalPedalId)) {
+      selectedPedals.delete(currentModalPedalId);
+      alert("Eliminado de la selección");
+    } else {
+      selectedPedals.add(currentModalPedalId);
+      alert("Añadido a la selección");
+    }
+    renderCatalog(); // Re-render para actualizar checkboxes
+    updateFab();
+  }
+
+  function updateFab() {
+    const fab = document.getElementById('cart-fab');
+    const count = selectedPedals.size;
+    if (count > 0) {
+      fab.style.display = 'flex';
+      fab.querySelector('span').innerText = `${count} Pedal${count > 1 ? 'es' : ''} seleccionado${count > 1 ? 's' : ''}`;
+    } else {
+      fab.style.display = 'none';
+    }
+  }
+
+  function checkout() {
+    const selectedObjs = allPedals.filter(p => selectedPedals.has(p.id));
+    const names = selectedObjs.map(p => `- ${p.nombre}`).join('%0D%0A'); // Salto de linea para mailto
+    
+    const subject = "Consulta Pedales Boutique";
+    const body = `Hola, estoy interesado en los siguientes pedales:%0D%0A%0D%0A${names}%0D%0A%0D%0AMis datos de contacto son:%0D%0A...`;
+    
+    // Abrir cliente de correo
+    window.location.href = `mailto:contacto@tudominio.com?subject=${subject}&body=${body}`;
+    
+    // Alternativa: Si prefieres Google Forms, crea un form con un campo de texto largo "pre-filled" y pon aquí la URL.
+  }
+
+  /* ================= MODAL ================= */
+  function openModal(id) {
+    const p = allPedals.find(x => x.id === id);
+    if (!p) return;
+    currentModalPedalId = id;
+
+    document.getElementById('modal-title').innerText = p.nombre;
+    document.getElementById('modal-cat').innerText = CAT_NAMES[p.categoria] || p.categoria;
+    document.getElementById('modal-desc').innerText = p.descripcionLarga;
+    
+    const gallery = document.getElementById('modal-imgs');
+    gallery.innerHTML = p.imagenes.map(src => `<img src="${src}">`).join('');
+
+    document.getElementById('product-modal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('product-modal').style.display = 'none';
+    currentModalPedalId = null;
+  }
+
+  /* ================= ADMIN SECRETO ================= */
+  function setupKonamiCode() {
+    const SECRET = "nagusi";
+    let buffer = "";
+    window.addEventListener("keydown", e => {
+      buffer += e.key.toLowerCase();
+      if (buffer.length > SECRET.length) buffer = buffer.slice(-SECRET.length);
+      if (buffer === SECRET) {
+        const pass = prompt("Contraseña Admin:");
+        // Aquí puedes poner una contraseña simple o borrar este if si te fias de "nagusi"
+        if(pass === "admin123") { 
+           document.getElementById('admin-panel').style.display = 'block';
+        } else {
+           alert("Incorrecto");
+        }
+      }
+    });
+  }
+
+  function closeAdmin() {
+    document.getElementById('admin-panel').style.display = 'none';
+    renderCatalog(); // Refrescar la web real al salir
+  }
+
+  function clearForm() {
+    document.getElementById('admin-id').value = "";
+    document.getElementById('admin-nombre').value = "";
+    document.getElementById('admin-short').value = "";
+    document.getElementById('admin-long').value = "";
+    document.getElementById('admin-img1').value = "";
+    document.getElementById('admin-img2').value = "";
+  }
+
+  function savePedal() {
+    const idField = document.getElementById('admin-id').value;
+    const nombre = document.getElementById('admin-nombre').value;
+    // Generar ID si es nuevo (basado en nombre)
+    const id = idField ? idField : nombre.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+    
+    const nuevoPedal = {
+      id: id,
+      nombre: nombre,
+      categoria: document.getElementById('admin-categoria').value,
+      descripcionCorta: document.getElementById('admin-short').value,
+      descripcionLarga: document.getElementById('admin-long').value,
+      imagenes: [
+        document.getElementById('admin-img1').value,
+        document.getElementById('admin-img2').value
+      ].filter(x => x) // Elimina vacios
+    };
+
+    // Actualizar o Añadir
+    const index = allPedals.findIndex(p => p.id === id);
+    if (index >= 0) {
+      allPedals[index] = nuevoPedal;
+    } else {
+      allPedals.push(nuevoPedal);
+    }
+
+    renderAdminList();
+    alert("Pedal guardado en memoria temporal. No olvides EXPORTAR JSON.");
+    clearForm();
+  }
+
+  function editPedal(id) {
+    const p = allPedals.find(x => x.id === id);
+    document.getElementById('admin-id').value = p.id;
+    document.getElementById('admin-nombre').value = p.nombre;
+    document.getElementById('admin-categoria').value = p.categoria;
+    document.getElementById('admin-short').value = p.descripcionCorta;
+    document.getElementById('admin-long').value = p.descripcionLarga;
+    document.getElementById('admin-img1').value = p.imagenes[0] || "";
+    document.getElementById('admin-img2').value = p.imagenes[1] || "";
+  }
+
+  function deletePedal(id) {
+    if(confirm("¿Borrar este pedal?")) {
+      allPedals = allPedals.filter(p => p.id !== id);
+      renderAdminList();
+    }
+  }
+
+  function renderAdminList() {
+    const list = document.getElementById('admin-list');
+    list.innerHTML = allPedals.map(p => `
+      <div class="admin-row">
+        <span><b>${p.nombre}</b> (${p.categoria})</span>
+        <div>
+          <button class="btn btn-outline" style="padding:2px 5px" onclick="editPedal('${p.id}')">Editar</button>
+          <button class="btn btn-outline" style="padding:2px 5px; color:red; border-color:red" onclick="deletePedal('${p.id}')">X</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function downloadJSON() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allPedals, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "pedales.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  }
 </script>
 
 </body>
