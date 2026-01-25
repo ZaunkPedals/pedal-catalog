@@ -3,360 +3,555 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZAUNK! // PEDAL EFFECTS</title>
+  <title>ZAUNK! // PEDALES DE EFECTO</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --brand-blue: #253494; /* AZUL ZAUNK */
-      --paper: #ffffff;      /* Blanco Puro */
-      --ink: #111111;        /* Negro Tinta */
+      --zaunk-blue: #253494; /* AZUL DE TU LOGO */
+      --paper: #fcfcfc;      /* Blanco papel */
+      --ink: #1a1a1a;        /* Negro suave para textos largos */
       
       --font-body: 'Courier Prime', monospace;
-      --font-title: 'Anton', sans-serif;
+      --font-title: 'Oswald', sans-serif;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      /* FONDO AZUL GLOBAL */
-      background-color: var(--brand-blue);
-      color: var(--paper);
+      background-color: var(--paper);
+      color: var(--ink);
       font-family: var(--font-body);
-      /* Ruido para textura de cartulina */
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      /* Textura sutil de papel granulado */
+      background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
     }
 
-    /* TITULARES */
+    /* === HEADER === */
+    header {
+      text-align: center;
+      padding: 3rem 1rem;
+      border-bottom: 5px solid var(--zaunk-blue);
+      background: #fff;
+    }
+
+    .logo-wrapper {
+      max-width: 200px;
+      margin: 0 auto;
+      transform: rotate(-2deg);
+      transition: transform 0.3s;
+    }
+    .logo-wrapper:hover { transform: scale(1.05) rotate(0deg); }
+    .logo-wrapper img { width: 100%; display: block; }
+
+    /* === ESTRUCTURA === */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+    
     h1, h2, h3 { 
       font-family: var(--font-title); 
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      text-transform: uppercase; 
+      color: var(--zaunk-blue);
       margin-top: 0;
     }
 
-    /* HEADER */
-    header {
-      padding: 3rem 1rem;
-      text-align: center;
-      /* Sin borde, integrado en el azul */
-    }
-    
-    .logo-container {
-      display: inline-block;
-      max-width: 180px; /* LOGO MÁS PEQUEÑO */
-      transform: rotate(-2deg);
-      transition: transform 0.3s;
-      filter: drop-shadow(5px 5px 0px rgba(0,0,0,0.3));
-    }
-    .logo-container:hover { transform: scale(1.05) rotate(2deg); }
-    .logo-container img { width: 100%; height: auto; display: block; }
-
-    /* LAYOUT */
-    .container { max-width: 1200px; margin: auto; padding: 0 1.5rem; }
-    .main-content { flex: 1; }
-
-    /* SECCIONES */
-    section { padding: 2rem 0; }
-
-    /* ESTILO DE CATEGORÍAS (Cinta Negra) */
-    .cat-title-wrapper {
-      margin-top: 4rem;
-      margin-bottom: 2rem;
-      border-bottom: 2px dashed rgba(255,255,255,0.3);
-      padding-bottom: 10px;
-    }
-    .cat-title {
-      background: var(--ink);
-      color: var(--paper);
-      display: inline-block;
-      padding: 5px 15px;
-      font-size: 2rem;
-      transform: rotate(-1deg);
-      box-shadow: 4px 4px 0px rgba(255,255,255,0.2);
-    }
-
-    /* BOTONES (INVERTIDOS: Blanco sobre Azul) */
+    /* === BOTONES ESTILO PUNK === */
     .btn {
-      background: var(--paper);
-      color: var(--brand-blue);
-      border: 2px solid var(--paper);
-      padding: 10px 25px;
+      background: #fff;
+      color: var(--zaunk-blue);
+      border: 3px solid var(--zaunk-blue);
+      padding: 10px 20px;
       font-family: var(--font-title);
       font-size: 1.1rem;
+      letter-spacing: 1px;
       cursor: pointer;
-      box-shadow: 5px 5px 0px var(--ink); /* Sombra negra para contraste */
-      transition: transform 0.1s;
+      box-shadow: 4px 4px 0px var(--zaunk-blue); /* Sombra dura desplazada */
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
     }
     .btn:hover {
-      background: var(--ink);
-      color: var(--paper);
-      border-color: var(--ink);
-      box-shadow: 0 0 0;
+      background: var(--zaunk-blue);
+      color: #fff;
       transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px #000;
     }
     
-    /* Botones dentro de tarjetas (Negros) */
-    .btn-card {
-      background: var(--ink);
-      color: var(--paper);
-      border: none;
-      box-shadow: 3px 3px 0px var(--brand-blue);
+    .btn-small { padding: 5px 10px; font-size: 0.9rem; border-width: 2px; box-shadow: 3px 3px 0 var(--zaunk-blue); }
+
+    /* === CATÁLOGO === */
+    .cat-header {
+      margin-top: 3rem;
+      border-bottom: 2px dashed var(--zaunk-blue);
+      margin-bottom: 2rem;
     }
-    .btn-card:hover {
-      background: var(--brand-blue);
-      color: var(--paper);
+    .cat-badge {
+      background: var(--zaunk-blue);
+      color: #fff;
+      padding: 5px 15px;
+      display: inline-block;
+      transform: skew(-10deg);
+    }
+    .cat-badge h2 { color: #fff; margin: 0; transform: skew(10deg); font-size: 1.8rem; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2.5rem;
+      padding-bottom: 3rem;
     }
 
-    /* TARJETAS DE PEDALES (Papel blanco sobre fondo azul) */
-    .grid-pedales {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 3rem;
-    }
-    
+    /* === TARJETAS (CARDS) === */
     .card {
-      background: var(--paper);
-      color: var(--ink); /* Texto negro dentro de la tarjeta */
-      padding: 15px 15px 20px 15px;
-      transform: rotate(var(--rot, 0deg));
-      transition: transform 0.2s;
+      background: #fff;
+      border: 3px solid var(--zaunk-blue);
+      padding: 1rem;
       position: relative;
-      /* Efecto de papel recortado */
-      box-shadow: 10px 10px 0px rgba(0,0,0,0.5); 
+      transition: transform 0.2s;
     }
     .card:hover {
-      transform: scale(1.03) rotate(0deg) !important;
-      z-index: 10;
-      box-shadow: 15px 15px 0px rgba(0,0,0,0.3); 
+      transform: scale(1.02) rotate(1deg);
+      z-index: 5;
+      box-shadow: 10px 10px 0px rgba(37, 52, 148, 0.2);
     }
 
-    .card-img-wrapper {
-      border: 3px solid var(--ink);
-      margin-bottom: 1rem;
-      filter: grayscale(100%) contrast(1.1);
-      transition: filter 0.3s;
+    .card-img {
+      width: 100%;
       height: 220px;
-      overflow: hidden;
+      object-fit: cover;
+      border: 2px solid var(--ink);
+      filter: grayscale(100%) contrast(1.1); /* Efecto fotocopia */
+      margin-bottom: 1rem;
       cursor: pointer;
-      background: #eee;
     }
-    .card:hover .card-img-wrapper { filter: grayscale(0%); border-color: var(--brand-blue); }
-    .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+    .card:hover .card-img { filter: grayscale(0%); border-color: var(--zaunk-blue); }
 
-    .card h3 { 
-      font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--brand-blue);
-      border-bottom: 3px solid var(--brand-blue); 
-      display: inline-block; cursor: pointer;
-    }
-    .card p { font-size: 0.9rem; line-height: 1.4; color: #333; }
+    .card h3 { font-size: 1.6rem; border-bottom: 2px solid var(--zaunk-blue); display: inline-block; cursor: pointer; }
+    .card p { font-size: 0.9rem; line-height: 1.4; }
 
-    /* CHECKBOX MANUAL */
-    .checkbox-wrapper {
-      display: flex; align-items: center; gap: 10px; margin-top: 1rem;
-      font-weight: bold; cursor: pointer; user-select: none; color: var(--ink);
+    /* CHECKBOX PERSONALIZADO */
+    .check-area {
+      margin-top: 1rem;
+      border-top: 1px dotted var(--zaunk-blue);
+      padding-top: 0.5rem;
+      display: flex; align-items: center; gap: 10px;
+      cursor: pointer;
     }
-    .custom-check {
-      width: 24px; height: 24px; border: 2px solid var(--ink);
-      background: #fff; display: flex; align-items: center; justify-content: center;
+    .box {
+      width: 24px; height: 24px; border: 2px solid var(--zaunk-blue);
+      display: flex; justify-content: center; align-items: center; background: #fff;
     }
     input[type="checkbox"] { display: none; }
-    input[type="checkbox"]:checked + .custom-check { background: var(--brand-blue); border-color: var(--brand-blue); }
-    input[type="checkbox"]:checked + .custom-check::after {
-      content: "X"; font-family: var(--font-title); color: #fff; font-size: 1.2rem;
-    }
+    input[type="checkbox"]:checked + .box { background: var(--zaunk-blue); }
+    input[type="checkbox"]:checked + .box::after { content: 'X'; color: #fff; font-weight: bold; }
 
-    /* FOOTER */
-    .social-bar {
-      background: var(--ink);
+    /* === FOOTER SOCIAL === */
+    footer {
+      background: var(--zaunk-blue);
       color: #fff;
-      padding: 3rem 0;
-      margin-top: 5rem;
-      border-top: 2px dashed rgba(255,255,255,0.3);
+      padding: 3rem 1rem;
+      margin-top: auto;
+      text-align: center;
+      border-top: 5px solid var(--ink);
     }
-    .social-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
-    .social-link {
+    .socials a {
       color: #fff; text-decoration: none; font-family: var(--font-title);
-      font-size: 1.5rem; padding: 5px 15px; transition: 0.3s;
+      font-size: 1.5rem; margin: 0 15px; border: 2px solid transparent; padding: 5px;
     }
-    .social-link:hover { color: var(--brand-blue); transform: scale(1.1) rotate(-3deg); background: #fff; }
+    .socials a:hover { border: 2px solid #fff; background: rgba(255,255,255,0.1); }
 
-    /* MODAL */
-    .modal {
-      position: fixed; inset: 0; background: rgba(37, 52, 148, 0.95); /* Azul translúcido */
-      display: none; align-items: center; justify-content: center; z-index: 1000;
+    /* === MODAL === */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(255,255,255,0.9);
+      display: none; align-items: center; justify-content: center; z-index: 100;
+      backdrop-filter: blur(5px);
     }
-    .modal-content {
-      background: var(--paper); color: var(--ink);
+    .modal-box {
+      background: #fff; border: 4px solid var(--zaunk-blue);
       width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto;
-      padding: 2rem; box-shadow: 20px 20px 0px var(--ink);
-      position: relative; border: 4px solid var(--ink);
+      padding: 2rem; box-shadow: 15px 15px 0px var(--ink);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
     }
-    .close-modal {
-      position: absolute; top: 0; right: 0; background: var(--ink); color: #fff;
-      padding: 10px 20px; font-weight: bold; cursor: pointer; font-size: 1.5rem; font-family: var(--font-title);
-    }
-    .close-modal:hover { background: var(--brand-blue); }
-
-    .video-frame {
-      width: 100%; aspect-ratio: 16/9; background: #000; border: 3px solid var(--ink); margin-top: 1rem;
-    }
-
-    /* FAB */
-    #cart-fab {
-      position: fixed; bottom: 2rem; right: 2rem;
-      background: var(--paper); color: var(--brand-blue); border: 3px solid var(--ink);
-      padding: 1rem 2rem; font-family: var(--font-title); font-size: 1.2rem;
-      box-shadow: 8px 8px 0px var(--ink); cursor: pointer; display: none; z-index: 100;
-    }
-    #cart-fab:hover { transform: scale(1.05); background: var(--ink); color: var(--paper); border-color: var(--paper); }
-
-    /* ADMIN PANEL (Mantener limpio para uso) */
-    #admin-panel {
-      position: fixed; inset: 0; background: #ddd; z-index: 2000;
-      padding: 2rem; overflow-y: auto; display: none; color: #000; font-family: monospace;
-    }
-    .admin-box { 
-      background: #fff; border: 2px solid #000; padding: 1.5rem; 
-      margin-bottom: 2rem; box-shadow: 5px 5px 0 #666; 
-    }
-    input, select, textarea {
-      width: 100%; background: #eee; border: 1px solid #999; padding: 10px;
-      font-family: monospace; margin-bottom: 12px;
+    @media(max-width: 700px) { .modal-box { grid-template-columns: 1fr; } }
+    
+    .modal-close {
+      grid-column: 1 / -1; text-align: right;
     }
     
+    /* === PANEL ADMIN === */
+    #admin {
+      position: fixed; inset: 0; background: #eee; z-index: 2000;
+      padding: 2rem; overflow-y: auto; display: none;
+      border: 10px solid var(--zaunk-blue);
+    }
+    .admin-card { background: #fff; border: 2px solid #000; padding: 1.5rem; margin-bottom: 2rem; }
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; font-weight: bold; font-family: var(--font-title); color: var(--zaunk-blue); }
+    input, select, textarea {
+      width: 100%; padding: 10px; border: 2px solid #ccc; font-family: var(--font-body);
+      background: #fafafa;
+    }
+    input:focus { border-color: var(--zaunk-blue); outline: none; }
+
+    /* === BOTÓN FLOTANTE === */
+    #fab {
+      position: fixed; bottom: 20px; right: 20px;
+      background: var(--zaunk-blue); color: #fff;
+      padding: 15px 25px; border: 3px solid #fff; box-shadow: 5px 5px 0px #000;
+      font-family: var(--font-title); font-size: 1.2rem; cursor: pointer;
+      display: none; z-index: 90;
+    }
+    #fab:hover { transform: scale(1.05); }
+
+    /* Acceso Admin de Emergencia (Invisible pero clickable) */
+    #secret-btn {
+      position: fixed; bottom: 0; left: 0; width: 20px; height: 20px; opacity: 0.1; z-index: 9999; cursor: crosshair;
+    }
+
   </style>
 </head>
 <body>
 
 <header>
-  <div class="container">
-    <div class="logo-container">
-      <img src="img/Zaunk_Logo.png" alt="ZAUNK! Pedal Effects">
-    </div>
+  <div class="logo-wrapper">
+    <img src="img/Zaunk_Logo.png" alt="ZAUNK LOGO" onerror="this.style.display='none'; document.querySelector('.logo-wrapper').innerText='ZAUNK! (Falta Logo)'">
   </div>
+  <p style="font-family: var(--font-body); margin-top: 1rem; font-weight: bold;">HANDMADE NOISE DEVICES</p>
 </header>
 
-<div class="main-content">
-  <section id="catalogo">
-    <div class="container" id="pedal-container">
-      <p style="text-align:center; font-size:1.5rem; padding: 2rem; border: 2px dashed #fff;">[ CARGANDO ARTEFACTOS SONOROS... ]</p>
-    </div>
-  </section>
-</div>
-
-<footer class="social-bar">
-  <div class="container">
-    <div style="text-align: center; margin-bottom: 1rem;">
-      <h3 style="margin:0;">// CONECTA CON EL RUIDO</h3>
-    </div>
-    <div class="social-links">
-      <a href="https://instagram.com" target="_blank" class="social-link">INSTAGRAM</a>
-      <a href="https://youtube.com" target="_blank" class="social-link">YOUTUBE</a>
-      <a href="mailto:contacto@zaunk.com" class="social-link">EMAIL</a>
-    </div>
-    <div style="text-align:center; margin-top: 2rem; opacity: 0.6; font-size: 0.8rem;">
-      &copy; 2024 ZAUNK! PEDAL EFFECTS.
-    </div>
+<main class="container" id="catalog-root">
+  <div style="text-align:center; padding: 4rem;">
+    <h2>CARGANDO ARTEFACTOS...</h2>
+    <small>Si esto no desaparece, revisa el archivo pedales.json</small>
   </div>
+</main>
+
+<footer>
+  <div class="socials">
+    <a href="#">INSTAGRAM</a>
+    <a href="#">YOUTUBE</a>
+    <a href="mailto:info@zaunk.com">EMAIL</a>
+  </div>
+  <br>
+  <small>&copy; 2024 ZAUNK EFFECTS. HECHO EN CASA.</small>
 </footer>
 
-<div id="cart-fab" onclick="checkout()">
-  <span id="cart-count">0</span> -> CONFIRMAR PEDIDO
+<div id="fab" onclick="goToCheckout()">
+  <span id="fab-count">0</span> -> PEDIR AHORA
 </div>
 
-<div class="modal" id="product-modal">
-  <div class="modal-content">
-    <div class="close-modal" onclick="closeModal()">X CERRAR</div>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem; margin-top: 2rem;">
-      <div>
-        <div id="modal-imgs" style="display:flex; flex-direction:column; gap:15px;"></div>
-        <div id="modal-video-container"></div>
-      </div>
-      <div>
-        <h2 id="modal-title" style="background:var(--ink); color:#fff; display:inline-block; padding:5px 15px; transform: rotate(-1deg);">TITULO</h2>
-        <div style="margin: 1rem 0;">
-          <span id="modal-cat" style="background:var(--brand-blue); color:#fff; padding: 2px 8px; font-weight:bold; font-family:var(--font-body);">CATEGORIA</span>
-        </div>
-        <p id="modal-desc" style="white-space: pre-line; padding:1rem; border: 2px solid var(--ink); background: #f4f4f4; margin-top: 1rem; box-shadow: 5px 5px 0 rgba(0,0,0,0.1);"></p>
-        <br>
-        <button class="btn" style="border:2px solid var(--brand-blue); color:var(--brand-blue); width:100%;" onclick="toggleSelectFromModal()">[ ] AÑADIR A LA LISTA</button>
-      </div>
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-close">
+      <button class="btn btn-small" onclick="closeModal()">X CERRAR</button>
+    </div>
+    <div id="modal-media"></div> <div id="modal-info">
+      <h2 id="m-title">NOMBRE</h2>
+      <span id="m-cat" style="background:var(--zaunk-blue); color:#fff; padding:2px 8px;">CAT</span>
+      <p id="m-desc" style="white-space: pre-line; margin-top:1rem;"></p>
+      <br>
+      <button class="btn" style="width:100%" onclick="toggleFromModal()">[ ] AÑADIR AL PEDIDO</button>
     </div>
   </div>
 </div>
 
-<div id="admin-panel">
+<div id="admin">
   <div class="container">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h1 style="color:#000;">// BACKSTAGE CONTROL</h1>
-      <button class="btn" style="background:var(--ink); color:#fff;" onclick="closeAdmin()">SALIR</button>
-    </div>
-
-    <div class="admin-box" style="border-color: var(--brand-blue);">
-      <h3 style="color:var(--brand-blue)">GESTIÓN DE LLAVES</h3>
-      <p style="font-size:0.8rem">Genera hash SHA-256 para nuevas contraseñas.</p>
-      <div style="display:flex; gap:10px;">
-        <input type="text" id="new-pass-input" placeholder="Contraseña nueva..." style="width:auto; flex:1;">
-        <button class="btn" onclick="generateHashTool()" style="font-size:0.9rem;">GENERAR</button>
-      </div>
-      <div id="hash-result" style="background:#000; color:#0f0; padding:10px; margin-top:10px; display:none; word-break:break-all;"></div>
+    <div style="display:flex; justify-content:space-between; margin-bottom:2rem;">
+      <h1>PANEL DE CONTROL</h1>
+      <button class="btn" onclick="closeAdmin()">SALIR</button>
     </div>
 
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem;">
-      <div class="admin-box">
-        <h3>CREAR / EDITAR</h3>
-        <input type="hidden" id="admin-id">
-        
-        <label>Nombre:</label>
-        <input type="text" id="admin-nombre">
-        
-        <label>Categoría:</label>
-        <select id="admin-categoria">
-          <option value="fuzz">FUZZ</option>
-          <option value="overdrive">OVERDRIVE</option>
-          <option value="distorsion">DISTORSION</option>
-          <option value="modulacion">MODULACION</option>
-          <option value="bajo">BAJO</option>
-          <option value="otros">OTROS</option>
-        </select>
-        
-        <label>Imágenes (1 por línea):</label>
-        <textarea id="admin-imgs-text" rows="4"></textarea>
-        
-        <label>ID Youtube:</label>
-        <input type="text" id="admin-video">
-        
-        <label>Intro Corta:</label>
-        <textarea id="admin-short" rows="2"></textarea>
-        
-        <label>Detalle Completo:</label>
-        <textarea id="admin-long" rows="6"></textarea>
-        
-        <div style="display:flex; gap:10px; margin-top:1rem;">
-          <button class="btn" style="background:var(--brand-blue); color:#fff; flex:1;" onclick="savePedal()">GUARDAR</button>
-          <button class="btn" style="background:#999; color:#fff;" onclick="clearForm()">LIMPIAR</button>
+      <div class="admin-card">
+        <h3>EDITOR</h3>
+        <input type="hidden" id="e-id">
+        <div class="form-group"><label>Nombre:</label><input id="e-nombre"></div>
+        <div class="form-group"><label>Categoría:</label>
+          <select id="e-cat">
+            <option value="fuzz">Fuzz</option>
+            <option value="overdrive">Overdrive</option>
+            <option value="distorsion">Distorsión</option>
+            <option value="modulacion">Modulación</option>
+            <option value="bajo">Bajo</option>
+            <option value="otros">Otros</option>
+          </select>
         </div>
+        <div class="form-group"><label>Imágenes (URLs):</label><textarea id="e-imgs" rows="3" placeholder="Una URL por línea"></textarea></div>
+        <div class="form-group"><label>Youtube ID:</label><input id="e-video"></div>
+        <div class="form-group"><label>Intro:</label><textarea id="e-short"></textarea></div>
+        <div class="form-group"><label>Descripción:</label><textarea id="e-long" rows="5"></textarea></div>
+        <button class="btn" onclick="saveData()">GUARDAR</button>
+        <button class="btn" style="border-color:#ccc; color:#666;" onclick="clearEditor()">LIMPIAR</button>
       </div>
 
-      <div class="admin-box">
-        <h3>INVENTARIO</h3>
-        <div id="admin-list" style="max-height:400px; overflow-y:auto; border:1px solid #ccc; padding:5px; margin-bottom:1rem;"></div>
-        <button class="btn" style="width:100%; background:#000; color:#fff;" onclick="downloadJSON()">DESCARGAR JSON</button>
+      <div class="admin-card">
+        <h3>LISTADO</h3>
+        <div id="admin-list" style="max-height:400px; overflow-y:auto; border:1px solid #ccc; padding:10px;"></div>
+        <br>
+        <button class="btn" style="width:100%; background:var(--ink); color:#fff; border-color:var(--ink);" onclick="downloadJson()">DESCARGAR JSON</button>
+        
+        <hr>
+        <h4>Cambiar Clave (Generador Hash)</h4>
+        <input id="new-pass" placeholder="Nueva clave...">
+        <button class="btn btn-small" onclick="genHash()">Ver Hash</button>
       </div>
     </div>
   </div>
 </div>
 
+<div id="secret-btn" onclick="forceLogin()"></div>
+
 <script>
-  /* CONFIG */
-  const GFORM_URL = "https://docs.google.com/forms/d/e/TU_ID_AQUI/viewform";
-  const GFORM_ENTRY = "entry.123456789";
-  const HASH_SECRET = "8056214555075677813083110295627771746654160408542454
+/* ================= CONFIGURACIÓN ================= */
+// URL GOOGLE FORM
+const FORM_URL = "https://docs.google.com/forms/d/e/TU_ID_AQUI/viewform"; 
+const FORM_ENTRY = "entry.123456789";
+
+// CLAVES (nagusi / admin)
+const H_SECRET = "8056214555075677813083110295627771746654160408542454559888927878";
+const H_PASS   = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
+
+/* ================= ESTADO ================= */
+let db = [];
+let cart = new Set();
+let keyBuffer = "";
+
+/* ================= INICIO ================= */
+window.addEventListener('DOMContentLoaded', () => {
+  loadData();
+  setupKeys();
+});
+
+// 1. CARGA DE DATOS ROBUSTA
+async function loadData() {
+  try {
+    const r = await fetch('pedales.json');
+    if(!r.ok) throw new Error("No se encuentra pedales.json");
+    const data = await r.json();
+    
+    // CORRECCIÓN AUTOMÁTICA DE DATOS
+    // Si tu json viejo tiene "tipo", lo pasamos a "categoria"
+    db = data.map(p => ({
+      ...p,
+      categoria: p.categoria || p.tipo || 'otros', // Fallback
+      imagenes: p.imagenes || [],
+      id: p.id || Math.random().toString(36).substr(2, 9)
+    }));
+    
+    renderFront();
+    renderAdminList();
+  } catch(e) {
+    document.getElementById('catalog-root').innerHTML = `
+      <div style="text-align:center; padding:4rem; color:red; border:2px solid red;">
+        <h3>ERROR DE CARGA</h3>
+        <p>${e.message}</p>
+        <p>Asegúrate de que 'pedales.json' está en la carpeta.</p>
+      </div>`;
+  }
+}
+
+// 2. RENDERIZADO WEB
+function renderFront() {
+  const root = document.getElementById('catalog-root');
+  root.innerHTML = "";
+  
+  // Agrupar
+  const groups = {};
+  db.forEach(p => {
+    let c = p.categoria.toLowerCase();
+    if(!groups[c]) groups[c] = [];
+    groups[c].push(p);
+  });
+
+  for(const cat in groups) {
+    // Título Categoría
+    const section = document.createElement('div');
+    section.innerHTML = `
+      <div class="cat-header">
+        <div class="cat-badge"><h2>${cat.toUpperCase()}</h2></div>
+      </div>
+      <div class="grid"></div>
+    `;
+    const grid = section.querySelector('.grid');
+    
+    groups[cat].forEach(p => {
+      const isSel = cart.has(p.id);
+      const img = (p.imagenes && p.imagenes[0]) ? p.imagenes[0] : ''; 
+      // Placeholder si no hay imagen
+      const imgTag = img ? `<img src="${img}" class="card-img">` : `<div class="card-img" style="background:#eee; display:flex; align-items:center; justify-content:center; color:#999;">SIN FOTO</div>`;
+
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div onclick="openModal('${p.id}')">
+          ${imgTag}
+        </div>
+        <h3 onclick="openModal('${p.id}')">${p.nombre}</h3>
+        <p>${p.descripcionCorta || ''}</p>
+        <label class="check-area">
+          <input type="checkbox" onchange="toggleCart('${p.id}', this)" ${isSel?'checked':''}>
+          <span class="box"></span>
+          <span>AÑADIR AL PEDIDO</span>
+        </label>
+      `;
+      grid.appendChild(card);
+    });
+    root.appendChild(section);
+  }
+}
+
+// 3. CARRITO
+function toggleCart(id, chk) {
+  if(chk.checked) cart.add(id); else cart.delete(id);
+  updateFab();
+}
+function updateFab() {
+  const btn = document.getElementById('fab');
+  if(cart.size > 0) {
+    btn.style.display = 'block';
+    document.getElementById('fab-count').innerText = cart.size;
+  } else {
+    btn.style.display = 'none';
+  }
+}
+function goToCheckout() {
+  const items = db.filter(p => cart.has(p.id)).map(p => `- ${p.nombre}`).join('\n');
+  const finalUrl = `${FORM_URL}?usp=pp_url&${FORM_ENTRY}=${encodeURIComponent(items)}`;
+  window.open(finalUrl, '_blank');
+}
+
+// 4. MODAL
+function openModal(id) {
+  const p = db.find(x => x.id === id);
+  if(!p) return;
+  
+  document.getElementById('m-title').innerText = p.nombre;
+  document.getElementById('m-cat').innerText = p.categoria.toUpperCase();
+  document.getElementById('m-desc').innerText = p.descripcionLarga || '';
+  
+  // Media
+  const mediaDiv = document.getElementById('modal-media');
+  let html = p.imagenes.map(src => `<img src="${src}" style="width:100%; border:2px solid #000; margin-bottom:10px;">`).join('');
+  if(p.videoID) {
+    html += `<iframe style="width:100%; aspect-ratio:16/9; border:2px solid #000;" src="https://www.youtube.com/embed/${p.videoID}" allowfullscreen></iframe>`;
+  }
+  mediaDiv.innerHTML = html;
+  
+  document.getElementById('modal').style.display = 'flex';
+}
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+  document.getElementById('modal-media').innerHTML = "";
+}
+
+// 5. SEGURIDAD (ACCESO PANEL)
+async function hash(s) {
+  const b = new TextEncoder().encode(s);
+  const h = await crypto.subtle.digest('SHA-256', b);
+  return Array.from(new Uint8Array(h)).map(x => x.toString(16).padStart(2,'0')).join('');
+}
+
+function setupKeys() {
+  window.addEventListener('keydown', e => {
+    keyBuffer += e.key.toLowerCase();
+    if(keyBuffer.length > 20) keyBuffer = keyBuffer.slice(-20);
+    if(keyBuffer.endsWith("nagusi")) forceLogin();
+  });
+}
+
+async function forceLogin() {
+  const pass = prompt("PASSWORD ADMIN:");
+  if(!pass) return;
+  const h = await hash(pass);
+  if(h === H_PASS) {
+    document.getElementById('admin').style.display = 'block';
+  } else {
+    alert("Incorrecto");
+  }
+}
+function closeAdmin() { 
+  document.getElementById('admin').style.display = 'none';
+  renderFront();
+}
+
+// 6. ADMIN FUNCIONES
+function renderAdminList() {
+  const l = document.getElementById('admin-list');
+  l.innerHTML = db.map(p => `
+    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between;">
+      <b>${p.nombre}</b>
+      <div>
+        <button onclick="editP('${p.id}')">EDIT</button>
+        <button onclick="delP('${p.id}')" style="color:red">X</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function editP(id) {
+  const p = db.find(x => x.id === id);
+  document.getElementById('e-id').value = p.id;
+  document.getElementById('e-nombre').value = p.nombre;
+  document.getElementById('e-cat').value = p.categoria;
+  document.getElementById('e-imgs').value = p.imagenes.join('\n');
+  document.getElementById('e-video').value = p.videoID || '';
+  document.getElementById('e-short').value = p.descripcionCorta || '';
+  document.getElementById('e-long').value = p.descripcionLarga || '';
+}
+
+function delP(id) {
+  if(confirm("¿Borrar?")) {
+    db = db.filter(x => x.id !== id);
+    renderAdminList();
+  }
+}
+
+function saveData() {
+  const idField = document.getElementById('e-id').value;
+  const nombre = document.getElementById('e-nombre').value;
+  if(!nombre) return alert("Pon un nombre");
+  
+  const id = idField || nombre.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+  const imgs = document.getElementById('e-imgs').value.split('\n').map(x=>x.trim()).filter(x=>x);
+  
+  const newItem = {
+    id,
+    nombre,
+    categoria: document.getElementById('e-cat').value,
+    imagenes: imgs,
+    videoID: document.getElementById('e-video').value,
+    descripcionCorta: document.getElementById('e-short').value,
+    descripcionLarga: document.getElementById('e-long').value
+  };
+  
+  const idx = db.findIndex(x => x.id === id);
+  if(idx >= 0) db[idx] = newItem;
+  else db.push(newItem);
+  
+  renderAdminList();
+  alert("Guardado en memoria temp.");
+  clearEditor();
+}
+
+function clearEditor() {
+  document.querySelectorAll('#admin input, #admin textarea').forEach(x => x.value = '');
+}
+
+function downloadJson() {
+  const s = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+  const a = document.createElement('a');
+  a.href = s; a.download = "pedales.json";
+  a.click();
+}
+
+async function genHash() {
+  const v = document.getElementById('new-pass').value;
+  if(v) alert(await hash(v));
+}
+</script>
+
+</body>
+</html>
