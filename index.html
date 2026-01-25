@@ -11,9 +11,9 @@
 
   <style>
     :root {
-      --zaunk-blue: #253494; /* AZUL DE TU LOGO */
-      --paper: #fcfcfc;      /* Blanco papel */
-      --ink: #1a1a1a;        /* Negro suave para textos largos */
+      --zaunk-blue: #253494;
+      --paper: #fcfcfc;
+      --ink: #1a1a1a;
       
       --font-body: 'Courier Prime', monospace;
       --font-title: 'Oswald', sans-serif;
@@ -26,26 +26,33 @@
       background-color: var(--paper);
       color: var(--ink);
       font-family: var(--font-body);
-      /* Textura sutil de papel granulado */
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
     }
 
     /* === HEADER === */
     header {
       text-align: center;
-      padding: 3rem 1rem;
-      border-bottom: 5px solid var(--zaunk-blue);
-      background: #fff;
+      padding: 2rem 1rem;
+      background-color: var(--zaunk-blue); /* Fondo Azul */
+      color: #fff;
+      border-bottom: 5px solid var(--ink);
     }
 
     .logo-wrapper {
-      max-width: 200px;
+      max-width: 220px;
       margin: 0 auto;
       transform: rotate(-2deg);
       transition: transform 0.3s;
+      background: #fff; /* Recuadro blanco para el logo si es transparente */
+      padding: 10px;
+      border: 3px solid var(--ink);
+      box-shadow: 5px 5px 0 rgba(0,0,0,0.3);
     }
     .logo-wrapper:hover { transform: scale(1.05) rotate(0deg); }
     .logo-wrapper img { width: 100%; display: block; }
+    
+    .editable-text { border: 1px dashed transparent; transition: 0.2s; }
+    .editable-text:hover { border-color: rgba(255,255,255,0.5); cursor: text; }
 
     /* === ESTRUCTURA === */
     .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
@@ -57,87 +64,81 @@
       margin-top: 0;
     }
 
-    /* === BOTONES ESTILO PUNK === */
+    /* === BOTONES === */
     .btn {
-      background: #fff;
-      color: var(--zaunk-blue);
-      border: 3px solid var(--zaunk-blue);
-      padding: 10px 20px;
-      font-family: var(--font-title);
-      font-size: 1.1rem;
-      letter-spacing: 1px;
-      cursor: pointer;
-      box-shadow: 4px 4px 0px var(--zaunk-blue); /* Sombra dura desplazada */
-      transition: all 0.2s;
-      text-decoration: none;
-      display: inline-block;
+      background: #fff; color: var(--zaunk-blue);
+      border: 3px solid var(--zaunk-blue); padding: 10px 20px;
+      font-family: var(--font-title); font-size: 1.1rem; cursor: pointer;
+      box-shadow: 4px 4px 0px var(--zaunk-blue); transition: all 0.2s;
     }
     .btn:hover {
-      background: var(--zaunk-blue);
-      color: #fff;
-      transform: translate(2px, 2px);
-      box-shadow: 2px 2px 0px #000;
+      background: var(--zaunk-blue); color: #fff;
+      transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000;
     }
-    
-    .btn-small { padding: 5px 10px; font-size: 0.9rem; border-width: 2px; box-shadow: 3px 3px 0 var(--zaunk-blue); }
 
     /* === CATÁLOGO === */
     .cat-header {
-      margin-top: 3rem;
+      margin-top: 4rem;
       border-bottom: 2px dashed var(--zaunk-blue);
       margin-bottom: 2rem;
     }
     .cat-badge {
-      background: var(--zaunk-blue);
-      color: #fff;
-      padding: 5px 15px;
-      display: inline-block;
-      transform: skew(-10deg);
+      background: var(--zaunk-blue); color: #fff; padding: 5px 15px;
+      display: inline-block; transform: skew(-10deg);
     }
     .cat-badge h2 { color: #fff; margin: 0; transform: skew(10deg); font-size: 1.8rem; }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 2.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 3rem;
       padding-bottom: 3rem;
     }
 
-    /* === TARJETAS (CARDS) === */
+    /* === TARJETAS === */
     .card {
       background: #fff;
-      border: 3px solid var(--zaunk-blue);
+      border: 2px solid var(--ink);
       padding: 1rem;
       position: relative;
       transition: transform 0.2s;
+      /* Por defecto B/N */
+      filter: grayscale(100%);
+      opacity: 0.9;
     }
-    .card:hover {
-      transform: scale(1.02) rotate(1deg);
-      z-index: 5;
-      box-shadow: 10px 10px 0px rgba(37, 52, 148, 0.2);
+    
+    /* ESTADO: SELECCIONADO (COLOR) */
+    .card.active {
+      filter: grayscale(0%); /* A COLOR */
+      border: 4px solid var(--zaunk-blue);
+      transform: scale(1.03);
+      z-index: 10;
+      box-shadow: 10px 10px 0px rgba(37, 52, 148, 0.3);
+      opacity: 1;
+    }
+    
+    .card:hover { opacity: 1; filter: grayscale(0%); /* Hover también color */ }
+
+    /* ESTADO: AGOTADO */
+    .card.agotado {
+      pointer-events: none;
+      opacity: 0.5;
+      filter: grayscale(100%) blur(1px);
+    }
+    .sold-out-badge {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
+      border: 3px solid red; color: red; font-size: 2rem; font-family: var(--font-title);
+      padding: 10px; background: rgba(255,255,255,0.9); z-index: 20;
     }
 
     .card-img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      border: 2px solid var(--ink);
-      filter: grayscale(100%) contrast(1.1); /* Efecto fotocopia */
-      margin-bottom: 1rem;
-      cursor: pointer;
+      width: 100%; height: 220px; object-fit: cover;
+      border: 2px solid var(--ink); margin-bottom: 1rem;
     }
-    .card:hover .card-img { filter: grayscale(0%); border-color: var(--zaunk-blue); }
 
-    .card h3 { font-size: 1.6rem; border-bottom: 2px solid var(--zaunk-blue); display: inline-block; cursor: pointer; }
-    .card p { font-size: 0.9rem; line-height: 1.4; }
-
-    /* CHECKBOX PERSONALIZADO */
     .check-area {
-      margin-top: 1rem;
-      border-top: 1px dotted var(--zaunk-blue);
-      padding-top: 0.5rem;
-      display: flex; align-items: center; gap: 10px;
-      cursor: pointer;
+      margin-top: 1rem; border-top: 1px dotted var(--zaunk-blue);
+      padding-top: 0.5rem; display: flex; align-items: center; gap: 10px; cursor: pointer;
     }
     .box {
       width: 24px; height: 24px; border: 2px solid var(--zaunk-blue);
@@ -147,55 +148,44 @@
     input[type="checkbox"]:checked + .box { background: var(--zaunk-blue); }
     input[type="checkbox"]:checked + .box::after { content: 'X'; color: #fff; font-weight: bold; }
 
-    /* === FOOTER SOCIAL === */
+    /* === FOOTER === */
     footer {
-      background: var(--zaunk-blue);
-      color: #fff;
-      padding: 3rem 1rem;
-      margin-top: auto;
-      text-align: center;
+      background: var(--zaunk-blue); color: #fff;
+      padding: 3rem 1rem; margin-top: auto; text-align: center;
       border-top: 5px solid var(--ink);
     }
     .socials a {
       color: #fff; text-decoration: none; font-family: var(--font-title);
-      font-size: 1.5rem; margin: 0 15px; border: 2px solid transparent; padding: 5px;
+      font-size: 1.5rem; margin: 0 15px;
     }
-    .socials a:hover { border: 2px solid #fff; background: rgba(255,255,255,0.1); }
 
     /* === MODAL === */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(255,255,255,0.9);
+      position: fixed; inset: 0; background: rgba(37,52,148,0.95);
       display: none; align-items: center; justify-content: center; z-index: 100;
-      backdrop-filter: blur(5px);
     }
     .modal-box {
-      background: #fff; border: 4px solid var(--zaunk-blue);
+      background: #fff; border: 4px solid #fff;
       width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto;
-      padding: 2rem; box-shadow: 15px 15px 0px var(--ink);
+      padding: 2rem; box-shadow: 20px 20px 0px var(--ink);
       display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
     }
     @media(max-width: 700px) { .modal-box { grid-template-columns: 1fr; } }
-    
-    .modal-close {
-      grid-column: 1 / -1; text-align: right;
-    }
-    
-    /* === PANEL ADMIN === */
+
+    /* === ADMIN === */
     #admin {
       position: fixed; inset: 0; background: #eee; z-index: 2000;
       padding: 2rem; overflow-y: auto; display: none;
       border: 10px solid var(--zaunk-blue);
     }
     .admin-card { background: #fff; border: 2px solid #000; padding: 1.5rem; margin-bottom: 2rem; }
-    .form-group { margin-bottom: 1rem; }
-    label { display: block; font-weight: bold; font-family: var(--font-title); color: var(--zaunk-blue); }
-    input, select, textarea {
-      width: 100%; padding: 10px; border: 2px solid #ccc; font-family: var(--font-body);
-      background: #fafafa;
+    input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid #ccc; }
+    
+    .hash-box {
+      background: #000; color: #0f0; padding: 1rem; 
+      font-family: monospace; border: 2px solid red; margin-bottom: 2rem;
     }
-    input:focus { border-color: var(--zaunk-blue); outline: none; }
 
-    /* === BOTÓN FLOTANTE === */
     #fab {
       position: fixed; bottom: 20px; right: 20px;
       background: var(--zaunk-blue); color: #fff;
@@ -204,11 +194,7 @@
       display: none; z-index: 90;
     }
     #fab:hover { transform: scale(1.05); }
-
-    /* Acceso Admin de Emergencia (Invisible pero clickable) */
-    #secret-btn {
-      position: fixed; bottom: 0; left: 0; width: 20px; height: 20px; opacity: 0.1; z-index: 9999; cursor: crosshair;
-    }
+    #secret-btn { position: fixed; bottom: 0; left: 0; width: 30px; height: 30px; z-index:9999; cursor: cell; }
 
   </style>
 </head>
@@ -216,26 +202,28 @@
 
 <header>
   <div class="logo-wrapper">
-    <img src="img/Zaunk_Logo.png" alt="ZAUNK LOGO" onerror="this.style.display='none'; document.querySelector('.logo-wrapper').innerText='ZAUNK! (Falta Logo)'">
+    <img src="img/Zaunk_Logo.png" alt="ZAUNK LOGO" onerror="this.style.display='none'">
   </div>
-  <p style="font-family: var(--font-body); margin-top: 1rem; font-weight: bold;">HANDMADE NOISE DEVICES</p>
+  <div style="margin-top: 1rem;">
+    <h2 id="web-title" style="color:#fff; margin:0; letter-spacing: 2px;">PEDAL EFFECTS</h2>
+    <p id="web-subtitle" style="font-family: var(--font-body); margin:0.5rem 0 0 0;">HANDMADE NOISE DEVICES</p>
+  </div>
 </header>
 
 <main class="container" id="catalog-root">
   <div style="text-align:center; padding: 4rem;">
     <h2>CARGANDO ARTEFACTOS...</h2>
-    <small>Si esto no desaparece, revisa el archivo pedales.json</small>
   </div>
 </main>
 
 <footer>
   <div class="socials">
-    <a href="#">INSTAGRAM</a>
-    <a href="#">YOUTUBE</a>
+    <a href="https://instagram.com" target="_blank">INSTAGRAM</a>
+    <a href="https://youtube.com" target="_blank">YOUTUBE</a>
     <a href="mailto:info@zaunk.com">EMAIL</a>
   </div>
   <br>
-  <small>&copy; 2024 ZAUNK EFFECTS. HECHO EN CASA.</small>
+  <small id="web-footer">&copy; 2024 ZAUNK EFFECTS. HECHO EN CASA.</small>
 </footer>
 
 <div id="fab" onclick="goToCheckout()">
@@ -244,59 +232,85 @@
 
 <div class="modal-overlay" id="modal">
   <div class="modal-box">
-    <div class="modal-close">
-      <button class="btn btn-small" onclick="closeModal()">X CERRAR</button>
+    <div style="grid-column: 1/-1; text-align:right;">
+      <button class="btn" style="padding:5px 10px;" onclick="closeModal()">X CERRAR</button>
     </div>
-    <div id="modal-media"></div> <div id="modal-info">
-      <h2 id="m-title">NOMBRE</h2>
-      <span id="m-cat" style="background:var(--zaunk-blue); color:#fff; padding:2px 8px;">CAT</span>
-      <p id="m-desc" style="white-space: pre-line; margin-top:1rem;"></p>
+    <div id="modal-media"></div>
+    <div id="modal-info">
+      <h2 id="m-title"></h2>
+      <div id="m-cats" style="margin-bottom:1rem;"></div>
+      <p id="m-desc" style="white-space: pre-line; border-left: 3px solid var(--zaunk-blue); padding-left:1rem;"></p>
       <br>
-      <button class="btn" style="width:100%" onclick="toggleFromModal()">[ ] AÑADIR AL PEDIDO</button>
+      <button id="m-btn" class="btn" style="width:100%" onclick="toggleFromModal()">LO QUIERO</button>
     </div>
   </div>
 </div>
 
 <div id="admin">
   <div class="container">
-    <div style="display:flex; justify-content:space-between; margin-bottom:2rem;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
       <h1>PANEL DE CONTROL</h1>
-      <button class="btn" onclick="closeAdmin()">SALIR</button>
+      <button class="btn" onclick="closeAdmin()">CERRAR</button>
+    </div>
+
+    <div class="admin-card" style="border-color:red;">
+      <h3 style="color:red; margin-top:0;">⚠️ GESTIÓN DE SEGURIDAD</h3>
+      <p>Aquí puedes crear los códigos hash para la secuencia de entrada o la contraseña.</p>
+      <div style="display:flex; gap:10px;">
+        <input id="hash-input" placeholder="Escribe nueva clave..." style="margin:0;">
+        <button class="btn" onclick="genHash()">GENERAR HASH</button>
+      </div>
+      <div id="hash-output" class="hash-box" style="display:none; margin-top:10px;">
+        Copia este código y pégalo en el archivo <code>index.html</code> (líneas H_SECRET o H_PASS):<br>
+        <strong id="hash-str" style="color:#fff;"></strong>
+      </div>
     </div>
 
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem;">
-      <div class="admin-card">
-        <h3>EDITOR</h3>
-        <input type="hidden" id="e-id">
-        <div class="form-group"><label>Nombre:</label><input id="e-nombre"></div>
-        <div class="form-group"><label>Categoría:</label>
-          <select id="e-cat">
-            <option value="fuzz">Fuzz</option>
-            <option value="overdrive">Overdrive</option>
-            <option value="distorsion">Distorsión</option>
-            <option value="modulacion">Modulación</option>
-            <option value="bajo">Bajo</option>
-            <option value="otros">Otros</option>
-          </select>
+      <div>
+        <div class="admin-card">
+          <h3>EDITOR DE PEDALES</h3>
+          <input type="hidden" id="e-id">
+          <label>Nombre:</label> <input id="e-nombre">
+          
+          <label>Categorías (separadas por coma):</label> 
+          <input id="e-cat" placeholder="Ej: fuzz, bajo, merch">
+          
+          <label>
+            <input type="checkbox" id="e-agotado" style="width:auto;"> 
+            MARCAR COMO AGOTADO (SOLD OUT)
+          </label>
+          
+          <label>Imágenes (1 URL por línea):</label> 
+          <textarea id="e-imgs" rows="3"></textarea>
+          
+          <label>Youtube ID:</label> <input id="e-video">
+          <label>Intro Corta:</label> <textarea id="e-short"></textarea>
+          <label>Descripción Larga:</label> <textarea id="e-long" rows="4"></textarea>
+          
+          <div style="display:flex; gap:10px;">
+            <button class="btn" style="flex:1" onclick="saveData()">GUARDAR PEDAL</button>
+            <button class="btn" style="background:#ccc; border-color:#ccc; color:#000;" onclick="clearEditor()">LIMPIAR</button>
+          </div>
         </div>
-        <div class="form-group"><label>Imágenes (URLs):</label><textarea id="e-imgs" rows="3" placeholder="Una URL por línea"></textarea></div>
-        <div class="form-group"><label>Youtube ID:</label><input id="e-video"></div>
-        <div class="form-group"><label>Intro:</label><textarea id="e-short"></textarea></div>
-        <div class="form-group"><label>Descripción:</label><textarea id="e-long" rows="5"></textarea></div>
-        <button class="btn" onclick="saveData()">GUARDAR</button>
-        <button class="btn" style="border-color:#ccc; color:#666;" onclick="clearEditor()">LIMPIAR</button>
       </div>
 
-      <div class="admin-card">
-        <h3>LISTADO</h3>
-        <div id="admin-list" style="max-height:400px; overflow-y:auto; border:1px solid #ccc; padding:10px;"></div>
-        <br>
-        <button class="btn" style="width:100%; background:var(--ink); color:#fff; border-color:var(--ink);" onclick="downloadJson()">DESCARGAR JSON</button>
-        
-        <hr>
-        <h4>Cambiar Clave (Generador Hash)</h4>
-        <input id="new-pass" placeholder="Nueva clave...">
-        <button class="btn btn-small" onclick="genHash()">Ver Hash</button>
+      <div>
+        <div class="admin-card" style="background:#eef;">
+          <h3>EDITOR DE TEXTOS WEB</h3>
+          <p style="font-size:0.8rem;">Edita los textos fijos de la web y descarga el HTML nuevo.</p>
+          <label>Título Cabecera:</label> <input id="txt-title">
+          <label>Subtítulo:</label> <input id="txt-subtitle">
+          <label>Footer Text:</label> <input id="txt-footer">
+          <button class="btn" style="width:100%; background:var(--ink); color:#fff; border-color:#000;" onclick="downloadHTML()">💾 DESCARGAR INDEX.HTML (TEXTOS)</button>
+        </div>
+
+        <div class="admin-card">
+          <h3>INVENTARIO JSON</h3>
+          <div id="admin-list" style="max-height:300px; overflow-y:auto; border:1px solid #ccc; padding:5px;"></div>
+          <br>
+          <button class="btn" style="width:100%;" onclick="downloadJson()">💾 DESCARGAR PEDALES.JSON (DATOS)</button>
+        </div>
       </div>
     </div>
   </div>
@@ -306,7 +320,6 @@
 
 <script>
 /* ================= CONFIGURACIÓN ================= */
-// URL GOOGLE FORM
 const FORM_URL = "https://docs.google.com/forms/d/e/TU_ID_AQUI/viewform"; 
 const FORM_ENTRY = "entry.123456789";
 
@@ -314,7 +327,7 @@ const FORM_ENTRY = "entry.123456789";
 const H_SECRET = "8056214555075677813083110295627771746654160408542454559888927878";
 const H_PASS   = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
 
-/* ================= ESTADO ================= */
+/* ================= VARIABLES ================= */
 let db = [];
 let cart = new Set();
 let keyBuffer = "";
@@ -323,91 +336,111 @@ let keyBuffer = "";
 window.addEventListener('DOMContentLoaded', () => {
   loadData();
   setupKeys();
+  // Cargar textos actuales en el admin
+  document.getElementById('txt-title').value = document.getElementById('web-title').innerText;
+  document.getElementById('txt-subtitle').value = document.getElementById('web-subtitle').innerText;
+  document.getElementById('txt-footer').value = document.getElementById('web-footer').innerText;
 });
 
-// 1. CARGA DE DATOS ROBUSTA
+// 1. CARGA DE DATOS
 async function loadData() {
   try {
     const r = await fetch('pedales.json');
-    if(!r.ok) throw new Error("No se encuentra pedales.json");
+    if(!r.ok) throw new Error("pedales.json no encontrado");
     const data = await r.json();
     
-    // CORRECCIÓN AUTOMÁTICA DE DATOS
-    // Si tu json viejo tiene "tipo", lo pasamos a "categoria"
-    db = data.map(p => ({
-      ...p,
-      categoria: p.categoria || p.tipo || 'otros', // Fallback
-      imagenes: p.imagenes || [],
-      id: p.id || Math.random().toString(36).substr(2, 9)
-    }));
+    // Normalizar datos (convertir cat string a array)
+    db = data.map(p => {
+      let cats = [];
+      if(Array.isArray(p.categoria)) cats = p.categoria;
+      else if(p.categoria) cats = p.categoria.split(',').map(s => s.trim());
+      else cats = ['otros'];
+      
+      return {
+        ...p,
+        categoria: cats,
+        imagenes: p.imagenes || [],
+        agotado: !!p.agotado,
+        id: p.id || Math.random().toString(36).substr(2, 9)
+      };
+    });
     
     renderFront();
     renderAdminList();
-  } catch(e) {
-    document.getElementById('catalog-root').innerHTML = `
-      <div style="text-align:center; padding:4rem; color:red; border:2px solid red;">
-        <h3>ERROR DE CARGA</h3>
-        <p>${e.message}</p>
-        <p>Asegúrate de que 'pedales.json' está en la carpeta.</p>
-      </div>`;
-  }
+  } catch(e) { console.error(e); }
 }
 
-// 2. RENDERIZADO WEB
+// 2. RENDER FRONTEND
 function renderFront() {
   const root = document.getElementById('catalog-root');
   root.innerHTML = "";
   
-  // Agrupar
-  const groups = {};
-  db.forEach(p => {
-    let c = p.categoria.toLowerCase();
-    if(!groups[c]) groups[c] = [];
-    groups[c].push(p);
-  });
+  // Obtener todas las categorías únicas
+  const allCats = new Set();
+  db.forEach(p => p.categoria.forEach(c => allCats.add(c.toLowerCase())));
+  
+  // Ordenar: merch al final si existe
+  const sortedCats = Array.from(allCats).sort((a,b) => a === 'merch' ? 1 : b === 'merch' ? -1 : a.localeCompare(b));
 
-  for(const cat in groups) {
-    // Título Categoría
-    const section = document.createElement('div');
-    section.innerHTML = `
-      <div class="cat-header">
-        <div class="cat-badge"><h2>${cat.toUpperCase()}</h2></div>
-      </div>
-      <div class="grid"></div>
-    `;
-    const grid = section.querySelector('.grid');
+  sortedCats.forEach(cat => {
+    // Filtrar pedales de esta categoría
+    const items = db.filter(p => p.categoria.some(c => c.toLowerCase() === cat));
     
-    groups[cat].forEach(p => {
-      const isSel = cart.has(p.id);
-      const img = (p.imagenes && p.imagenes[0]) ? p.imagenes[0] : ''; 
-      // Placeholder si no hay imagen
-      const imgTag = img ? `<img src="${img}" class="card-img">` : `<div class="card-img" style="background:#eee; display:flex; align-items:center; justify-content:center; color:#999;">SIN FOTO</div>`;
-
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <div onclick="openModal('${p.id}')">
-          ${imgTag}
-        </div>
-        <h3 onclick="openModal('${p.id}')">${p.nombre}</h3>
-        <p>${p.descripcionCorta || ''}</p>
-        <label class="check-area">
-          <input type="checkbox" onchange="toggleCart('${p.id}', this)" ${isSel?'checked':''}>
-          <span class="box"></span>
-          <span>AÑADIR AL PEDIDO</span>
-        </label>
+    if(items.length > 0) {
+      const section = document.createElement('div');
+      section.innerHTML = `
+        <div class="cat-header"><div class="cat-badge"><h2>${cat.toUpperCase()}</h2></div></div>
+        <div class="grid"></div>
       `;
-      grid.appendChild(card);
-    });
-    root.appendChild(section);
-  }
+      const grid = section.querySelector('.grid');
+      
+      items.forEach(p => {
+        const isSel = cart.has(p.id);
+        const img = p.imagenes[0] || ''; 
+        const soldOutBadge = p.agotado ? '<div class="sold-out-badge">SOLD OUT</div>' : '';
+        const activeClass = isSel ? 'active' : '';
+        const agotadoClass = p.agotado ? 'agotado' : '';
+        const chkDisabled = p.agotado ? 'disabled' : '';
+
+        const card = document.createElement('div');
+        // Clases dinámicas: active = color, agotado = gris
+        card.className = `card ${activeClass} ${agotadoClass}`;
+        card.innerHTML = `
+          ${soldOutBadge}
+          <div onclick="openModal('${p.id}')" style="cursor:pointer">
+            ${img ? `<img src="${img}" class="card-img">` : '<div class="card-img" style="background:#eee;">NO FOTO</div>'}
+          </div>
+          <h3 onclick="openModal('${p.id}')">${p.nombre}</h3>
+          <p>${p.descripcionCorta || ''}</p>
+          
+          <label class="check-area">
+            <input type="checkbox" onchange="toggleCart('${p.id}', this)" ${isSel?'checked':''} ${chkDisabled}>
+            <span class="box"></span>
+            <span>${p.agotado ? 'NO DISPONIBLE' : 'AÑADIR AL PEDIDO'}</span>
+          </label>
+        `;
+        grid.appendChild(card);
+      });
+      root.appendChild(section);
+    }
+  });
 }
 
 // 3. CARRITO
 function toggleCart(id, chk) {
-  if(chk.checked) cart.add(id); else cart.delete(id);
+  if(chk.disabled) return;
+  const card = chk.closest('.card');
+  
+  if(chk.checked) {
+    cart.add(id);
+    card.classList.add('active'); // Activa el color
+  } else {
+    cart.delete(id);
+    card.classList.remove('active'); // Vuelve a B/N
+  }
   updateFab();
 }
+
 function updateFab() {
   const btn = document.getElementById('fab');
   if(cart.size > 0) {
@@ -417,6 +450,7 @@ function updateFab() {
     btn.style.display = 'none';
   }
 }
+
 function goToCheckout() {
   const items = db.filter(p => cart.has(p.id)).map(p => `- ${p.nombre}`).join('\n');
   const finalUrl = `${FORM_URL}?usp=pp_url&${FORM_ENTRY}=${encodeURIComponent(items)}`;
@@ -429,10 +463,25 @@ function openModal(id) {
   if(!p) return;
   
   document.getElementById('m-title').innerText = p.nombre;
-  document.getElementById('m-cat').innerText = p.categoria.toUpperCase();
+  document.getElementById('m-cats').innerHTML = p.categoria.map(c => `<span style="background:var(--zaunk-blue); color:#fff; padding:2px 6px; margin-right:5px; font-size:0.8rem;">${c.toUpperCase()}</span>`).join('');
   document.getElementById('m-desc').innerText = p.descripcionLarga || '';
   
-  // Media
+  const btn = document.getElementById('m-btn');
+  if(p.agotado) {
+    btn.innerText = "AGOTADO";
+    btn.disabled = true;
+    btn.style.opacity = 0.5;
+  } else {
+    btn.innerText = "LO QUIERO";
+    btn.disabled = false;
+    btn.style.opacity = 1;
+    // Vinculamos el botón del modal al estado del carrito
+    btn.onclick = () => {
+        if(cart.has(id)) { alert("Ya está en tu lista"); }
+        else { cart.add(id); renderFront(); updateFab(); closeModal(); }
+    };
+  }
+
   const mediaDiv = document.getElementById('modal-media');
   let html = p.imagenes.map(src => `<img src="${src}" style="width:100%; border:2px solid #000; margin-bottom:10px;">`).join('');
   if(p.videoID) {
@@ -447,13 +496,12 @@ function closeModal() {
   document.getElementById('modal-media').innerHTML = "";
 }
 
-// 5. SEGURIDAD (ACCESO PANEL)
+// 5. SEGURIDAD
 async function hash(s) {
   const b = new TextEncoder().encode(s);
   const h = await crypto.subtle.digest('SHA-256', b);
   return Array.from(new Uint8Array(h)).map(x => x.toString(16).padStart(2,'0')).join('');
 }
-
 function setupKeys() {
   window.addEventListener('keydown', e => {
     keyBuffer += e.key.toLowerCase();
@@ -461,28 +509,32 @@ function setupKeys() {
     if(keyBuffer.endsWith("nagusi")) forceLogin();
   });
 }
-
 async function forceLogin() {
   const pass = prompt("PASSWORD ADMIN:");
   if(!pass) return;
   const h = await hash(pass);
-  if(h === H_PASS) {
-    document.getElementById('admin').style.display = 'block';
-  } else {
-    alert("Incorrecto");
-  }
+  if(h === H_PASS) document.getElementById('admin').style.display = 'block';
+  else alert("Denegado");
 }
-function closeAdmin() { 
-  document.getElementById('admin').style.display = 'none';
-  renderFront();
+function closeAdmin() { document.getElementById('admin').style.display = 'none'; renderFront(); }
+
+// 6. ADMIN
+async function genHash() {
+  const v = document.getElementById('hash-input').value;
+  if(!v) return;
+  const h = await hash(v);
+  document.getElementById('hash-output').style.display = 'block';
+  document.getElementById('hash-str').innerText = h;
 }
 
-// 6. ADMIN FUNCIONES
 function renderAdminList() {
-  const l = document.getElementById('admin-list');
-  l.innerHTML = db.map(p => `
-    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between;">
-      <b>${p.nombre}</b>
+  document.getElementById('admin-list').innerHTML = db.map(p => `
+    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
+      <span>
+        <b>${p.nombre}</b> 
+        <small>(${p.categoria.join(', ')})</small> 
+        ${p.agotado ? '<span style="color:red; font-weight:bold;">[AGOTADO]</span>' : ''}
+      </span>
       <div>
         <button onclick="editP('${p.id}')">EDIT</button>
         <button onclick="delP('${p.id}')" style="color:red">X</button>
@@ -495,32 +547,27 @@ function editP(id) {
   const p = db.find(x => x.id === id);
   document.getElementById('e-id').value = p.id;
   document.getElementById('e-nombre').value = p.nombre;
-  document.getElementById('e-cat').value = p.categoria;
+  document.getElementById('e-cat').value = p.categoria.join(', ');
+  document.getElementById('e-agotado').checked = p.agotado;
   document.getElementById('e-imgs').value = p.imagenes.join('\n');
   document.getElementById('e-video').value = p.videoID || '';
   document.getElementById('e-short').value = p.descripcionCorta || '';
   document.getElementById('e-long').value = p.descripcionLarga || '';
 }
 
-function delP(id) {
-  if(confirm("¿Borrar?")) {
-    db = db.filter(x => x.id !== id);
-    renderAdminList();
-  }
-}
-
 function saveData() {
   const idField = document.getElementById('e-id').value;
   const nombre = document.getElementById('e-nombre').value;
-  if(!nombre) return alert("Pon un nombre");
+  if(!nombre) return alert("Nombre obligatorio");
   
   const id = idField || nombre.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-  const imgs = document.getElementById('e-imgs').value.split('\n').map(x=>x.trim()).filter(x=>x);
+  const cats = document.getElementById('e-cat').value.split(',').map(s=>s.trim()).filter(s=>s);
+  const imgs = document.getElementById('e-imgs').value.split('\n').map(s=>s.trim()).filter(s=>s);
   
-  const newItem = {
-    id,
-    nombre,
-    categoria: document.getElementById('e-cat').value,
+  const nuevo = {
+    id, nombre, 
+    categoria: cats.length ? cats : ['otros'],
+    agotado: document.getElementById('e-agotado').checked,
     imagenes: imgs,
     videoID: document.getElementById('e-video').value,
     descripcionCorta: document.getElementById('e-short').value,
@@ -528,18 +575,25 @@ function saveData() {
   };
   
   const idx = db.findIndex(x => x.id === id);
-  if(idx >= 0) db[idx] = newItem;
-  else db.push(newItem);
+  if(idx >= 0) db[idx] = nuevo; else db.push(nuevo);
   
   renderAdminList();
-  alert("Guardado en memoria temp.");
+  alert("Guardado en memoria");
   clearEditor();
 }
 
+function delP(id) {
+  if(confirm("¿Eliminar?")) {
+    db = db.filter(x => x.id !== id);
+    renderAdminList();
+  }
+}
 function clearEditor() {
   document.querySelectorAll('#admin input, #admin textarea').forEach(x => x.value = '');
+  document.getElementById('e-agotado').checked = false;
 }
 
+// 7. DESCARGAS
 function downloadJson() {
   const s = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
   const a = document.createElement('a');
@@ -547,11 +601,30 @@ function downloadJson() {
   a.click();
 }
 
-async function genHash() {
-  const v = document.getElementById('new-pass').value;
-  if(v) alert(await hash(v));
+function downloadHTML() {
+  // Aplicar textos del admin al DOM actual
+  document.getElementById('web-title').innerText = document.getElementById('txt-title').value;
+  document.getElementById('web-subtitle').innerText = document.getElementById('txt-subtitle').value;
+  document.getElementById('web-footer').innerText = document.getElementById('txt-footer').value;
+  
+  // Clonar el documento para limpiar cosas antes de guardar
+  const clone = document.documentElement.cloneNode(true);
+  
+  // Limpiar el catálogo (se carga vía JSON, no queremos guardar items duplicados)
+  clone.querySelector('#catalog-root').innerHTML = '<div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div>';
+  
+  // Ocultar modal y admin por si acaso
+  clone.querySelector('#modal').style.display = 'none';
+  clone.querySelector('#admin').style.display = 'none';
+
+  const htmlContent = "<!DOCTYPE html>\n" + clone.outerHTML;
+  const blob = new Blob([htmlContent], {type: "text/html"});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = "index.html";
+  a.click();
+  alert("HTML Descargado con los nuevos textos. Súbelo a GitHub.");
 }
 </script>
-
 </body>
 </html>
