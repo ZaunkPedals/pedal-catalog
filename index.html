@@ -3,27 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pedal Effects by ZAUNK!</title>
+  <title>Pedales Boutique</title>
 
   <style>
     :root {
-      --bg: #f7f7f7;
-      --text: #111;
-      --accent: #2a3b8f;
-      --soft: #ddd;
+      --bg: #0f1115;
+      --card: #1a1d24;
+      --text: #eaeaea;
+      --muted: #9aa0aa;
+      --accent: #4da3ff;
     }
+
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     header {
-      padding: 2.5rem 1rem;
+      padding: 2rem;
       text-align: center;
-      border-bottom: 1px solid var(--soft);
     }
 
     header img {
@@ -32,267 +34,206 @@
     }
 
     section {
-      padding: 3rem 1.5rem;
+      padding: 2rem;
       max-width: 1200px;
       margin: auto;
     }
 
     h2 {
-      border-bottom: 1px solid var(--soft);
+      border-bottom: 1px solid #2a2e38;
       padding-bottom: .5rem;
-    }
-
-    .filters {
-      display: flex;
-      gap: .5rem;
-      flex-wrap: wrap;
-      margin: 1.5rem 0;
-    }
-
-    .filters button {
-      padding: .4rem .8rem;
-      border: 1px solid var(--soft);
-      background: white;
-      cursor: pointer;
-    }
-
-    .filters button.active {
-      background: var(--accent);
-      color: white;
     }
 
     .pedales {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: 1.5rem;
+      margin-top: 1.5rem;
     }
 
     .pedal {
-      border: 1px solid var(--soft);
-      background: white;
+      background: var(--card);
+      border-radius: 14px;
       padding: 1rem;
       cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .pedal:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.6);
     }
 
     .pedal img {
       width: 100%;
-      height: 180px;
-      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: .5rem;
     }
 
-    .select {
+    .pedal p {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .pedal label {
+      display: block;
       margin-top: .5rem;
+      font-size: .85rem;
     }
 
-    .modal {
+    /* MODAL */
+    #modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.75);
+      background: rgba(0,0,0,.85);
       display: none;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       z-index: 10;
     }
 
     .modal-content {
-      background: white;
+      background: var(--card);
       max-width: 800px;
-      width: 95%;
-      padding: 1.5rem;
-      position: relative;
-      max-height: 90vh;
+      width: 90%;
+      padding: 2rem;
+      border-radius: 16px;
       overflow-y: auto;
+      max-height: 90vh;
     }
 
     .modal-content img {
       width: 100%;
+      border-radius: 10px;
       margin-bottom: 1rem;
     }
 
     .close {
-      position: absolute;
-      top: .5rem;
-      right: .5rem;
+      float: right;
       cursor: pointer;
-      font-size: 1.2rem;
+      font-size: 1.5rem;
     }
 
+    /* ADMIN */
     #admin-panel {
       display: none;
-      border: 2px dashed #aaa;
-      padding: 1.5rem;
-      margin-top: 2rem;
-      background: #fff;
-    }
-
-    #admin-panel input, #admin-panel textarea {
-      width: 100%;
-      margin-bottom: .5rem;
-    }
-
-    footer {
-      border-top: 1px solid var(--soft);
-      padding: 2rem;
-      text-align: center;
-      font-size: .9rem;
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      background: #000;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: .8rem;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <img src="img/logo.png" alt="Pedal Effects by ZAUNK!" />
-  <h1>Pedal Effects by ZAUNK!</h1>
+  <img src="img/logo.png" alt="Logo" />
   <p>Pedales artesanales hechos a mano</p>
 </header>
 
 <section>
-  <h2>Sobre mí</h2>
-  <p>
-    Fabricante independiente de pedales de guitarra y bajo. Cada pedal está
-    diseñado y montado a mano, buscando carácter, musicalidad y fiabilidad.
-  </p>
+  <h2>Pedales</h2>
+  <div class="pedales"></div>
 </section>
 
 <section>
-  <h2>Pedales</h2>
-  <div class="filters"></div>
-  <div class="pedales"></div>
-
-  <div id="admin-panel">
-    <h3>Panel de administración</h3>
-    <input id="adminTitle" placeholder="Nombre" />
-    <input id="adminType" placeholder="Tipo (fuzz, overdrive...)" />
-    <input id="adminImages" placeholder="Imágenes (separadas por coma)" />
-    <textarea id="adminShort" placeholder="Descripción corta"></textarea>
-    <textarea id="adminLong" placeholder="Descripción larga"></textarea>
-    <button id="add-pedal">Añadir pedal</button>
-    <button id="export-json">Exportar JSON</button>
-    <p><small>Ctrl + Shift + P</small></p>
-  </div>
+  <h2>Sobre mí</h2>
+  <p>Diseño y construyo pedales boutique buscando carácter, personalidad y sonido.</p>
 </section>
 
 <section>
   <h2>Contacto</h2>
-  <form action="https://formspree.io/f/xxxxxx" method="POST">
-    <input type="email" name="email" placeholder="Tu email" required />
-    <textarea name="message" placeholder="Pedales seleccionados" id="selected"></textarea>
-    <button type="submit">Enviar</button>
-  </form>
+  <p>Email: contacto@tudominio.com</p>
 </section>
 
-<footer>
-  © 2026 – Pedal Effects by ZAUNK!
-</footer>
+<div id="modal"></div>
 
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <span class="close" id="close">✕</span>
-    <div id="modal-images"></div>
-    <h3 id="modal-title"></h3>
-    <pre id="modal-desc"></pre>
-  </div>
+<div id="admin-panel">
+  <strong>Panel admin activo</strong>
 </div>
 
 <script>
 /* =====================
-   CONFIG ADMIN
+   ADMIN CONFIG
 ===================== */
 const ADMIN_USER = "admin";
-// hash SHA-256 de "pedales123"
 const ADMIN_PASS_HASH = "8b2f8b6f5c8e7b2bbf9f6c3b6bfe1e0c4e9c6b6b7f8b5b0f3a4d6d5e4c3b2a1";
 
-let adminUnlocked = false;
-
-/* =====================
-   SHA-256
-===================== */
 async function sha256(text) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(text);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(hashBuffer))
-    .map(b => b.toString(16).padStart(2, "0"))
-    .join("");
+  const data = new TextEncoder().encode(text);
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
 /* =====================
-   TECLA SECRETA
-   Ctrl + Alt + A
+   SECUENCIA SECRETA
+   N A G U S I
 ===================== */
-document.addEventListener("keydown", async (e) => {
-  if (e.ctrlKey && e.altKey && e.key.toLowerCase() === "a") {
-    e.preventDefault();
+const SECRET = "nagusi";
+let buffer = "";
 
-    if (!adminUnlocked) {
-      const user = prompt("Usuario admin:");
-      const pass = prompt("Contraseña:");
-      if (!user || !pass) return;
+window.addEventListener("keydown", async e => {
+  buffer += e.key.toLowerCase();
+  buffer = buffer.slice(-SECRET.length);
 
-      const hash = await sha256(pass);
+  if (buffer === SECRET) {
+    buffer = "";
+    const user = prompt("Usuario admin:");
+    const pass = prompt("Contraseña:");
+    if (!user || !pass) return;
 
-      if (user === ADMIN_USER && hash === ADMIN_PASS_HASH) {
-        adminUnlocked = true;
-        document.getElementById("admin-panel").style.display = "block";
-        alert("Panel admin activado");
-      } else {
-        alert("Credenciales incorrectas");
-      }
+    const hash = await sha256(pass);
+    if (user === ADMIN_USER && hash === ADMIN_PASS_HASH) {
+      document.getElementById("admin-panel").style.display = "block";
+      alert("Panel admin activado");
     } else {
-      adminUnlocked = false;
-      document.getElementById("admin-panel").style.display = "none";
+      alert("Credenciales incorrectas");
     }
   }
 });
 
 /* =====================
-   CARGAR PEDALES DESDE JSON
+   CARGA PEDALES
 ===================== */
 fetch("pedales.json")
-  .then(res => res.json())
-  .then(pedales => renderPedales(pedales))
-  .catch(err => console.error("Error cargando pedales:", err));
+  .then(r => r.json())
+  .then(pedales => {
+    const cont = document.querySelector(".pedales");
 
-function renderPedales(pedales) {
-  const contenedor = document.querySelector(".pedales");
-  contenedor.innerHTML = "";
+    pedales.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "pedal";
 
-  pedales.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "pedal";
-    div.dataset.tipo = p.tipo;
+      card.innerHTML = `
+        <img src="${p.imagenes[0]}" alt="${p.nombre}">
+        <h3>${p.nombre}</h3>
+        <p>${p.descripcionCorta}</p>
+        <label>
+          <input type="checkbox" value="${p.nombre}"> Me interesa
+        </label>
+      `;
 
-    div.innerHTML = `
-      <img src="${p.imagenes[0]}" alt="${p.nombre}">
-      <h3>${p.nombre}</h3>
-      <p>${p.descripcionCorta}</p>
-      <label>
-        <input type="checkbox" name="pedales[]" value="${p.nombre}">
-        Me interesa
-      </label>
-    `;
+      const checkbox = card.querySelector("input");
+      checkbox.addEventListener("click", e => e.stopPropagation());
 
-    div.addEventListener("click", () => abrirModal(p));
-    contenedor.appendChild(div);
+      card.addEventListener("click", () => abrirModal(p));
+      cont.appendChild(card);
+    });
   });
-}
 
-/* =====================
-   MODAL
-===================== */
-function abrirModal(pedal) {
+function abrirModal(p) {
   const modal = document.getElementById("modal");
-  const imgs = pedal.imagenes.map(i => `<img src="${i}">`).join("");
-
   modal.innerHTML = `
     <div class="modal-content">
       <span class="close" onclick="cerrarModal()">×</span>
-      <h2>${pedal.nombre}</h2>
-      <div class="modal-imgs">${imgs}</div>
-      <p>${pedal.descripcionLarga}</p>
+      <h2>${p.nombre}</h2>
+      ${p.imagenes.map(i => `<img src="${i}">`).join("")}
+      <p>${p.descripcionLarga}</p>
     </div>
   `;
-
   modal.style.display = "flex";
 }
 
@@ -300,5 +241,6 @@ function cerrarModal() {
   document.getElementById("modal").style.display = "none";
 }
 </script>
+
 </body>
 </html>

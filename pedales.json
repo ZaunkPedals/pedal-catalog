@@ -1,12 +1,13 @@
 [
   {
-    "nombre": "BASSATI! (Woolly Mammoth inspired)",
+    "id": "woolly-mammoth",
+    "nombre": "Woolly Mammoth Fuzz",
     "tipo": "fuzz",
     "imagenes": [
-      "img/bassati-1.jpg",
-      "img/bassati-2.jpg"
+      "img/pedales/woolly_1.jpg",
+      "img/pedales/woolly_2.jpg"
     ],
-    "descripcionCorta": "Fuzz masivo y agresivo optimizado para bajo.",
-    "descripcionLarga": "ES:\nEl ZVEX Woolly Mammoth Fuzz es un pedal de fuzz perfecto para bajos, con una presencia de graves impresionante, lo que lo hace ideal tanto para bajistas como para guitarristas.\n\nOfrece un tono de fuzz grueso, rico y agresivo que mantiene la claridad y el punch incluso en configuraciones extremas. Con una distorsión suave y sedosa, y una respuesta de graves profunda, es ideal para música rock pesada y experimental.\n\nCARACTERÍSTICAS:\n\nSección de Control Fuzz:\n• Wool: Ajusta la intensidad y textura del fuzz.\n• Pinch: Controla la anchura del pulso del fuzz.\n• EQ: Ajusta el equilibrio tonal del pedal.\n• Volume: Controla el nivel de salida general.\n\nDestacados:\n• Diseño amigable para bajos.\n• Efecto fuzz puerta único.\n• Amplio rango tonal.\n\nAlimentación: 9V DC centro negativo (no incluida)."
+    "descripcionCorta": "Fuzz grueso y agresivo con graves demoledores, ideal para bajo y guitarra.",
+    "descripcionLarga": "El ZVEX Woolly Mammoth Fuzz es un pedal de fuzz perfecto para bajos, con una presencia de graves impresionante, lo que lo hace ideal tanto para bajistas como para guitarristas. Ofrece un tono de fuzz grueso, rico y agresivo que mantiene la claridad y el punch incluso en configuraciones extremas.\\n\\nCARACTERÍSTICAS:\\n\\nSección de Control Fuzz:\\n• Wool: Ajusta la intensidad y textura del fuzz, desde suave y sutil hasta masivo y agresivo.\\n• Pinch: Controla la anchura del pulso del fuzz, creando un sonido fuzz apretado o uno más suelto y decaído.\\n• EQ: Ajusta el equilibrio tonal del pedal, enfatizando frecuencias graves o agudas.\\n• Volume: Controla el nivel de salida general, proporcionando un gran margen para tonos de fuzz contundentes.\\n\\nDestacados:\\n• Diseño amigable para bajos, manteniendo el punch en frecuencias graves.\\n• Efecto fuzz tipo puerta gracias al control Pinch.\\n• Amplio rango tonal, desde fuzz denso hasta tonos cortantes.\\n\\nAlimentación: 9V DC centro negativo (no incluida)."
   }
 ]
