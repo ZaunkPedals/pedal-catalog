@@ -29,13 +29,12 @@
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
     }
 
-    /* === HEADER === */
+    /* === HEADER (ESTILO ANTERIOR LIMPIO) === */
     header {
       text-align: center;
-      padding: 2rem 1rem;
-      background-color: var(--zaunk-blue); /* Fondo Azul */
-      color: #fff;
-      border-bottom: 5px solid var(--ink);
+      padding: 3rem 1rem;
+      background-color: #fff; /* Fondo blanco limpio */
+      border-bottom: 5px solid var(--zaunk-blue);
     }
 
     .logo-wrapper {
@@ -43,16 +42,9 @@
       margin: 0 auto;
       transform: rotate(-2deg);
       transition: transform 0.3s;
-      background: #fff; /* Recuadro blanco para el logo si es transparente */
-      padding: 10px;
-      border: 3px solid var(--ink);
-      box-shadow: 5px 5px 0 rgba(0,0,0,0.3);
     }
-    .logo-wrapper:hover { transform: scale(1.05) rotate(0deg); }
+    .logo-wrapper:hover { transform: scale(1.05) rotate(2deg); }
     .logo-wrapper img { width: 100%; display: block; }
-    
-    .editable-text { border: 1px dashed transparent; transition: 0.2s; }
-    .editable-text:hover { border-color: rgba(255,255,255,0.5); cursor: text; }
 
     /* === ESTRUCTURA === */
     .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
@@ -101,40 +93,52 @@
       border: 2px solid var(--ink);
       padding: 1rem;
       position: relative;
-      transition: transform 0.2s;
-      /* Por defecto B/N */
-      filter: grayscale(100%);
-      opacity: 0.9;
-    }
-    
-    /* ESTADO: SELECCIONADO (COLOR) */
-    .card.active {
-      filter: grayscale(0%); /* A COLOR */
-      border: 4px solid var(--zaunk-blue);
-      transform: scale(1.03);
-      z-index: 10;
-      box-shadow: 10px 10px 0px rgba(37, 52, 148, 0.3);
-      opacity: 1;
-    }
-    
-    .card:hover { opacity: 1; filter: grayscale(0%); /* Hover también color */ }
-
-    /* ESTADO: AGOTADO */
-    .card.agotado {
-      pointer-events: none;
-      opacity: 0.5;
-      filter: grayscale(100%) blur(1px);
-    }
-    .sold-out-badge {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
-      border: 3px solid red; color: red; font-size: 2rem; font-family: var(--font-title);
-      padding: 10px; background: rgba(255,255,255,0.9); z-index: 20;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
+    /* ESTADO NORMAL (NO SELECCIONADO): Filtro sucio/vintage pero CON COLOR */
     .card-img {
       width: 100%; height: 220px; object-fit: cover;
       border: 2px solid var(--ink); margin-bottom: 1rem;
+      transition: 0.3s;
+      /* Filtro: Contraste alto + sepia ligero para look "viejo" pero color */
+      filter: contrast(1.2) brightness(0.9) sepia(0.2); 
     }
+    
+    .card:hover .card-img { filter: contrast(1.1) brightness(1); }
+
+    /* ESTADO SELECCIONADO: Imagen Pura y Borde Azul */
+    .card.active {
+      border: 4px solid var(--zaunk-blue);
+      transform: scale(1.02);
+      box-shadow: 10px 10px 0px rgba(37, 52, 148, 0.2);
+      z-index: 10;
+    }
+    
+    .card.active .card-img {
+      filter: none; /* Color original puro */
+      border-color: var(--zaunk-blue);
+    }
+
+    .card.agotado {
+      pointer-events: none; opacity: 0.6;
+    }
+    .card.agotado .card-img { filter: grayscale(100%); }
+
+    .sold-out-badge {
+      position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
+      border: 3px solid red; color: red; font-size: 2rem; font-family: var(--font-title);
+      padding: 10px; background: rgba(255,255,255,0.9); z-index: 20; white-space: nowrap;
+    }
+    
+    .price-tag {
+      position: absolute; top: -10px; right: -10px;
+      background: var(--ink); color: #fff;
+      padding: 5px 10px; font-family: var(--font-title);
+      font-size: 1.2rem; transform: rotate(5deg);
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+    }
+    .card.active .price-tag { background: var(--zaunk-blue); }
 
     .check-area {
       margin-top: 1rem; border-top: 1px dotted var(--zaunk-blue);
@@ -205,7 +209,7 @@
     <img src="img/Zaunk_Logo.png" alt="ZAUNK LOGO" onerror="this.style.display='none'">
   </div>
   <div style="margin-top: 1rem;">
-    <h2 id="web-title" style="color:#fff; margin:0; letter-spacing: 2px;">PEDAL EFFECTS</h2>
+    <h2 id="web-title" style="margin:0; letter-spacing: 2px;">PEDAL EFFECTS</h2>
     <p id="web-subtitle" style="font-family: var(--font-body); margin:0.5rem 0 0 0;">HANDMADE NOISE DEVICES</p>
   </div>
 </header>
@@ -227,7 +231,7 @@
 </footer>
 
 <div id="fab" onclick="goToCheckout()">
-  <span id="fab-count">0</span> -> PEDIR AHORA
+  <span id="fab-count">0</span> -> CONFIRMAR PEDIDO
 </div>
 
 <div class="modal-overlay" id="modal">
@@ -239,7 +243,8 @@
     <div id="modal-info">
       <h2 id="m-title"></h2>
       <div id="m-cats" style="margin-bottom:1rem;"></div>
-      <p id="m-desc" style="white-space: pre-line; border-left: 3px solid var(--zaunk-blue); padding-left:1rem;"></p>
+      <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px;">0 €</h3>
+      <p id="m-desc" style="white-space: pre-line; border-left: 3px solid var(--zaunk-blue); padding-left:1rem; margin-top:1rem;"></p>
       <br>
       <button id="m-btn" class="btn" style="width:100%" onclick="toggleFromModal()">LO QUIERO</button>
     </div>
@@ -255,13 +260,13 @@
 
     <div class="admin-card" style="border-color:red;">
       <h3 style="color:red; margin-top:0;">⚠️ GESTIÓN DE SEGURIDAD</h3>
-      <p>Aquí puedes crear los códigos hash para la secuencia de entrada o la contraseña.</p>
+      <p>Genera hash SHA-256 para tus nuevas contraseñas y actualízalas en el archivo index.html.</p>
       <div style="display:flex; gap:10px;">
         <input id="hash-input" placeholder="Escribe nueva clave..." style="margin:0;">
         <button class="btn" onclick="genHash()">GENERAR HASH</button>
       </div>
       <div id="hash-output" class="hash-box" style="display:none; margin-top:10px;">
-        Copia este código y pégalo en el archivo <code>index.html</code> (líneas H_SECRET o H_PASS):<br>
+        Copia este código y pégalo en las líneas H_SECRET o H_PASS:<br>
         <strong id="hash-str" style="color:#fff;"></strong>
       </div>
     </div>
@@ -271,25 +276,23 @@
         <div class="admin-card">
           <h3>EDITOR DE PEDALES</h3>
           <input type="hidden" id="e-id">
+          
           <label>Nombre:</label> <input id="e-nombre">
+          <label>Precio (€):</label> <input type="number" id="e-precio">
+          <label>Categorías (separadas por coma):</label> <input id="e-cat" placeholder="Ej: fuzz, bajo, merch">
           
-          <label>Categorías (separadas por coma):</label> 
-          <input id="e-cat" placeholder="Ej: fuzz, bajo, merch">
-          
-          <label>
-            <input type="checkbox" id="e-agotado" style="width:auto;"> 
+          <label style="background:#ddd; padding:10px; display:block; cursor:pointer; margin-bottom:1rem;">
+            <input type="checkbox" id="e-agotado" style="width:auto; margin-right:10px;"> 
             MARCAR COMO AGOTADO (SOLD OUT)
           </label>
           
-          <label>Imágenes (1 URL por línea):</label> 
-          <textarea id="e-imgs" rows="3"></textarea>
-          
+          <label>Imágenes (1 URL por línea):</label> <textarea id="e-imgs" rows="3"></textarea>
           <label>Youtube ID:</label> <input id="e-video">
           <label>Intro Corta:</label> <textarea id="e-short"></textarea>
           <label>Descripción Larga:</label> <textarea id="e-long" rows="4"></textarea>
           
           <div style="display:flex; gap:10px;">
-            <button class="btn" style="flex:1" onclick="saveData()">GUARDAR PEDAL</button>
+            <button class="btn" style="flex:1" onclick="saveData()">GUARDAR</button>
             <button class="btn" style="background:#ccc; border-color:#ccc; color:#000;" onclick="clearEditor()">LIMPIAR</button>
           </div>
         </div>
@@ -297,19 +300,18 @@
 
       <div>
         <div class="admin-card" style="background:#eef;">
-          <h3>EDITOR DE TEXTOS WEB</h3>
-          <p style="font-size:0.8rem;">Edita los textos fijos de la web y descarga el HTML nuevo.</p>
-          <label>Título Cabecera:</label> <input id="txt-title">
+          <h3>TEXTOS DE LA WEB</h3>
+          <label>Título:</label> <input id="txt-title">
           <label>Subtítulo:</label> <input id="txt-subtitle">
-          <label>Footer Text:</label> <input id="txt-footer">
-          <button class="btn" style="width:100%; background:var(--ink); color:#fff; border-color:#000;" onclick="downloadHTML()">💾 DESCARGAR INDEX.HTML (TEXTOS)</button>
+          <label>Footer:</label> <input id="txt-footer">
+          <button class="btn" style="width:100%; background:var(--ink); color:#fff; border-color:#000;" onclick="downloadHTML()">💾 DESCARGAR INDEX.HTML</button>
         </div>
 
         <div class="admin-card">
-          <h3>INVENTARIO JSON</h3>
+          <h3>INVENTARIO</h3>
           <div id="admin-list" style="max-height:300px; overflow-y:auto; border:1px solid #ccc; padding:5px;"></div>
           <br>
-          <button class="btn" style="width:100%;" onclick="downloadJson()">💾 DESCARGAR PEDALES.JSON (DATOS)</button>
+          <button class="btn" style="width:100%;" onclick="downloadJson()">💾 DESCARGAR PEDALES.JSON</button>
         </div>
       </div>
     </div>
@@ -336,7 +338,7 @@ let keyBuffer = "";
 window.addEventListener('DOMContentLoaded', () => {
   loadData();
   setupKeys();
-  // Cargar textos actuales en el admin
+  // Cargar textos actuales
   document.getElementById('txt-title').value = document.getElementById('web-title').innerText;
   document.getElementById('txt-subtitle').value = document.getElementById('web-subtitle').innerText;
   document.getElementById('txt-footer').value = document.getElementById('web-footer').innerText;
@@ -349,7 +351,6 @@ async function loadData() {
     if(!r.ok) throw new Error("pedales.json no encontrado");
     const data = await r.json();
     
-    // Normalizar datos (convertir cat string a array)
     db = data.map(p => {
       let cats = [];
       if(Array.isArray(p.categoria)) cats = p.categoria;
@@ -359,6 +360,7 @@ async function loadData() {
       return {
         ...p,
         categoria: cats,
+        precio: p.precio || 0,
         imagenes: p.imagenes || [],
         agotado: !!p.agotado,
         id: p.id || Math.random().toString(36).substr(2, 9)
@@ -375,15 +377,11 @@ function renderFront() {
   const root = document.getElementById('catalog-root');
   root.innerHTML = "";
   
-  // Obtener todas las categorías únicas
   const allCats = new Set();
   db.forEach(p => p.categoria.forEach(c => allCats.add(c.toLowerCase())));
-  
-  // Ordenar: merch al final si existe
   const sortedCats = Array.from(allCats).sort((a,b) => a === 'merch' ? 1 : b === 'merch' ? -1 : a.localeCompare(b));
 
   sortedCats.forEach(cat => {
-    // Filtrar pedales de esta categoría
     const items = db.filter(p => p.categoria.some(c => c.toLowerCase() === cat));
     
     if(items.length > 0) {
@@ -403,10 +401,10 @@ function renderFront() {
         const chkDisabled = p.agotado ? 'disabled' : '';
 
         const card = document.createElement('div');
-        // Clases dinámicas: active = color, agotado = gris
         card.className = `card ${activeClass} ${agotadoClass}`;
         card.innerHTML = `
           ${soldOutBadge}
+          <div class="price-tag">${p.precio} €</div>
           <div onclick="openModal('${p.id}')" style="cursor:pointer">
             ${img ? `<img src="${img}" class="card-img">` : '<div class="card-img" style="background:#eee;">NO FOTO</div>'}
           </div>
@@ -433,10 +431,10 @@ function toggleCart(id, chk) {
   
   if(chk.checked) {
     cart.add(id);
-    card.classList.add('active'); // Activa el color
+    card.classList.add('active'); 
   } else {
     cart.delete(id);
-    card.classList.remove('active'); // Vuelve a B/N
+    card.classList.remove('active');
   }
   updateFab();
 }
@@ -452,8 +450,11 @@ function updateFab() {
 }
 
 function goToCheckout() {
-  const items = db.filter(p => cart.has(p.id)).map(p => `- ${p.nombre}`).join('\n');
-  const finalUrl = `${FORM_URL}?usp=pp_url&${FORM_ENTRY}=${encodeURIComponent(items)}`;
+  const items = db.filter(p => cart.has(p.id)).map(p => `- ${p.nombre} (${p.precio} €)`).join('\n');
+  const total = db.filter(p => cart.has(p.id)).reduce((acc, p) => acc + parseInt(p.precio), 0);
+  
+  const text = `${items}\n\nTOTAL APROX: ${total} €`;
+  const finalUrl = `${FORM_URL}?usp=pp_url&${FORM_ENTRY}=${encodeURIComponent(text)}`;
   window.open(finalUrl, '_blank');
 }
 
@@ -463,6 +464,7 @@ function openModal(id) {
   if(!p) return;
   
   document.getElementById('m-title').innerText = p.nombre;
+  document.getElementById('m-price').innerText = p.precio + " €";
   document.getElementById('m-cats').innerHTML = p.categoria.map(c => `<span style="background:var(--zaunk-blue); color:#fff; padding:2px 6px; margin-right:5px; font-size:0.8rem;">${c.toUpperCase()}</span>`).join('');
   document.getElementById('m-desc').innerText = p.descripcionLarga || '';
   
@@ -475,7 +477,6 @@ function openModal(id) {
     btn.innerText = "LO QUIERO";
     btn.disabled = false;
     btn.style.opacity = 1;
-    // Vinculamos el botón del modal al estado del carrito
     btn.onclick = () => {
         if(cart.has(id)) { alert("Ya está en tu lista"); }
         else { cart.add(id); renderFront(); updateFab(); closeModal(); }
@@ -531,9 +532,8 @@ function renderAdminList() {
   document.getElementById('admin-list').innerHTML = db.map(p => `
     <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
       <span>
-        <b>${p.nombre}</b> 
-        <small>(${p.categoria.join(', ')})</small> 
-        ${p.agotado ? '<span style="color:red; font-weight:bold;">[AGOTADO]</span>' : ''}
+        <b>${p.nombre}</b> <small>${p.precio}€</small>
+        ${p.agotado ? '<span style="color:red; font-weight:bold;">[SOLD OUT]</span>' : ''}
       </span>
       <div>
         <button onclick="editP('${p.id}')">EDIT</button>
@@ -547,6 +547,7 @@ function editP(id) {
   const p = db.find(x => x.id === id);
   document.getElementById('e-id').value = p.id;
   document.getElementById('e-nombre').value = p.nombre;
+  document.getElementById('e-precio').value = p.precio;
   document.getElementById('e-cat').value = p.categoria.join(', ');
   document.getElementById('e-agotado').checked = p.agotado;
   document.getElementById('e-imgs').value = p.imagenes.join('\n');
@@ -567,6 +568,7 @@ function saveData() {
   const nuevo = {
     id, nombre, 
     categoria: cats.length ? cats : ['otros'],
+    precio: document.getElementById('e-precio').value,
     agotado: document.getElementById('e-agotado').checked,
     imagenes: imgs,
     videoID: document.getElementById('e-video').value,
@@ -575,7 +577,7 @@ function saveData() {
   };
   
   const idx = db.findIndex(x => x.id === id);
-  if(idx >= 0) db[idx] = nuevo; else db.push(nuevo);
+  if(idx >= 0) db[idx] = nuevo; else db.push(newItem);
   
   renderAdminList();
   alert("Guardado en memoria");
@@ -602,18 +604,12 @@ function downloadJson() {
 }
 
 function downloadHTML() {
-  // Aplicar textos del admin al DOM actual
   document.getElementById('web-title').innerText = document.getElementById('txt-title').value;
   document.getElementById('web-subtitle').innerText = document.getElementById('txt-subtitle').value;
   document.getElementById('web-footer').innerText = document.getElementById('txt-footer').value;
   
-  // Clonar el documento para limpiar cosas antes de guardar
   const clone = document.documentElement.cloneNode(true);
-  
-  // Limpiar el catálogo (se carga vía JSON, no queremos guardar items duplicados)
   clone.querySelector('#catalog-root').innerHTML = '<div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div>';
-  
-  // Ocultar modal y admin por si acaso
   clone.querySelector('#modal').style.display = 'none';
   clone.querySelector('#admin').style.display = 'none';
 
@@ -623,7 +619,6 @@ function downloadHTML() {
   a.href = URL.createObjectURL(blob);
   a.download = "index.html";
   a.click();
-  alert("HTML Descargado con los nuevos textos. Súbelo a GitHub.");
 }
 </script>
 </body>
