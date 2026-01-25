@@ -181,7 +181,7 @@
       font-size: 1.5rem; margin: 0 15px;
     }
 
-    /* === MODAL === */
+    /* === MODAL / FICHA === */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(37,52,148,0.95);
       display: none; align-items: center; justify-content: center; z-index: 100;
@@ -200,7 +200,7 @@
     .carousel-container {
       position: relative; width: 100%;
       border: 2px solid #000; box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
-      background: #000;
+      background: #000; /* Fondo negro para el video */
     }
     .carousel-track {
       display: flex; overflow-x: auto; 
@@ -211,12 +211,28 @@
     .carousel-track::-webkit-scrollbar { display: none; }
     
     .carousel-item {
-      flex: 0 0 100%; scroll-snap-align: center; cursor: zoom-in;
-      display: flex; align-items: center; justify-content: center;
-      height: auto; aspect-ratio: 1/1; overflow: hidden;
+      flex: 0 0 100%;
+      scroll-snap-align: center;
+      cursor: zoom-in;
+      display: flex; /* Para centrar video */
+      align-items: center; 
+      justify-content: center;
+      height: auto;
+      aspect-ratio: 1/1; /* Mantiene el carrusel cuadrado */
+      overflow: hidden;
     }
-    .carousel-item img { width: 100%; height: 100%; object-fit: cover; }
-    .carousel-item iframe { width: 100%; aspect-ratio: 16/9; border: none; }
+    
+    /* IMAGEN: Llena el cuadrado */
+    .carousel-item img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    
+    /* VIDEO: Mantiene 16:9 y se centra */
+    .carousel-item iframe {
+      width: 100%; 
+      aspect-ratio: 16/9; 
+      border: none;
+    }
     
     .carousel-btn {
       position: absolute; top: 50%; transform: translateY(-50%);
@@ -227,7 +243,9 @@
     .carousel-btn.prev { left: 0; }
     .carousel-btn.next { right: 0; }
     
-    .carousel-dots { display: flex; justify-content: center; margin-top: 10px; gap: 5px; }
+    .carousel-dots {
+      display: flex; justify-content: center; margin-top: 10px; gap: 5px;
+    }
     .dot { width: 10px; height: 10px; background: #ccc; border-radius: 50%; }
     .dot.active { background: var(--zaunk-blue); }
 
@@ -327,12 +345,13 @@
     <div id="modal-info">
       <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;"></h2>
       <div id="m-cats" style="margin-bottom:1rem;"></div>
-      <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px;">0 €</h3>
+      <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px;"></h3>
       
-      <button id="m-btn-top" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 1rem; vertical-align: middle;">LO QUIERO</button>
+      <button id="m-btn-top" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 10px; margin-bottom: 10px; vertical-align: middle;">LO QUIERO</button>
 
       <p id="m-desc" style="white-space: pre-line; border-left: 3px solid var(--zaunk-blue); padding-left:1rem; margin-top:1rem; font-size:0.95rem; line-height:1.6;"></p>
       <br>
+      
       <button id="m-btn" class="btn" style="width:100%" onclick="toggleFromModal()">LO QUIERO</button>
     </div>
   </div>
@@ -363,6 +382,7 @@
         <div class="admin-card">
           <h3>EDITOR DE PEDALES</h3>
           <input type="hidden" id="e-id">
+          
           <label>Nombre:</label> <input id="e-nombre">
           <label>Precio (€):</label> <input type="number" id="e-precio">
           <label>Categorías (separadas por coma):</label> 
@@ -546,7 +566,6 @@ function goToCheckout() {
   window.open(finalUrl, '_blank');
 }
 
-// === MODAL Y CARRUSEL ===
 function openModal(id) {
   const p = db.find(x => x.id === id);
   if(!p) return;
@@ -562,19 +581,17 @@ function openModal(id) {
   
   const buttons = [btn, btnTop];
   
-  if(p.agotado) {
-    buttons.forEach(b => {
-      b.innerText = "AGOTADO"; b.disabled = true; b.style.opacity = 0.5;
-    });
-  } else {
-    buttons.forEach(b => {
-      b.innerText = "LO QUIERO"; b.disabled = false; b.style.opacity = 1;
-      b.onclick = () => {
-          if(cart.has(id)) { alert("Ya está en tu lista"); }
-          else { cart.add(id); renderFront(); updateFab(); closeModal(); }
-      };
-    });
-  }
+  buttons.forEach(b => {
+      if(p.agotado) {
+        b.innerText = "AGOTADO"; b.disabled = true; b.style.opacity = 0.5;
+      } else {
+        b.innerText = "LO QUIERO"; b.disabled = false; b.style.opacity = 1;
+        b.onclick = () => {
+            if(cart.has(id)) { alert("Ya está en tu lista"); }
+            else { cart.add(id); renderFront(); updateFab(); closeModal(); }
+        };
+      }
+  });
 
   const track = document.getElementById('carousel-track');
   const dots = document.getElementById('carousel-dots');
