@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pedal Effects by ZAUNK!</title>
+
+  <style>
+    :root {
+      --bg: #f7f7f7;
+      --text: #111;
+      --accent: #2a3b8f;
+      --soft: #ddd;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      padding: 2.5rem 1rem;
+      text-align: center;
+      border-bottom: 1px solid var(--soft);
+    }
+
+    header img {
+      max-width: 160px;
+      margin-bottom: 1rem;
+    }
+
+    section {
+      padding: 3rem 1.5rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    h2 {
+      border-bottom: 1px solid var(--soft);
+      padding-bottom: .5rem;
+    }
+
+    .filters {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin: 1.5rem 0;
+    }
+
+    .filters button {
+      padding: .4rem .8rem;
+      border: 1px solid var(--soft);
+      background: white;
+      cursor: pointer;
+    }
+
+    .filters button.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    .pedales {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .pedal {
+      border: 1px solid var(--soft);
+      background: white;
+      padding: 1rem;
+      cursor: pointer;
+    }
+
+    .pedal img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .select {
+      margin-top: .5rem;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.75);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .modal-content {
+      background: white;
+      max-width: 800px;
+      width: 95%;
+      padding: 1.5rem;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-content img {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    .close {
+      position: absolute;
+      top: .5rem;
+      right: .5rem;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    #admin-panel {
+      display: none;
+      border: 2px dashed #aaa;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      background: #fff;
+    }
+
+    #admin-panel input, #admin-panel textarea {
+      width: 100%;
+      margin-bottom: .5rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--soft);
+      padding: 2rem;
+      text-align: center;
+      font-size: .9rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="img/logo.png" alt="Pedal Effects by ZAUNK!" />
+  <h1>Pedal Effects by ZAUNK!</h1>
+  <p>Pedales artesanales hechos a mano</p>
+</header>
+
+<section>
+  <h2>Sobre mí</h2>
+  <p>
+    Fabricante independiente de pedales de guitarra y bajo. Cada pedal está
+    diseñado y montado a mano, buscando carácter, musicalidad y fiabilidad.
+  </p>
+</section>
+
+<section>
+  <h2>Pedales</h2>
+  <div class="filters"></div>
+  <div class="pedales"></div>
+
+  <div id="admin-panel">
+    <h3>Panel de administración</h3>
+    <input id="adminTitle" placeholder="Nombre" />
+    <input id="adminType" placeholder="Tipo (fuzz, overdrive...)" />
+    <input id="adminImages" placeholder="Imágenes (separadas por coma)" />
+    <textarea id="adminShort" placeholder="Descripción corta"></textarea>
+    <textarea id="adminLong" placeholder="Descripción larga"></textarea>
+    <button id="add-pedal">Añadir pedal</button>
+    <button id="export-json">Exportar JSON</button>
+    <p><small>Ctrl + Shift + P</small></p>
+  </div>
+</section>
+
+<section>
+  <h2>Contacto</h2>
+  <form action="https://formspree.io/f/xxxxxx" method="POST">
+    <input type="email" name="email" placeholder="Tu email" required />
+    <textarea name="message" placeholder="Pedales seleccionados" id="selected"></textarea>
+    <button type="submit">Enviar</button>
+  </form>
+</section>
+
+<footer>
+  © 2026 – Pedal Effects by ZAUNK!
+</footer>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close" id="close">✕</span>
+    <div id="modal-images"></div>
+    <h3 id="modal-title"></h3>
+    <pre id="modal-desc"></pre>
+  </div>
+</div>
+
+<script>
+/* =====================
+   CONFIG ADMIN
+   ===================== */
+const ADMIN_USER = 'admin';
+const ADMIN_PASS_HASH = '8b2f8b6f5c8e7b2bbf9f6c3b6bfe1e0c4e9c6b6b7f8b5b0f3a4d6d5e4c3b2a1';
+let adminUnlocked = false;
+
+async function sha256(text) {
+  const data = new TextEncoder().encode(text);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+/* =====================
+   CARGA JSON
+   ===================== */
+let pedals = [];
+fetch('pedales.json')
+  .then(r => r.json())
+  .then(data => {
+    pedals = data;
+    renderFilters();
+    renderPedals(pedals);
+  });
+
+const filters = document.querySelector('.filters');
+const grid = document.querySelector('.pedales');
+const selected = [];
+
+function renderFilters() {
+  const types = ['todos', ...new Set(pedals.map(p => p.tipo))];
+  filters.innerHTML = '';
+  types.forEach(t => {
+    const b = document.createElement('button');
+    b.textContent = t;
+    b.onclick = () => renderPedals(t === 'todos' ? pedals : pedals.filter(p => p.tipo === t));
+    filters.appendChild(b);
+  });
+}
+
+function renderPedals(list) {
+  grid.innerHTML = '';
+  list.forEach(p => {
+    const d = document.createElement('div');
+    d.className = 'pedal';
+    d.innerHTML = `<img src="${p.imagenes[0]}"><h3>${p.nombre}</h3><p>${p.descripcionCorta}</p><label class="select"><input type="checkbox"> Seleccionar</label>`;
+
+    d.querySelector('img').onclick = () => openModal(p);
+    d.querySelector('input').onchange = e => {
+      if (e.target.checked) selected.push(p.nombre);
+      else selected.splice(selected.indexOf(p.nombre), 1);
+      document.getElementById('selected').value = selected.join(', ');
+    };
+
+    grid.appendChild(d);
+  });
+}
+
+/* =====================
+   MODAL
+   ===================== */
+const modal = document.getElementById('modal');
+function openModal(p) {
+  modal.style.display = 'flex';
+  modal-title.textContent = p.nombre;
+  modal-desc.textContent = p.descripcionLarga;
+  modal-images.innerHTML = '';
+  p.imagenes.forEach(img => {
+    const i = document.createElement('img');
+    i.src = img;
+    modal-images.appendChild(i);
+  });
+}
+close.onclick = () => modal.style.display = 'none';
+modal.onclick = e => e.target === modal && (modal.style.display = 'none');
+
+/* =====================
+   ADMIN SECRETO
+   ===================== */
+document.addEventListener('keydown', async e => {
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'p') {
+    if (!adminUnlocked) {
+      const u = prompt('Usuario');
+      const p = prompt('Contraseña');
+      if (u === ADMIN_USER && await sha256(p || '') === ADMIN_PASS_HASH) {
+        adminUnlocked = true;
+        admin-panel.style.display = 'block';
+      } else alert('Acceso denegado');
+    } else {
+      adminUnlocked = false;
+      admin-panel.style.display = 'none';
+    }
+  }
+});
+
+add-pedal.onclick = () => {
+  const pedal = {
+    nombre: adminTitle.value,
+    tipo: adminType.value,
+    imagenes: adminImages.value.split(',').map(s => s.trim()),
+    descripcionCorta: adminShort.value,
+    descripcionLarga: adminLong.value
+  };
+  pedals.push(pedal);
+  renderFilters();
+  renderPedals(pedals);
+};
+
+export-json.onclick = () => {
+  const blob = new Blob([JSON.stringify(pedals, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'pedales.json';
+  a.click();
+};
+</script>
+</body>
+</html>
