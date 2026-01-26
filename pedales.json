@@ -6,16 +6,19 @@
       "Fuzz",
       "Bass"
     ],
-    "precio": "65",
+    "precio": "70",
     "agotado": false,
     "imagenes": [
       "img/pedales/bassati/Woolly_Mammoth_Cover.png",
       "img/pedales/bassati/Woolly_Mammoth_Back_ES.png",
       "img/pedales/bassati/Woolly_Mammoth_Back_EN.png"
     ],
-    "videoID": "71XmR1qRJrk",
+    "videoIDs": [
+      "71XmR1qRJrk",
+      "Zd9vq9RKZl8"
+    ],
     "descripcionCorta": "Pedal basado en el fuzz Wolly Mammoth. ",
-    "descripcionLarga": "El BASSATI Woolly Mammoth es un pedal de fuzz perfecto para bajos, con una presencia de graves impresionante, lo que lo hace ideal tanto para bajistas como para guitarristas. Ofrece un tono de fuzz grueso, rico y agresivo que mantiene la claridad y el punch incluso en configuraciones extremas. Con una distorsión suave y sedosa, y una respuesta de graves profunda, el Woolly Mammoth es ideal para música rock pesada y experimental.\n\nCARACTERÍSTICAS:\nSección de Control Fuzz:\n•Wool: Ajusta la intensidad y textura del fuzz, desde suave y sutil hasta masivo y agresivo.\n•Pinch: Controla la anchura del pulso del fuzz, creando un sonido fuzz apretado o uno más suelto y decaído.\n•EQ: Ajusta el equilibrio tonal del pedal, enfatizando frecuencias graves o agudas.\n•Volume: Controla el nivel de salida general, proporcionando un gran margen para tonos de fuzz contundentes.\n\nDestacados:\n•Diseño Amigable para Bajos: Mantiene el punch en las frecuencias graves, perfecto para bajistas y guitarristas.\n•Efecto Fuzz Puerta: La perilla \"Pinch\" ofrece sonidos fuzz únicos y entrecortados que sobresalen en la mezcla.\n•Amplio Rango Tonal: Desde un fuzz grueso y lleno de graves hasta un tono líder cortante y chisporroteante.\n\n*Funciona con una fuente de alimentación estándar para pedales: 9 Voltios DC, centro negativo (no incluida).\n"
+    "descripcionLarga": "El <b>BASSATI Woolly Mammoth</b> es un pedal de fuzz perfecto para bajo, con una presencia de graves impresionante, lo que lo hace ideal tanto para bajistas como para guitarristas. Ofrece un tono de fuzz grueso, rico y agresivo que mantiene la claridad y el punch incluso en configuraciones extremas. Con una distorsión suave y sedosa, y una respuesta de graves profunda, el Woolly Mammoth es ideal para música rock pesada y experimental.\n<br>\n<b>CARACTERÍSTICAS:</b><br>\nSección de Control Fuzz:<br>\n<ul>\n<li>Wool: Ajusta la intensidad y textura del fuzz, desde suave y sutil hasta masivo y agresivo.</li>\n<li>Pinch: Controla la anchura del pulso del fuzz, creando un sonido fuzz apretado o uno más suelto y decaído.</li>\n<li>EQ: Ajusta el equilibrio tonal del pedal, enfatizando frecuencias graves o agudas.</li>\n<li></li>\n<li>Volume: Controla el nivel de salida general, proporcionando un gran margen para tonos de fuzz contundentes.</li>\n</ul>\n<br>\n<b>Destacados:</b><br>\n<ul>\n<li>Diseño Amigable para Bajos: Mantiene el punch en las frecuencias graves, perfecto para bajistas y guitarristas.</li>\n<li>Efecto Fuzz Puerta: La perilla \"Pinch\" ofrece sonidos fuzz únicos y entrecortados que sobresalen en la mezcla.</li>\n<li>Amplio Rango Tonal: Desde un fuzz grueso y lleno de graves hasta un tono líder cortante y chisporroteante.\n</li>\n</ul><br>\n*Funciona con una fuente de alimentación estándar para pedales: 9 Voltios DC, centro negativo (no incluida).\n"
   },
   {
     "id": "the-double-trouble-njd-dub-siren--delay-",
@@ -33,6 +36,9 @@
     ],
     "videoID": "hhkBgY2TfvI",
     "descripcionCorta": "No solo la clásica Sirena DUB NJD, sino que además incluye una sección dedicada para Echo/Delay y mods con sonidos bizarros. ",
-    "descripcionLarga": "No solo la clásica Sirena DUB NJD, sino que además incluye una sección dedicada para Echo/Delay y mods con sonidos bizarros. Una de las sirenas más famosas usada por los pioneros de los Sound-System desde la década de los 70.\n\n\nCARACTERÍSTICAS:\n\nSección Dub Siren:\n•Trigger: Interruptor para activar la sirena.\n•Tone: Controla el tono de Graves a Agudos (4 posiciones).\n•Mode: Controla la forma de la onda de sonido (4 posiciones).\n•Rate: Controla la velocidad del efecto o selecciona el modo off/manual (4 posiciones).\n•Botón Siren: Lanza un ciclo de sirena.\n•Botón Manual: Modifica la forma de la onda. (Funciona cuando: Rate=Off y Mode=1 o 4).\n\nSección Echo/Delay:\n•Mix: Añade Echo/Delay a la señal original.\n•Echo: Establece el tiempo de Echo/Delay.\n•Botón Feedback: Establece el Echo/Delay a niveles de infarto para generar retroalimentación/oscilación. \n•Botón Warp: Añade efectos locos a la sección Echo/Delay.\n•Botón Blast: Añade efectos locos y funciona como un filtro de frecuencias. \n•Combos: Presiona más de un botón al mismo tiempo para obtener sonidos extraños y sorprendentes.\n\n* Funciona con una fuente alimentación standard para pedales de: 9Volt DC centro negativo.  (No incluido)\n* Salida: Conectores RCA\n"
+    "descripcionLarga": "No solo la clásica Sirena DUB NJD, sino que además incluye una sección dedicada para Echo/Delay y mods con sonidos bizarros. Una de las sirenas más famosas usada por los pioneros de los Sound-System desde la década de los 70.\n\n\nCARACTERÍSTICAS:\n\nSección Dub Siren:\n•Trigger: Interruptor para activar la sirena.\n•Tone: Controla el tono de Graves a Agudos (4 posiciones).\n•Mode: Controla la forma de la onda de sonido (4 posiciones).\n•Rate: Controla la velocidad del efecto o selecciona el modo off/manual (4 posiciones).\n•Botón Siren: Lanza un ciclo de sirena.\n•Botón Manual: Modifica la forma de la onda. (Funciona cuando: Rate=Off y Mode=1 o 4).\n\nSección Echo/Delay:\n•Mix: Añade Echo/Delay a la señal original.\n•Echo: Establece el tiempo de Echo/Delay.\n•Botón Feedback: Establece el Echo/Delay a niveles de infarto para generar retroalimentación/oscilación. \n•Botón Warp: Añade efectos locos a la sección Echo/Delay.\n•Botón Blast: Añade efectos locos y funciona como un filtro de frecuencias. \n•Combos: Presiona más de un botón al mismo tiempo para obtener sonidos extraños y sorprendentes.\n\n* Funciona con una fuente alimentación standard para pedales de: 9Volt DC centro negativo.  (No incluido)\n* Salida: Conectores RCA\n",
+    "videoIDs": [
+      "hhkBgY2TfvI"
+    ]
   }
 ]
