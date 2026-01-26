@@ -48,6 +48,16 @@
     .intro-text { font-family: var(--font-title); font-size: 1.5rem; letter-spacing: 5px; color: var(--zaunk-blue); animation: blink 1s infinite; }
     @keyframes blink { 50% { opacity: 0.5; } }
 
+    /* === TOAST NOTIFICATION === */
+    #toast {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: var(--zaunk-blue); color: #fff;
+      padding: 2rem 3rem; text-align: center;
+      font-family: var(--font-title); font-size: 2rem;
+      border: 3px solid #fff; box-shadow: 10px 10px 0px var(--ink);
+      z-index: 20000; display: none;
+    }
+
     /* === HEADER === */
     header {
       text-align: center;
@@ -321,12 +331,14 @@
   <div class="intro-text">LOADING NOISE...</div>
 </div>
 
+<div id="toast">¡AÑADIDO A LA CESTA!</div>
+
 <header>
   <div class="logo-wrapper">
     <img src="img/Zaunk_Logo.png" alt="ZAUNK LOGO" onerror="this.style.display='none'">
   </div>
   <div style="margin-top: 1rem;">
-    <h2 id="web-title" style="margin:0; letter-spacing: 2px;">DIY EFFECTS</h2>
+    <h2 id="web-title" style="margin:0; letter-spacing: 2px;">DIY EFFECT PEDALS</h2>
     <p id="web-subtitle" style="font-family: var(--font-body); margin:0.5rem 0 0 0;">Custom Guitar, Bass and Synth Effects</p>
   </div>
 </header>
@@ -493,8 +505,8 @@
 <script>
 const FORM_URL = "https://docs.google.com/forms/d/e/TU_ID_AQUI/viewform"; 
 const FORM_ENTRY = "entry.123456789";
-const H_SECRET = "8056214555075677813083110295627771746654160408542454559888927878";
-const H_PASS   = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
+const H_SECRET = "904cd7663273295972db9d233d6b041305df872856236306c4596b669532526e"; // 'nagusi'
+const H_PASS   = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"; // 'admin'
 
 let db = [];
 let cart = new Map();
@@ -510,7 +522,6 @@ window.addEventListener('DOMContentLoaded', () => {
   loadData();
   setupKeys();
   
-  // Cargar valores al admin
   document.getElementById('txt-tab-title').value = document.title;
   document.getElementById('txt-title').value = document.getElementById('web-title').innerText;
   document.getElementById('txt-subtitle').value = document.getElementById('web-subtitle').innerText;
@@ -555,7 +566,6 @@ function initScrollObserver() {
 }
 
 function renderFront() {
-  // Generar Menu
   const nav = document.getElementById('main-nav');
   nav.innerHTML = '';
   const allCats = new Set();
@@ -568,7 +578,6 @@ function renderFront() {
   nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="showInfoPage('faq')">FAQ</a>`;
   nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="showInfoPage('about')">ABOUT US</a>`;
 
-  // Generar Grid
   const root = document.getElementById('catalog-root');
   root.innerHTML = "";
   
@@ -712,8 +721,16 @@ function openModal(id) {
             document.querySelectorAll(`#vis-qty-${id}`).forEach(s => s.innerText = next);
             document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => c.classList.add('active'));
             document.querySelectorAll(`.card[data-id="${id}"] .add-btn`).forEach(b => b.innerText = "ACTUALIZAR");
+            
             updateFab();
-            closeModal();
+            
+            // TOAST & CLOSE
+            const t = document.getElementById('toast');
+            t.style.display = 'block';
+            setTimeout(() => {
+                t.style.display = 'none';
+                closeModal();
+            }, 1000);
         };
       }
   });
@@ -766,10 +783,13 @@ async function hash(s) {
   return Array.from(new Uint8Array(h)).map(x => x.toString(16).padStart(2,'0')).join('');
 }
 function setupKeys() {
-  window.addEventListener('keydown', e => {
+  window.addEventListener('keydown', async e => {
     keyBuffer += e.key.toLowerCase();
     if(keyBuffer.length > 20) keyBuffer = keyBuffer.slice(-20);
-    if(keyBuffer.endsWith("nagusi")) forceLogin();
+    if(keyBuffer.length >= 6) {
+        const h = await hash(keyBuffer.slice(-6));
+        if (h === H_SECRET) forceLogin();
+    }
   });
 }
 async function forceLogin() {
@@ -866,7 +886,6 @@ function downloadHTML() {
   document.getElementById('txt-about-content').innerHTML = document.getElementById('txt-about').value;
   document.getElementById('txt-faq-content').innerHTML = document.getElementById('txt-faq').value;
   
-  // Set tab title
   document.title = document.getElementById('txt-tab-title').value;
 
   const clone = document.documentElement.cloneNode(true);
@@ -877,6 +896,7 @@ function downloadHTML() {
   clone.querySelector('#modal').style.display = 'none';
   clone.querySelector('#admin').style.display = 'none';
   clone.querySelector('#lightbox').style.display = 'none';
+  clone.querySelector('#toast').style.display = 'none';
 
   let scriptContent = clone.querySelector('script').innerHTML;
   const newUrl = document.getElementById('txt-form-url').value;
