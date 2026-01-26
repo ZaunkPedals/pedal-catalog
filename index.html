@@ -53,7 +53,7 @@
       text-align: center;
       padding: 3rem 1rem 1rem 1rem;
       background-color: #fff;
-      /* Eliminado el border-bottom para que sea más limpio */
+      /* Sin bordes */
     }
 
     .logo-wrapper {
@@ -67,25 +67,40 @@
     .nav-bar {
       background: var(--zaunk-blue);
       color: #fff;
-      padding: 10px 0; position: sticky; top: 0; z-index: 80;
+      padding: 0; /* Padding 0 para que los bordes toquen arriba y abajo */
+      position: sticky; top: 0; z-index: 80;
       overflow-x: auto; white-space: nowrap;
-      border-bottom: 3px solid var(--ink);
       text-align: center;
-      -webkit-overflow-scrolling: touch; 
+      -webkit-overflow-scrolling: touch;
+      /* Borde inferior eliminado */
+      border-bottom: none;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra suave para separar del contenido */
     }
     .nav-bar::-webkit-scrollbar { display: none; }
     .nav-bar { -ms-overflow-style: none; scrollbar-width: none; }
 
     .nav-link {
       color: #fff; text-decoration: none; font-family: var(--font-title);
-      font-size: 1.1rem; padding: 10px 15px;
+      font-size: 1.1rem; 
+      padding: 15px 20px; /* Más espacio para que se vea bien el separador */
       display: inline-block;
       text-transform: uppercase; letter-spacing: 1px; transition: 0.2s;
       cursor: pointer;
+      /* SEPARADOR SUTIL */
+      border-right: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .nav-link:last-child { border-right: none; } /* Quitar borde al último */
+
+    /* ESTILO PARA BOTONES SECUNDARIOS (FAQ/ABOUT) */
+    .nav-link.secondary {
+      font-size: 0.9rem; /* Más pequeño */
+      background: rgba(0, 0, 0, 0.1); /* Ligeramente más oscuro para diferenciar */
+      opacity: 0.9;
     }
     
     @media (hover: hover) {
-        .nav-link:hover { color: var(--ink); background: #fff; transform: skew(-10deg); }
+        .nav-link:hover { color: var(--zaunk-blue); background: #fff; }
     }
 
     .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
@@ -217,7 +232,7 @@
     footer {
       background: var(--zaunk-blue); color: #fff;
       padding: 3rem 1rem; margin-top: auto; text-align: center;
-      border-top: 5px solid var(--ink);
+      border: none; /* Borde eliminado */
     }
     .socials { display: flex; justify-content: center; flex-wrap: wrap; gap: 2rem; margin-bottom: 2rem; }
     .socials a {
@@ -566,8 +581,8 @@ function renderFront() {
   sortedCats.forEach(cat => {
       nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="scrollToCat('${cat}')">${cat}</a>`;
   });
-  nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="showInfoPage('faq')">FAQ</a>`;
-  nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="showInfoPage('about')">ABOUT US</a>`;
+  nav.innerHTML += `<a href="javascript:void(0)" class="nav-link secondary" onclick="showInfoPage('faq')">FAQ</a>`;
+  nav.innerHTML += `<a href="javascript:void(0)" class="nav-link secondary" onclick="showInfoPage('about')">ABOUT US</a>`;
 
   // Generar Grid
   const root = document.getElementById('catalog-root');
