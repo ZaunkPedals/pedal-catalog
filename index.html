@@ -59,13 +59,12 @@
     }
 
     /* === ELEMENTOS FLOTANTES === */
-    /* IMPORTANTE: display:none por defecto en CSS para evitar parpadeos */
     #fab {
       position: fixed; bottom: 20px; right: 20px; 
       background: var(--zaunk-blue); color: #fff;
       padding: 15px 25px; border: 3px solid #fff; box-shadow: 5px 5px 0px #000;
       font-family: var(--font-title); font-size: 1.2rem; cursor: pointer; 
-      z-index: 90; display: none;
+      z-index: 90; display: none; /* Oculto por defecto en CSS */
     }
     #fab:hover { transform: scale(1.05); }
     
@@ -74,7 +73,8 @@
       position: fixed; bottom: 20px; left: 20px;
       width: 40px; height: 40px; background: #fff; border: 2px solid var(--zaunk-blue);
       color: var(--zaunk-blue); font-family: var(--font-title); font-size: 1.5rem;
-      display: none; align-items: center; justify-content: center; cursor: pointer;
+      display: none; /* Oculto por defecto en CSS */
+      align-items: center; justify-content: center; cursor: pointer;
       z-index: 89; box-shadow: 3px 3px 0px rgba(0,0,0,0.2); transition: 0.2s;
     }
     #scroll-up:hover { background: var(--zaunk-blue); color: #fff; }
@@ -350,9 +350,9 @@
 
 <div id="toast">¡AÑADIDO A LA CESTA!</div>
 
-<div id="scroll-up" onclick="goHome()" style="display:none;">↑</div>
+<div id="scroll-up" onclick="goHome()">↑</div>
 
-<div id="fab" onclick="goToCheckout()" style="display:none;">
+<div id="fab" onclick="goToCheckout()">
   <span id="fab-count">0</span> -> CONFIRMAR PEDIDO
 </div>
 
@@ -493,18 +493,15 @@
 <script>
 const FORM_URL = "https://docs.google.com/forms/d/e/TU_ID_AQUI/viewform"; 
 const FORM_ENTRY = "entry.123456789";
-const SECRET_WORD = "nagusi"; // TEXTO PLANO (Para el teclado)
-const H_PASS = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"; // "admin" (SHA-256)
+const SECRET_WORD = "nagusi"; // TRIGGER TECLADO (TEXTO PLANO)
+const H_PASS = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"; // PASSWORD ADMIN (HASH SHA-256)
 
 let db = [];
 let cart = new Map();
 let keyBuffer = "";
 
 window.addEventListener('DOMContentLoaded', () => {
-  // Aseguramos que elementos flotantes empiecen ocultos
-  document.getElementById('fab').style.display = 'none';
-  document.getElementById('scroll-up').style.display = 'none';
-
+  // Intro Splash
   setTimeout(() => {
     document.getElementById('intro-layer').style.opacity = '0';
     setTimeout(() => document.getElementById('intro-layer').style.display = 'none', 800);
@@ -512,8 +509,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   loadData();
   setupKeys();
-  cart.clear(); // Limpiar carro
-  updateFab();  // Checkear estado inicial
+  updateFab();
   
   // Cargar valores al admin
   document.getElementById('txt-tab-title').value = document.title;
@@ -781,12 +777,18 @@ function scrollCarousel(dir) { const track = document.getElementById('carousel-t
 function viewImage(src) { document.getElementById('lightbox').style.display = 'flex'; document.getElementById('lightbox-img').src = src; }
 function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
 
-// SEGURIDAD & ADMIN (SHA-256)
+// SEGURIDAD & ADMIN (SHA-256 CON PROTECCIÓN DE CRASH)
 async function hash(s) {
+  // Protección para entornos locales inseguros
+  if (!window.crypto || !window.crypto.subtle) {
+      alert("⚠️ ERROR: Estás en un entorno no seguro (sin HTTPS). La encriptación no funcionará y no podrás acceder al admin.");
+      throw new Error("Crypto not available");
+  }
   const b = new TextEncoder().encode(s);
   const h = await crypto.subtle.digest('SHA-256', b);
   return Array.from(new Uint8Array(h)).map(x => x.toString(16).padStart(2,'0')).join('');
 }
+
 function setupKeys() {
   window.addEventListener('keydown', e => {
     keyBuffer += e.key.toLowerCase();
@@ -795,22 +797,33 @@ function setupKeys() {
     if(keyBuffer.endsWith(SECRET_WORD)) forceLogin();
   });
 }
+
 async function forceLogin() {
   const pass = prompt("PASSWORD ADMIN:");
   if(!pass) return;
-  // PASS: HASHEADO
-  const h = await hash(pass);
-  if(h === H_PASS) document.getElementById('admin').style.display = 'block';
-  else alert("Denegado");
+  
+  try {
+      const h = await hash(pass);
+      if(h === H_PASS) document.getElementById('admin').style.display = 'block';
+      else alert("Denegado");
+  } catch(e) {
+      console.error(e);
+  }
 }
+
 function closeAdmin() { document.getElementById('admin').style.display = 'none'; renderFront(); }
+
 async function genHash() {
   const v = document.getElementById('hash-input').value;
   if(!v) return;
-  const h = await hash(v);
-  document.getElementById('hash-output').style.display = 'block';
-  document.getElementById('hash-str').innerText = h;
-  setTimeout(() => { document.getElementById('hash-output').style.display = 'none'; }, 10000);
+  try {
+      const h = await hash(v);
+      document.getElementById('hash-output').style.display = 'block';
+      document.getElementById('hash-str').innerText = h;
+      setTimeout(() => { document.getElementById('hash-output').style.display = 'none'; }, 10000);
+  } catch(e) {
+      alert("Error al generar hash (¿Estás en HTTPS?)");
+  }
 }
 
 // EDITORES
