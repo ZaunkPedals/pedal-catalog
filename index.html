@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZAUNK! // PEDALES DE EFECTO</title>
+  <title>ZAUNK PEDALS</title>
   
   <meta name="description" content="Pedales de efecto boutique hechos a mano. Fuzz, Overdrive y ruido analógico.">
-  <meta property="og:title" content="ZAUNK! Pedal Effects">
+  <meta property="og:title" content="ZAUNK PEDALS">
   <meta property="og:image" content="img/Zaunk_Logo.png">
   <link rel="icon" type="image/png" href="img/Zaunk_Logo.png">
 
@@ -32,14 +32,14 @@
       color: var(--ink);
       font-family: var(--font-body);
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
-      overflow-x: hidden; /* Evita scroll horizontal por animaciones */
+      overflow-x: hidden;
     }
 
     /* === INTRO SPLASH SCREEN === */
     #intro-layer {
       position: fixed; inset: 0; background: #fff; z-index: 9999;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      transition: opacity 0.8s ease-out;
+      transition: opacity 0.5s ease-out;
     }
     .intro-logo {
       width: 200px; animation: spin-intro 2s infinite linear; margin-bottom: 20px;
@@ -65,22 +65,28 @@
 
     /* === MENU DE NAVEGACIÓN === */
     .nav-bar {
-      background: var(--ink); color: #fff;
+      background: var(--zaunk-blue);
+      color: #fff;
       padding: 10px 0; position: sticky; top: 0; z-index: 80;
       overflow-x: auto; white-space: nowrap;
-      border-bottom: 3px solid var(--zaunk-blue);
+      border-bottom: 3px solid var(--ink);
       text-align: center;
+      -webkit-overflow-scrolling: touch; 
     }
-    /* Ocultar scrollbar del menú */
     .nav-bar::-webkit-scrollbar { display: none; }
     .nav-bar { -ms-overflow-style: none; scrollbar-width: none; }
 
     .nav-link {
       color: #fff; text-decoration: none; font-family: var(--font-title);
-      font-size: 1.1rem; padding: 5px 15px; display: inline-block;
+      font-size: 1.1rem; padding: 10px 15px;
+      display: inline-block;
       text-transform: uppercase; letter-spacing: 1px; transition: 0.2s;
+      cursor: pointer;
     }
-    .nav-link:hover { color: var(--zaunk-blue); background: #fff; transform: skew(-10deg); }
+    
+    @media (hover: hover) {
+        .nav-link:hover { color: var(--ink); background: #fff; transform: skew(-10deg); }
+    }
 
     .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
     
@@ -104,7 +110,7 @@
     /* === CATÁLOGO === */
     .cat-header {
       margin-top: 4rem; border-bottom: 2px dashed var(--zaunk-blue);
-      margin-bottom: 2rem; scroll-margin-top: 80px; /* Para que el menú no tape el título */
+      margin-bottom: 2rem; scroll-margin-top: 80px;
     }
     .cat-badge {
       background: var(--zaunk-blue); color: #fff; padding: 5px 15px;
@@ -140,7 +146,7 @@
       overflow: hidden; cursor: pointer; background: #fff;
     }
     .card-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: 0.3s ease; }
-    /* GRANO SUTIL */
+    
     .img-wrapper::after {
       content: ""; position: absolute; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
@@ -149,7 +155,7 @@
     .card:hover .card-img { transform: scale(1.05); }
     .card:hover .img-wrapper::after { opacity: 0; }
 
-    /* Botón +INFO */
+    /* BOTÓN +INFO */
     .btn-info {
         display: block; width: 100%; text-align: center;
         background: #eee; border: 1px solid #000; padding: 5px;
@@ -184,7 +190,6 @@
       padding: 10px; background: rgba(255,255,255,0.9); z-index: 60; white-space: nowrap;
     }
     
-    /* CONTROL DE CANTIDAD */
     .qty-control {
       border-top: 1px dotted var(--zaunk-blue);
       padding-top: 0.5rem; display: flex; align-items: center; justify-content: space-between; gap: 5px;
@@ -304,9 +309,7 @@
     #secret-btn { position: fixed; bottom: 0; left: 0; width: 30px; height: 30px; z-index:9999; cursor: cell; }
 
     /* INFO PAGES (About / FAQ) */
-    .info-page {
-      display: none; padding: 4rem 0;
-    }
+    .info-page { display: none; padding: 4rem 0; }
     .info-page h2 { border-bottom: 4px solid var(--zaunk-blue); display: inline-block; }
     .info-content { background: #fff; padding: 2rem; border: 2px solid var(--ink); margin-top: 2rem; line-height: 1.6; }
 
@@ -324,7 +327,7 @@
     <img src="img/Zaunk_Logo.png" alt="ZAUNK LOGO" onerror="this.style.display='none'">
   </div>
   <div style="margin-top: 1rem;">
-    <h2 id="web-title" style="margin:0; letter-spacing: 2px;">DIY EFFECT PEDALS</h2>
+    <h2 id="web-title" style="margin:0; letter-spacing: 2px;">DIY EFFECTS</h2>
     <p id="web-subtitle" style="font-family: var(--font-body); margin:0.5rem 0 0 0;">Custom Guitar, Bass and Synth Effects</p>
   </div>
 </header>
@@ -497,11 +500,11 @@ let cart = new Map();
 let keyBuffer = "";
 
 window.addEventListener('DOMContentLoaded', () => {
-  // Intro Splash
+  // Intro Splash (1.5s)
   setTimeout(() => {
     document.getElementById('intro-layer').style.opacity = '0';
     setTimeout(() => document.getElementById('intro-layer').style.display = 'none', 800);
-  }, 2500);
+  }, 1500);
 
   loadData();
   setupKeys();
@@ -558,10 +561,10 @@ function renderFront() {
   const sortedCats = Array.from(allCats).sort((a,b) => a === 'merch' ? 1 : b === 'merch' ? -1 : a.localeCompare(b));
   
   sortedCats.forEach(cat => {
-      nav.innerHTML += `<a href="#" class="nav-link" onclick="scrollToCat('${cat}')">${cat}</a>`;
+      nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="scrollToCat('${cat}')">${cat}</a>`;
   });
-  nav.innerHTML += `<a href="#" class="nav-link" onclick="showInfoPage('about')">ABOUT US</a>`;
-  nav.innerHTML += `<a href="#" class="nav-link" onclick="showInfoPage('faq')">FAQ</a>`;
+  nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="showInfoPage('about')">ABOUT US</a>`;
+  nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="showInfoPage('faq')">FAQ</a>`;
 
   // Generar Grid
   const root = document.getElementById('catalog-root');
@@ -571,7 +574,7 @@ function renderFront() {
     const items = db.filter(p => p.categoria.some(c => c.toLowerCase() === cat));
     if(items.length > 0) {
       const section = document.createElement('div');
-      section.id = `cat-${cat}`; // Anchor ID
+      section.id = `cat-${cat}`; 
       section.innerHTML = `<div class="cat-header"><div class="cat-badge"><h2>${cat.toUpperCase()}</h2></div></div><div class="grid"></div>`;
       const grid = section.querySelector('.grid');
       items.forEach(p => {
@@ -594,7 +597,7 @@ function renderFront() {
           <div onclick="openModal('${p.id}')" class="img-wrapper">
             ${img ? `<img src="${img}" class="card-img">` : '<div class="card-img" style="background:#eee; display:flex; align-items:center; justify-content:center;">NO FOTO</div>'}
           </div>
-          <button class="btn-info" onclick="openModal('${p.id}')">[ + INFO / VIDEO ]</button>
+          <button class="btn-info" onclick="openModal('${p.id}')">[ + INFO ]</button>
           <h3 onclick="openModal('${p.id}')" style="cursor:pointer">${p.nombre}</h3>
           <p>${p.descripcionCorta || ''}</p>
           
@@ -618,7 +621,6 @@ function renderFront() {
 function scrollToCat(cat) {
     document.getElementById('catalog-root').style.display = 'block';
     document.querySelectorAll('.info-page').forEach(p => p.style.display = 'none');
-    
     const el = document.getElementById(`cat-${cat}`);
     if(el) el.scrollIntoView({ behavior: 'smooth' });
 }
@@ -627,6 +629,7 @@ function showInfoPage(page) {
     document.getElementById('catalog-root').style.display = 'none';
     document.querySelectorAll('.info-page').forEach(p => p.style.display = 'none');
     document.getElementById(`sec-${page}`).style.display = 'block';
+    window.scrollTo(0,0);
 }
 
 function adjustVisualQty(id, change) {
