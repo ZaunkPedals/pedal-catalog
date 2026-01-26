@@ -18,7 +18,7 @@
       "Zd9vq9RKZl8"
     ],
     "descripcionCorta": "Pedal basado en el fuzz Wolly Mammoth. ",
-    "descripcionLarga": "El <b>BASSATI Woolly Mammoth</b> es un pedal de fuzz perfecto para bajo, con una presencia de graves impresionante, lo que lo hace ideal tanto para bajistas como para guitarristas. Ofrece un tono de fuzz grueso, rico y agresivo que mantiene la claridad y el punch incluso en configuraciones extremas. Con una distorsión suave y sedosa, y una respuesta de graves profunda, el Woolly Mammoth es ideal para música rock pesada y experimental.\n<br>\n<b>CARACTERÍSTICAS:</b><br>\nSección de Control Fuzz:<br>\n<ul>\n<li>Wool: Ajusta la intensidad y textura del fuzz, desde suave y sutil hasta masivo y agresivo.</li>\n<li>Pinch: Controla la anchura del pulso del fuzz, creando un sonido fuzz apretado o uno más suelto y decaído.</li>\n<li>EQ: Ajusta el equilibrio tonal del pedal, enfatizando frecuencias graves o agudas.</li>\n<li></li>\n<li>Volume: Controla el nivel de salida general, proporcionando un gran margen para tonos de fuzz contundentes.</li>\n</ul>\n<br>\n<b>Destacados:</b><br>\n<ul>\n<li>Diseño Amigable para Bajos: Mantiene el punch en las frecuencias graves, perfecto para bajistas y guitarristas.</li>\n<li>Efecto Fuzz Puerta: La perilla \"Pinch\" ofrece sonidos fuzz únicos y entrecortados que sobresalen en la mezcla.</li>\n<li>Amplio Rango Tonal: Desde un fuzz grueso y lleno de graves hasta un tono líder cortante y chisporroteante.\n</li>\n</ul><br>\n*Funciona con una fuente de alimentación estándar para pedales: 9 Voltios DC, centro negativo (no incluida).\n"
+    "descripcionLarga": "El <b>BASSATI Woolly Mammoth</b> es un pedal de fuzz perfecto para bajo, con una presencia de graves impresionante, lo que lo hace ideal tanto para bajistas como para guitarristas. Ofrece un tono de fuzz grueso, rico y agresivo que mantiene la claridad y el punch incluso en configuraciones extremas. Con una distorsión suave y sedosa, y una respuesta de graves profunda, el Woolly Mammoth es ideal para música rock pesada y experimental.\n<br>\n<b>CARACTERÍSTICAS:</b><br>\n<b>Sección de Control Fuzz:</b><br>\n<ul>\n<li><b>Wool</b>: Ajusta la intensidad y textura del fuzz, desde suave y sutil hasta masivo y agresivo.</li>\n<li><b>Pinch</b>: Controla la anchura del pulso del fuzz, creando un sonido fuzz apretado o uno más suelto y decaído.</li>\n<li><b>EQ</b>: Ajusta el equilibrio tonal del pedal, enfatizando frecuencias graves o agudas.</li>\n<li><b>Volume</b>: Controla el nivel de salida general, proporcionando un gran margen para tonos de fuzz contundentes.</li>\n</ul>\n<br>\n<b><b>Destacados</b>:</b><br>\n<ul>\n<li><b>Diseño Amigable para Bajos</b>: Mantiene el punch en las frecuencias graves, perfecto para bajistas y guitarristas.</li>\n<li><b>Efecto Fuzz Puerta</b>: La perilla \"Pinch\" ofrece sonidos fuzz únicos y entrecortados que sobresalen en la mezcla.</li>\n<li><b>Amplio Rango Tonal</b>: Desde un fuzz grueso y lleno de graves hasta un tono líder cortante y chisporroteante.\n</li>\n</ul><br>\n*Funciona con una fuente de alimentación estándar para pedales: 9 Voltios DC, centro negativo (no incluida).\n"
   },
   {
     "id": "the-double-trouble-njd-dub-siren--delay-",
@@ -40,5 +40,25 @@
     "videoIDs": [
       "hhkBgY2TfvI"
     ]
+  },
+  {
+    "id": "the-red-artifact",
+    "nombre": "The Red Artifact",
+    "categoria": [
+      "Fuzz"
+    ],
+    "precio": "80",
+    "agotado": false,
+    "imagenes": [
+      "img/pedales/red_artifact/The_Red_Artifact_Cover.png",
+      "img/pedales/red_artifact/The_Red_Artifact_Back_ES.png",
+      "img/pedales/red_artifact/The_Red_Artifact_Back_EN.png"
+    ],
+    "videoIDs": [
+      "UKjNidYJeH4",
+      "F7mpZUPxKhQ"
+    ],
+    "descripcionCorta": "Mágico Fuzz basado en el DBA Fuzz War con  un especial interruptor selector de diodos.",
+    "descripcionLarga": "El <b>Red Artifact</b> (Fuzz War) es un pedal de fuzz salvaje y abrasivo, capaz de ir de una saturación cálida a una distorsión caótica. Perfecto para quienes buscan un muro de sonido imparable.<br>\n<h3>CARACTERÍSTICAS:</h3>\n\n<p><strong>Sección de Control Fuzz:</strong></p>\n\n<ul>\n  <li><strong>Fuzz:</strong> Controla la intensidad del fuzz, desde una ligera saturación hasta distorsión total.</li>\n  <li><strong>Tone:</strong> Ajusta el rango de frecuencias, proporcionando una barrida amplia desde un fuzz grave y oscuro hasta agudos penetrantes.</li>\n  <li><strong>Volume:</strong> Controla el nivel de salida general, permitiendo que el fuzz sea tan fuerte o sutil como lo desees.</li>\n</ul>\n\n<p>\n  Funciona con una <strong>fuente de alimentación estándar para pedales</strong>: \n  <strong>9 Voltios DC, centro negativo</strong> (no incluida).\n</p>\n\n\n"
   }
 ]
