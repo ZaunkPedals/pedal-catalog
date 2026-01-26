@@ -123,7 +123,6 @@
       transition: 0.3s ease;
     }
 
-    /* GRANO SUTIL */
     .img-wrapper::after {
       content: ""; position: absolute; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
@@ -133,7 +132,6 @@
     .card:hover .card-img { transform: scale(1.05); }
     .card:hover .img-wrapper::after { opacity: 0; }
 
-    /* ESTADO SELECCIONADO */
     .card.active {
       border: 4px solid var(--zaunk-blue);
       transform: scale(1.02) rotate(-2deg) !important;
@@ -161,21 +159,36 @@
       padding: 10px; background: rgba(255,255,255,0.9); z-index: 60; white-space: nowrap;
     }
     
-    /* CONTROL DE CANTIDAD */
+    /* CONTROL DE CANTIDAD Y AÑADIR */
     .qty-control {
       margin-top: 1rem; border-top: 1px dotted var(--zaunk-blue);
-      padding-top: 0.5rem; display: flex; align-items: center; justify-content: space-between;
-      font-family: var(--font-title); font-size: 1.2rem;
+      padding-top: 0.5rem; display: flex; align-items: center; justify-content: space-between; gap: 5px;
+      font-family: var(--font-title);
     }
+    
+    .qty-selector {
+        display: flex; align-items: center; border: 2px solid var(--ink);
+    }
+    
     .qty-btn {
-      width: 30px; height: 30px; background: #fff; border: 2px solid var(--zaunk-blue);
-      color: var(--zaunk-blue); cursor: pointer; font-weight: bold; font-size: 1.2rem;
+      width: 30px; height: 30px; background: #fff; border: none;
+      color: var(--ink); cursor: pointer; font-weight: bold; font-size: 1.2rem;
       display: flex; align-items: center; justify-content: center; transition: 0.2s;
     }
-    .qty-btn:hover { background: var(--zaunk-blue); color: #fff; }
-    .qty-btn:disabled { opacity: 0.3; cursor: not-allowed; border-color: #999; color: #999; background: #eee; }
-    
-    .qty-num { min-width: 30px; text-align: center; }
+    .qty-btn:hover { background: #eee; }
+    .qty-num { width: 30px; text-align: center; font-size: 1.1rem; }
+
+    .add-btn {
+        flex: 1;
+        background: var(--zaunk-blue); color: #fff;
+        border: 2px solid var(--zaunk-blue);
+        height: 34px; /* Alinear con el selector */
+        font-family: var(--font-title); cursor: pointer;
+        transition: 0.2s; text-transform: uppercase;
+        letter-spacing: 1px; font-size: 0.9rem;
+    }
+    .add-btn:hover { background: #fff; color: var(--zaunk-blue); }
+    .add-btn:disabled { opacity: 0.5; cursor: not-allowed; background: #ccc; border-color: #ccc; }
 
     /* === FOOTER === */
     footer {
@@ -207,7 +220,6 @@
       display: flex; flex-direction: column; gap: 1.5rem;
     }
 
-    /* CARRUSEL */
     #modal-media-col { width: 100%; max-width: 500px; margin: 0 auto; }
 
     .carousel-container {
@@ -368,7 +380,7 @@
       
       <div style="margin-bottom: 1rem; display:flex; align-items:center;">
         <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px; margin:0;">0 €</h3>
-        <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px;">LO QUIERO</button>
+        <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px;">AÑADIR (+1)</button>
       </div>
 
       <div id="m-desc"></div>
@@ -473,7 +485,7 @@ const H_SECRET = "80562145550756778130831102956277717466541604085424545598889278
 const H_PASS   = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
 
 let db = [];
-let cart = new Map(); // Ahora es un mapa ID -> Cantidad
+let cart = new Map();
 let keyBuffer = "";
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -531,10 +543,13 @@ function renderFront() {
       section.innerHTML = `<div class="cat-header"><div class="cat-badge"><h2>${cat.toUpperCase()}</h2></div></div><div class="grid"></div>`;
       const grid = section.querySelector('.grid');
       items.forEach(p => {
-        const qty = cart.get(p.id) || 0;
-        const activeClass = qty > 0 ? 'active' : '';
-        const agotadoClass = p.agotado ? 'agotado' : '';
+        // Obtenemos si ya está en el carro para marcarlo, pero el número del input es local (default 1)
+        const inCartQty = cart.get(p.id) || 0;
+        const activeClass = inCartQty > 0 ? 'active' : '';
+        const displayQty = inCartQty > 0 ? inCartQty : 1; // Si no está en carro, muestra 1 por defecto
+        
         const soldOutBadge = p.agotado ? '<div class="sold-out-badge">SOLD OUT</div>' : '';
+        const agotadoClass = p.agotado ? 'agotado' : '';
         const disabled = p.agotado ? 'disabled' : '';
         const img = p.imagenes[0] || ''; 
 
@@ -552,10 +567,12 @@ function renderFront() {
           <p>${p.descripcionCorta || ''}</p>
           
           <div class="qty-control">
-            <button class="qty-btn" onclick="updateQty('${p.id}', -1)" ${disabled}>-</button>
-            <span class="qty-num" id="qty-${p.id}">${qty}</span>
-            <button class="qty-btn" onclick="updateQty('${p.id}', 1)" ${disabled}>+</button>
-            <span style="font-size:0.8rem; margin-left:5px;">${p.agotado ? 'NO DISPONIBLE' : 'AÑADIR'}</span>
+            <div class="qty-selector">
+                <button class="qty-btn" onclick="adjustVisualQty('${p.id}', -1)" ${disabled}>-</button>
+                <span class="qty-num" id="vis-qty-${p.id}">${displayQty}</span>
+                <button class="qty-btn" onclick="adjustVisualQty('${p.id}', 1)" ${disabled}>+</button>
+            </div>
+            <button class="add-btn" onclick="saveToCart('${p.id}')" ${disabled}>${inCartQty > 0 ? 'ACTUALIZAR' : 'AÑADIR'}</button>
           </div>
         `;
         grid.appendChild(card);
@@ -566,23 +583,38 @@ function renderFront() {
   initScrollObserver();
 }
 
-function updateQty(id, change) {
-    let current = cart.get(id) || 0;
-    let next = current + change;
-    if (next < 0) next = 0;
+// NUEVA LÓGICA DE CARRITO "PRE-COMPRA"
+function adjustVisualQty(id, change) {
+    // Busca todos los contadores visuales de este pedal (puede estar en varias cats)
+    const displays = document.querySelectorAll(`#vis-qty-${id}`);
     
-    if (next === 0) cart.delete(id);
-    else cart.set(id, next);
-    
-    // Actualizar UI en TODAS las tarjetas con ese ID (por si está en 2 categorías)
-    const cards = document.querySelectorAll(`.card[data-id="${id}"]`);
-    cards.forEach(c => {
-        if (next > 0) c.classList.add('active');
-        else c.classList.remove('active');
-        
-        const span = c.querySelector(`#qty-${id}`);
-        if(span) span.innerText = next;
+    displays.forEach(d => {
+        let val = parseInt(d.innerText);
+        let newVal = val + change;
+        if(newVal < 0) newVal = 0; // Permitimos bajar a 0 para quitar del carro si quieren
+        d.innerText = newVal;
     });
+}
+
+function saveToCart(id) {
+    // Leemos el valor visual actual
+    const display = document.querySelector(`#vis-qty-${id}`);
+    if(!display) return;
+    
+    const qty = parseInt(display.innerText);
+    
+    if(qty > 0) {
+        cart.set(id, qty);
+        // Activar visualmente las tarjetas
+        document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => c.classList.add('active'));
+        // Cambiar texto botón a ACTUALIZAR
+        document.querySelectorAll(`.card[data-id="${id}"] .add-btn`).forEach(b => b.innerText = "ACTUALIZAR");
+    } else {
+        cart.delete(id);
+        // Desactivar tarjetas
+        document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => c.classList.remove('active'));
+        document.querySelectorAll(`.card[data-id="${id}"] .add-btn`).forEach(b => b.innerText = "AÑADIR");
+    }
     
     updateFab();
 }
@@ -591,7 +623,6 @@ function updateFab() {
   const btn = document.getElementById('fab');
   let totalItems = 0;
   cart.forEach(qty => totalItems += qty);
-  
   if(totalItems > 0) {
     btn.style.display = 'block';
     document.getElementById('fab-count').innerText = totalItems;
@@ -603,7 +634,6 @@ function updateFab() {
 function goToCheckout() {
   let itemsStr = "";
   let total = 0;
-  
   cart.forEach((qty, id) => {
       const p = db.find(x => x.id === id);
       if(p) {
@@ -611,7 +641,6 @@ function goToCheckout() {
           total += (parseInt(p.precio) * qty);
       }
   });
-  
   const text = `${itemsStr}\n\nTOTAL APROX: ${total} €`;
   const finalUrl = `${FORM_URL}?usp=pp_url&${FORM_ENTRY}=${encodeURIComponent(text)}`;
   window.open(finalUrl, '_blank');
@@ -634,10 +663,18 @@ function openModal(id) {
       if(p.agotado) {
         b.innerText = "AGOTADO"; b.disabled = true; b.style.opacity = 0.5;
       } else {
-        b.innerText = "LO QUIERO (+1)"; b.disabled = false; b.style.opacity = 1;
+        b.innerText = "AÑADIR (+1)"; b.disabled = false; b.style.opacity = 1;
         b.onclick = () => {
-            updateQty(id, 1);
-            alert("Añadido +1 unidad al pedido");
+            let current = cart.get(id) || 0;
+            let next = current + 1;
+            cart.set(id, next);
+            // Actualizar UI principal para reflejar el cambio
+            document.querySelectorAll(`#vis-qty-${id}`).forEach(s => s.innerText = next);
+            document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => c.classList.add('active'));
+            document.querySelectorAll(`.card[data-id="${id}"] .add-btn`).forEach(b => b.innerText = "ACTUALIZAR");
+            
+            updateFab();
+            alert("Añadido +1 al pedido");
         };
       }
   });
