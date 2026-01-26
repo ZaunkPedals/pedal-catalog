@@ -59,12 +59,13 @@
     }
 
     /* === ELEMENTOS FLOTANTES === */
+    /* IMPORTANTE: display:none por defecto en CSS para evitar parpadeos */
     #fab {
       position: fixed; bottom: 20px; right: 20px; 
       background: var(--zaunk-blue); color: #fff;
       padding: 15px 25px; border: 3px solid #fff; box-shadow: 5px 5px 0px #000;
       font-family: var(--font-title); font-size: 1.2rem; cursor: pointer; 
-      z-index: 90; display: none; /* Oculto por defecto en CSS */
+      z-index: 90; display: none;
     }
     #fab:hover { transform: scale(1.05); }
     
@@ -73,8 +74,7 @@
       position: fixed; bottom: 20px; left: 20px;
       width: 40px; height: 40px; background: #fff; border: 2px solid var(--zaunk-blue);
       color: var(--zaunk-blue); font-family: var(--font-title); font-size: 1.5rem;
-      display: none; /* Oculto por defecto en CSS */
-      align-items: center; justify-content: center; cursor: pointer;
+      display: none; align-items: center; justify-content: center; cursor: pointer;
       z-index: 89; box-shadow: 3px 3px 0px rgba(0,0,0,0.2); transition: 0.2s;
     }
     #scroll-up:hover { background: var(--zaunk-blue); color: #fff; }
@@ -307,6 +307,7 @@
     }
     #m-desc ul { margin: 0; padding-left: 1rem; }
     #m-desc li { margin-bottom: 5px; }
+    #m-desc p { margin-bottom: 1rem; }
 
     /* LIGHTBOX */
     #lightbox {
@@ -492,18 +493,18 @@
 <script>
 const FORM_URL = "https://docs.google.com/forms/d/e/TU_ID_AQUI/viewform"; 
 const FORM_ENTRY = "entry.123456789";
-const SECRET_WORD = "nagusi"; // TEXTO PLANO (Para abrir el prompt)
-const H_PASS = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"; // CONTRASEÑA "admin" HASHEADA
+const SECRET_WORD = "nagusi"; // TEXTO PLANO (Para el teclado)
+const H_PASS = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"; // "admin" (SHA-256)
 
 let db = [];
 let cart = new Map();
 let keyBuffer = "";
 
 window.addEventListener('DOMContentLoaded', () => {
-  // Inicialización limpia
+  // Aseguramos que elementos flotantes empiecen ocultos
   document.getElementById('fab').style.display = 'none';
   document.getElementById('scroll-up').style.display = 'none';
-  
+
   setTimeout(() => {
     document.getElementById('intro-layer').style.opacity = '0';
     setTimeout(() => document.getElementById('intro-layer').style.display = 'none', 800);
@@ -511,8 +512,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   loadData();
   setupKeys();
-  cart.clear(); // Vaciar carrito al inicio
-  updateFab();  // Forzar actualización UI
+  cart.clear(); // Limpiar carro
+  updateFab();  // Checkear estado inicial
   
   // Cargar valores al admin
   document.getElementById('txt-tab-title').value = document.title;
@@ -729,7 +730,6 @@ function openModal(id) {
             
             updateFab();
             
-            // TOAST & CLOSE
             const t = document.getElementById('toast');
             t.style.display = 'block';
             setTimeout(() => {
@@ -781,7 +781,7 @@ function scrollCarousel(dir) { const track = document.getElementById('carousel-t
 function viewImage(src) { document.getElementById('lightbox').style.display = 'flex'; document.getElementById('lightbox-img').src = src; }
 function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
 
-// SEGURIDAD & ADMIN
+// SEGURIDAD & ADMIN (SHA-256)
 async function hash(s) {
   const b = new TextEncoder().encode(s);
   const h = await crypto.subtle.digest('SHA-256', b);
@@ -902,7 +902,6 @@ function downloadHTML() {
   clone.querySelector('#admin').style.display = 'none';
   clone.querySelector('#lightbox').style.display = 'none';
   clone.querySelector('#toast').style.display = 'none';
-  // Ocultar botones flotantes
   clone.querySelector('#fab').style.display = 'none';
   clone.querySelector('#scroll-up').style.display = 'none';
 
