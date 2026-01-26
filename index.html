@@ -63,7 +63,8 @@
       position: fixed; bottom: 20px; right: 20px; 
       background: var(--zaunk-blue); color: #fff;
       padding: 15px 25px; border: 3px solid #fff; box-shadow: 5px 5px 0px #000;
-      font-family: var(--font-title); font-size: 1.2rem; cursor: pointer; display: none; z-index: 90;
+      font-family: var(--font-title); font-size: 1.2rem; cursor: pointer; 
+      z-index: 90; display: none; /* Oculto por defecto */
     }
     #fab:hover { transform: scale(1.05); }
     
@@ -72,7 +73,8 @@
       position: fixed; bottom: 20px; left: 20px;
       width: 40px; height: 40px; background: #fff; border: 2px solid var(--zaunk-blue);
       color: var(--zaunk-blue); font-family: var(--font-title); font-size: 1.5rem;
-      display: none; align-items: center; justify-content: center; cursor: pointer;
+      display: none; /* Oculto por defecto */
+      align-items: center; justify-content: center; cursor: pointer;
       z-index: 89; box-shadow: 3px 3px 0px rgba(0,0,0,0.2); transition: 0.2s;
     }
     #scroll-up:hover { background: var(--zaunk-blue); color: #fff; }
@@ -305,7 +307,7 @@
     }
     #m-desc ul { margin: 0; padding-left: 1rem; }
     #m-desc li { margin-bottom: 5px; }
-    #m-desc p { margin-bottom: 1rem; } /* Espaciado para párrafos */
+    #m-desc p { margin-bottom: 1rem; }
 
     /* LIGHTBOX */
     #lightbox {
@@ -348,7 +350,11 @@
 
 <div id="toast">¡AÑADIDO A LA CESTA!</div>
 
-<div id="scroll-up" onclick="goHome()">↑</div>
+<div id="scroll-up" onclick="goHome()" style="display:none;">↑</div>
+
+<div id="fab" onclick="goToCheckout()" style="display:none;">
+  <span id="fab-count">0</span> -> CONFIRMAR PEDIDO
+</div>
 
 <header>
   <div class="logo-wrapper" onclick="goHome()">
@@ -407,41 +413,7 @@
   </div>
 </footer>
 
-<div id="fab" onclick="goToCheckout()">
-  <span id="fab-count">0</span> -> CONFIRMAR PEDIDO
-</div>
-
-<div id="lightbox" onclick="closeLightbox()">
-  <span class="lightbox-close-btn">&times;</span>
-  <img id="lightbox-img" src="">
-</div>
-
-<div class="modal-overlay" id="modal">
-  <div class="modal-box">
-    <div style="text-align:right;">
-      <button class="btn" style="padding:5px 10px;" onclick="closeModal()">X CERRAR</button>
-    </div>
-    <div id="modal-media-col">
-      <div class="carousel-container">
-        <button class="carousel-btn prev" onclick="scrollCarousel(-1)">&lt;</button>
-        <div class="carousel-track" id="carousel-track"></div>
-        <button class="carousel-btn next" onclick="scrollCarousel(1)">&gt;</button>
-      </div>
-      <div id="carousel-dots" class="carousel-dots"></div>
-    </div>
-    <div id="modal-info">
-      <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;"></h2>
-      <div id="m-cats" style="margin-bottom:1rem;"></div>
-      <div style="margin-bottom: 1rem; display:flex; align-items:center;">
-        <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px; margin:0;">0 €</h3>
-        <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px;">LO QUIERO (+1)</button>
-      </div>
-      <div id="m-desc"></div>
-      <br>
-      <button id="m-btn" class="btn" style="width:100%" onclick="toggleFromModal()">LO QUIERO (+1)</button>
-    </div>
-  </div>
-</div>
+<div id="secret-btn" onclick="forceLogin()"></div>
 
 <div id="admin">
   <div class="container">
@@ -518,20 +490,21 @@
   </div>
 </div>
 
-<div id="secret-btn" onclick="forceLogin()"></div>
-
 <script>
 const FORM_URL = "https://docs.google.com/forms/d/e/TU_ID_AQUI/viewform"; 
 const FORM_ENTRY = "entry.123456789";
-const SECRET_WORD = "nagusi"; // TEXTO PLANO (Para abrir el prompt)
-const H_PASS = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"; // CONTRASEÑA "admin" HASHEADA
+const SECRET_WORD = "nagusi"; // TEXTO PLANO
+const H_PASS = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"; // "admin" (SHA-256)
 
 let db = [];
 let cart = new Map();
 let keyBuffer = "";
 
 window.addEventListener('DOMContentLoaded', () => {
-  // Intro Splash (1.5s)
+  // Aseguramos que elementos flotantes empiecen ocultos
+  document.getElementById('fab').style.display = 'none';
+  document.getElementById('scroll-up').style.display = 'none';
+
   setTimeout(() => {
     document.getElementById('intro-layer').style.opacity = '0';
     setTimeout(() => document.getElementById('intro-layer').style.display = 'none', 800);
@@ -539,6 +512,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   loadData();
   setupKeys();
+  cart.clear(); 
+  updateFab();  
   
   // Cargar valores al admin
   document.getElementById('txt-tab-title').value = document.title;
@@ -714,15 +689,21 @@ window.onscroll = updateFab;
 
 function goToCheckout() {
   let itemsStr = "";
-  let total = 0;
+  let subtotal = 0;
+  
   cart.forEach((qty, id) => {
       const p = db.find(x => x.id === id);
       if(p) {
           itemsStr += `- ${qty}x ${p.nombre} (${p.precio}€/ud)\n`;
-          total += (parseInt(p.precio) * qty);
+          subtotal += (parseInt(p.precio) * qty);
       }
   });
-  const text = `${itemsStr}\n\nTOTAL APROX: ${total} €`;
+
+  const envio = 6;
+  const total = subtotal + envio;
+
+  const text = `HOLA ZAUNK! ESTE ES MI PEDIDO:\n\n${itemsStr}\n------------------\nSubtotal: ${subtotal} €\nEnvío: ${envio} €\n------------------\nTOTAL ESTIMADO: ${total} €\n\n(Espero confirmación de stock y datos de pago)`;
+  
   const finalUrl = `${FORM_URL}?usp=pp_url&${FORM_ENTRY}=${encodeURIComponent(text)}`;
   window.open(finalUrl, '_blank');
 }
@@ -755,7 +736,6 @@ function openModal(id) {
             
             updateFab();
             
-            // TOAST & CLOSE
             const t = document.getElementById('toast');
             t.style.display = 'block';
             setTimeout(() => {
@@ -807,36 +787,47 @@ function scrollCarousel(dir) { const track = document.getElementById('carousel-t
 function viewImage(src) { document.getElementById('lightbox').style.display = 'flex'; document.getElementById('lightbox-img').src = src; }
 function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
 
-// SEGURIDAD & ADMIN
+// SEGURIDAD & ADMIN (SHA-256)
 async function hash(s) {
+  if (!window.crypto || !window.crypto.subtle) throw new Error("Crypto no seguro");
   const b = new TextEncoder().encode(s);
   const h = await crypto.subtle.digest('SHA-256', b);
   return Array.from(new Uint8Array(h)).map(x => x.toString(16).padStart(2,'0')).join('');
 }
+
 function setupKeys() {
   window.addEventListener('keydown', e => {
     keyBuffer += e.key.toLowerCase();
     if(keyBuffer.length > 20) keyBuffer = keyBuffer.slice(-20);
-    // TRIGGER: TEXTO PLANO
     if(keyBuffer.endsWith(SECRET_WORD)) forceLogin();
   });
 }
+
 async function forceLogin() {
   const pass = prompt("PASSWORD ADMIN:");
   if(!pass) return;
-  // PASS: HASHEADO
-  const h = await hash(pass);
-  if(h === H_PASS) document.getElementById('admin').style.display = 'block';
-  else alert("Denegado");
+  try {
+      const h = await hash(pass);
+      if(h === H_PASS) document.getElementById('admin').style.display = 'block';
+      else alert("Denegado");
+  } catch(e) {
+      alert("Error de seguridad (¿Estás en HTTPS?)");
+  }
 }
+
 function closeAdmin() { document.getElementById('admin').style.display = 'none'; renderFront(); }
+
 async function genHash() {
   const v = document.getElementById('hash-input').value;
   if(!v) return;
-  const h = await hash(v);
-  document.getElementById('hash-output').style.display = 'block';
-  document.getElementById('hash-str').innerText = h;
-  setTimeout(() => { document.getElementById('hash-output').style.display = 'none'; }, 10000);
+  try {
+      const h = await hash(v);
+      document.getElementById('hash-output').style.display = 'block';
+      document.getElementById('hash-str').innerText = h;
+      setTimeout(() => { document.getElementById('hash-output').style.display = 'none'; }, 10000);
+  } catch(e) {
+      alert("Error al generar hash");
+  }
 }
 
 // EDITORES
@@ -923,11 +914,13 @@ function downloadHTML() {
   clone.querySelector('#catalog-root').innerHTML = '<div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div>';
   clone.querySelector('#intro-layer').style.opacity = '1';
   clone.querySelector('#intro-layer').style.display = 'flex';
-  clone.querySelector('#main-nav').innerHTML = ''; // Limpiar menu generado
+  clone.querySelector('#main-nav').innerHTML = ''; 
   clone.querySelector('#modal').style.display = 'none';
   clone.querySelector('#admin').style.display = 'none';
   clone.querySelector('#lightbox').style.display = 'none';
   clone.querySelector('#toast').style.display = 'none';
+  clone.querySelector('#fab').style.display = 'none';
+  clone.querySelector('#scroll-up').style.display = 'none';
 
   let scriptContent = clone.querySelector('script').innerHTML;
   const newUrl = document.getElementById('txt-form-url').value;
