@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZAUNK PEDALS</title>
+  <title>Zaunk Pedals!</title>
   
   <meta name="description" content="Pedales de efecto boutique hechos a mano. Fuzz, Overdrive y ruido analógico.">
-  <meta property="og:title" content="ZAUNK PEDALS">
+  <meta property="og:title" content="Zaunk Pedals!">
   <meta property="og:image" content="img/Zaunk_Logo.png">
   <link rel="icon" type="image/png" href="img/Zaunk_Logo.png">
 
@@ -53,7 +53,7 @@
       text-align: center;
       padding: 3rem 1rem 1rem 1rem;
       background-color: #fff;
-      border-bottom: 5px solid var(--zaunk-blue);
+      /* Eliminado el border-bottom para que sea más limpio */
     }
 
     .logo-wrapper {
@@ -450,6 +450,7 @@
           <div class="format-toolbar">
               <button class="format-btn" onclick="insertTag('b')">B</button>
               <button class="format-btn" onclick="insertTag('i')">I</button>
+              <button class="format-btn" onclick="insertTag('u')">U</button>
               <button class="format-btn" onclick="insertTag('ul')">Lista</button>
               <button class="format-btn" onclick="insertTag('br')">Salto</button>
           </div>
@@ -463,6 +464,7 @@
       <div>
         <div class="admin-card" style="background:#eef;">
           <h3>CONFIG WEB & TEXTOS</h3>
+          <label>Browser Tab Title:</label> <input id="txt-tab-title">
           <label>Título:</label> <input id="txt-title">
           <label>Subtítulo:</label> <input id="txt-subtitle">
           <label>Footer:</label> <input id="txt-footer">
@@ -510,6 +512,7 @@ window.addEventListener('DOMContentLoaded', () => {
   setupKeys();
   
   // Cargar valores al admin
+  document.getElementById('txt-tab-title').value = document.title;
   document.getElementById('txt-title').value = document.getElementById('web-title').innerText;
   document.getElementById('txt-subtitle').value = document.getElementById('web-subtitle').innerText;
   document.getElementById('txt-footer').value = document.getElementById('web-footer').innerText;
@@ -563,8 +566,8 @@ function renderFront() {
   sortedCats.forEach(cat => {
       nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="scrollToCat('${cat}')">${cat}</a>`;
   });
-  nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="showInfoPage('about')">ABOUT US</a>`;
   nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="showInfoPage('faq')">FAQ</a>`;
+  nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="showInfoPage('about')">ABOUT US</a>`;
 
   // Generar Grid
   const root = document.getElementById('catalog-root');
@@ -820,6 +823,7 @@ function insertTag(tag) {
     let replace = "";
     if (tag === 'b') replace = `<b>${selection}</b>`;
     if (tag === 'i') replace = `<i>${selection}</i>`;
+    if (tag === 'u') replace = `<u>${selection}</u>`;
     if (tag === 'ul') replace = `<ul>\n<li>${selection}</li>\n</ul>`;
     if (tag === 'br') replace = `<br>`;
     el.value = text.substring(0, start) + replace + text.substring(end);
@@ -862,6 +866,9 @@ function downloadHTML() {
   
   document.getElementById('txt-about-content').innerHTML = document.getElementById('txt-about').value;
   document.getElementById('txt-faq-content').innerHTML = document.getElementById('txt-faq').value;
+  
+  // Set tab title
+  document.title = document.getElementById('txt-tab-title').value;
 
   const clone = document.documentElement.cloneNode(true);
   clone.querySelector('#catalog-root').innerHTML = '<div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div>';
