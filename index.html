@@ -123,6 +123,7 @@
       transition: 0.3s ease;
     }
 
+    /* GRANO SUTIL */
     .img-wrapper::after {
       content: ""; position: absolute; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
@@ -160,18 +161,21 @@
       padding: 10px; background: rgba(255,255,255,0.9); z-index: 60; white-space: nowrap;
     }
     
-    .check-area {
+    /* CONTROL DE CANTIDAD */
+    .qty-control {
       margin-top: 1rem; border-top: 1px dotted var(--zaunk-blue);
-      padding-top: 0.5rem; display: flex; align-items: center; gap: 10px; cursor: pointer;
+      padding-top: 0.5rem; display: flex; align-items: center; justify-content: space-between;
+      font-family: var(--font-title); font-size: 1.2rem;
     }
-    .box {
-      width: 24px; height: 24px; border: 2px solid var(--zaunk-blue);
-      display: flex; justify-content: center; align-items: center; background: #fff;
+    .qty-btn {
+      width: 30px; height: 30px; background: #fff; border: 2px solid var(--zaunk-blue);
+      color: var(--zaunk-blue); cursor: pointer; font-weight: bold; font-size: 1.2rem;
+      display: flex; align-items: center; justify-content: center; transition: 0.2s;
     }
-    /* El checkbox se oculta, usamos label */
-    .chk-pedal { display: none; }
-    .chk-pedal:checked + .box { background: var(--zaunk-blue); }
-    .chk-pedal:checked + .box::after { content: 'X'; color: #fff; font-weight: bold; }
+    .qty-btn:hover { background: var(--zaunk-blue); color: #fff; }
+    .qty-btn:disabled { opacity: 0.3; cursor: not-allowed; border-color: #999; color: #999; background: #eee; }
+    
+    .qty-num { min-width: 30px; text-align: center; }
 
     /* === FOOTER === */
     footer {
@@ -220,9 +224,7 @@
     .carousel-track::-webkit-scrollbar { display: none; }
     
     .carousel-item {
-      flex: 0 0 100%;
-      scroll-snap-align: center;
-      cursor: zoom-in;
+      flex: 0 0 100%; scroll-snap-align: center; cursor: zoom-in;
       display: flex; align-items: center; justify-content: center;
       height: auto; aspect-ratio: 1/1; overflow: hidden;
     }
@@ -279,10 +281,7 @@
     }
     .admin-card { background: #fff; border: 2px solid #000; padding: 1.5rem; margin-bottom: 2rem; }
     input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid #ccc; }
-    
-    /* Fix para checkboxes del admin */
     #admin input[type="checkbox"] { width: auto !important; display: inline-block; margin-right: 10px; transform: scale(1.5); }
-    
     .hash-box { background: #000; color: #0f0; padding: 1rem; font-family: monospace; border: 2px solid red; margin-bottom: 2rem; }
 
     .format-toolbar { display: flex; gap: 5px; margin-bottom: 5px; }
@@ -388,13 +387,13 @@
 
     <div class="admin-card" style="border-color:red;">
       <h3 style="color:red; margin-top:0;">⚠️ GESTIÓN DE SEGURIDAD</h3>
-      <p>Genera hash SHA-256 para tus nuevas contraseñas. Al descargar el HTML, se guardará este hash.</p>
+      <p>Genera hash SHA-256 para tus nuevas contraseñas y actualízalas en el archivo index.html.</p>
       <div style="display:flex; gap:10px;">
         <input id="hash-input" placeholder="Escribe nueva clave..." style="margin:0;">
         <button class="btn" onclick="genHash()">GENERAR HASH</button>
       </div>
       <div id="hash-output" class="hash-box" style="display:none; margin-top:10px;">
-        Copia este código por si acaso: <br>
+        Copia este código y pégalo en las líneas H_SECRET o H_PASS:<br>
         <strong id="hash-str" style="color:#fff;"></strong>
       </div>
     </div>
@@ -474,7 +473,7 @@ const H_SECRET = "80562145550756778130831102956277717466541604085424545598889278
 const H_PASS   = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
 
 let db = [];
-let cart = new Set();
+let cart = new Map(); // Ahora es un mapa ID -> Cantidad
 let keyBuffer = "";
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -532,15 +531,14 @@ function renderFront() {
       section.innerHTML = `<div class="cat-header"><div class="cat-badge"><h2>${cat.toUpperCase()}</h2></div></div><div class="grid"></div>`;
       const grid = section.querySelector('.grid');
       items.forEach(p => {
-        const isSel = cart.has(p.id);
-        const img = p.imagenes[0] || ''; 
-        const soldOutBadge = p.agotado ? '<div class="sold-out-badge">SOLD OUT</div>' : '';
-        const activeClass = isSel ? 'active' : '';
+        const qty = cart.get(p.id) || 0;
+        const activeClass = qty > 0 ? 'active' : '';
         const agotadoClass = p.agotado ? 'agotado' : '';
-        const chkDisabled = p.agotado ? 'disabled' : '';
+        const soldOutBadge = p.agotado ? '<div class="sold-out-badge">SOLD OUT</div>' : '';
+        const disabled = p.agotado ? 'disabled' : '';
+        const img = p.imagenes[0] || ''; 
 
         const card = document.createElement('div');
-        // AÑADIMOS data-id PARA LA SINCRONIZACIÓN
         card.className = `card ${activeClass} ${agotadoClass}`;
         card.setAttribute('data-id', p.id);
         
@@ -552,11 +550,13 @@ function renderFront() {
           </div>
           <h3 onclick="openModal('${p.id}')" style="cursor:pointer">${p.nombre}</h3>
           <p>${p.descripcionCorta || ''}</p>
-          <label class="check-area">
-            <input type="checkbox" class="chk-pedal" data-id="${p.id}" onchange="toggleCart('${p.id}', this)" ${isSel?'checked':''} ${chkDisabled}>
-            <span class="box"></span>
-            <span>${p.agotado ? 'NO DISPONIBLE' : 'AÑADIR AL PEDIDO'}</span>
-          </label>
+          
+          <div class="qty-control">
+            <button class="qty-btn" onclick="updateQty('${p.id}', -1)" ${disabled}>-</button>
+            <span class="qty-num" id="qty-${p.id}">${qty}</span>
+            <button class="qty-btn" onclick="updateQty('${p.id}', 1)" ${disabled}>+</button>
+            <span style="font-size:0.8rem; margin-left:5px;">${p.agotado ? 'NO DISPONIBLE' : 'AÑADIR'}</span>
+          </div>
         `;
         grid.appendChild(card);
       });
@@ -566,71 +566,53 @@ function renderFront() {
   initScrollObserver();
 }
 
-// === LOGICA SINCRONIZADA CORREGIDA ===
-function toggleCart(id, chk) {
-  if(chk.disabled) return;
-  
-  // 1. Actualizar Set del Carrito
-  // La lógica es: si hay AL MENOS UN checkbox marcado con este ID, el producto se queda.
-  // Pero primero aplicamos el cambio actual.
-  
-  // Buscamos todos los checkboxes de este ID en la página
-  const allChecks = document.querySelectorAll(`.chk-pedal[data-id="${id}"]`);
-  
-  // Si el usuario acaba de desmarcar, verificamos si hay OTRO marcado
-  let keepInCart = false;
-  
-  // Si el usuario acaba de marcar, seguro que va al carrito.
-  // Si acaba de desmarcar, tenemos que ver si hay otro activado.
-  // Para simplificar, sincronizamos visualmente todo al estado del clic actual
-  // y luego decidimos.
-  
-  const newState = chk.checked;
-  
-  if (newState) {
-      cart.add(id);
-  } else {
-      // Si desmarca, revisamos si hay algún OTRO checkbox marcado para este ID que NO sea el que acabamos de tocar?
-      // El usuario pidió: "al deseleccionar un pedal, desaparece de la cesta. No debería de ser así, ya que sigue seleccionado en otra sección."
-      // Esto implica que los checkboxes deben ser INDEPENDIENTES visualmente pero ambos alimentan el carrito?
-      // O que deben estar SINCRONIZADOS?
-      // "Sigue seleccionado en otra sección" implica que NO están sincronizados visualmente.
-      
-      // En ese caso, comprobamos si queda alguno marcado.
-      let anyChecked = false;
-      allChecks.forEach(c => {
-          if (c !== chk && c.checked) anyChecked = true;
-      });
-      
-      if (!anyChecked) {
-          cart.delete(id);
-      }
-      // Si anyChecked es true, NO borramos del carrito.
-  }
-
-  // Actualizar clases visuales de las TARJETAS (Solo la actual o todas?)
-  // Si son independientes, solo actualizamos la tarjeta actual.
-  const card = chk.closest('.card');
-  if (newState) card.classList.add('active');
-  else card.classList.remove('active');
-
-  updateFab();
+function updateQty(id, change) {
+    let current = cart.get(id) || 0;
+    let next = current + change;
+    if (next < 0) next = 0;
+    
+    if (next === 0) cart.delete(id);
+    else cart.set(id, next);
+    
+    // Actualizar UI en TODAS las tarjetas con ese ID (por si está en 2 categorías)
+    const cards = document.querySelectorAll(`.card[data-id="${id}"]`);
+    cards.forEach(c => {
+        if (next > 0) c.classList.add('active');
+        else c.classList.remove('active');
+        
+        const span = c.querySelector(`#qty-${id}`);
+        if(span) span.innerText = next;
+    });
+    
+    updateFab();
 }
 
 function updateFab() {
   const btn = document.getElementById('fab');
-  if(cart.size > 0) {
+  let totalItems = 0;
+  cart.forEach(qty => totalItems += qty);
+  
+  if(totalItems > 0) {
     btn.style.display = 'block';
-    document.getElementById('fab-count').innerText = cart.size;
+    document.getElementById('fab-count').innerText = totalItems;
   } else {
     btn.style.display = 'none';
   }
 }
 
 function goToCheckout() {
-  const items = db.filter(p => cart.has(p.id)).map(p => `- ${p.nombre} (${p.precio} €)`).join('\n');
-  const total = db.filter(p => cart.has(p.id)).reduce((acc, p) => acc + parseInt(p.precio), 0);
-  const text = `${items}\n\nTOTAL APROX: ${total} €`;
+  let itemsStr = "";
+  let total = 0;
+  
+  cart.forEach((qty, id) => {
+      const p = db.find(x => x.id === id);
+      if(p) {
+          itemsStr += `- ${qty}x ${p.nombre} (${p.precio}€/ud)\n`;
+          total += (parseInt(p.precio) * qty);
+      }
+  });
+  
+  const text = `${itemsStr}\n\nTOTAL APROX: ${total} €`;
   const finalUrl = `${FORM_URL}?usp=pp_url&${FORM_ENTRY}=${encodeURIComponent(text)}`;
   window.open(finalUrl, '_blank');
 }
@@ -652,21 +634,10 @@ function openModal(id) {
       if(p.agotado) {
         b.innerText = "AGOTADO"; b.disabled = true; b.style.opacity = 0.5;
       } else {
-        b.innerText = "LO QUIERO"; b.disabled = false; b.style.opacity = 1;
+        b.innerText = "LO QUIERO (+1)"; b.disabled = false; b.style.opacity = 1;
         b.onclick = () => {
-            // Al comprar desde el modal, marcamos TODAS las instancias visualmente
-            if(cart.has(id)) { alert("Ya está en tu lista"); }
-            else { 
-                cart.add(id); 
-                // Sincronizar UI forzosa al añadir desde modal
-                const allChecks = document.querySelectorAll(`.chk-pedal[data-id="${id}"]`);
-                allChecks.forEach(c => {
-                    c.checked = true;
-                    c.closest('.card').classList.add('active');
-                });
-                updateFab(); 
-                closeModal(); 
-            }
+            updateQty(id, 1);
+            alert("Añadido +1 unidad al pedido");
         };
       }
   });
@@ -676,13 +647,11 @@ function openModal(id) {
   track.innerHTML = "";
   dots.innerHTML = "";
   
-  // Agregar listener de scroll para los puntos
   track.onscroll = () => {
       const idx = Math.round(track.scrollLeft / track.clientWidth);
       const allDots = document.querySelectorAll('.dot');
       allDots.forEach((d, i) => {
-          if (i === idx) d.classList.add('active');
-          else d.classList.remove('active');
+          if (i === idx) d.classList.add('active'); else d.classList.remove('active');
       });
   };
 
@@ -711,26 +680,12 @@ function openModal(id) {
   document.getElementById('modal').style.display = 'flex';
 }
 
-function closeModal() {
-  document.getElementById('modal').style.display = 'none';
-  document.getElementById('carousel-track').innerHTML = "";
-}
+function closeModal() { document.getElementById('modal').style.display = 'none'; document.getElementById('carousel-track').innerHTML = ""; }
+function scrollCarousel(dir) { const track = document.getElementById('carousel-track'); track.scrollBy({ left: dir * track.clientWidth, behavior: 'smooth' }); }
+function viewImage(src) { document.getElementById('lightbox').style.display = 'flex'; document.getElementById('lightbox-img').src = src; }
+function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
 
-function scrollCarousel(dir) {
-  const track = document.getElementById('carousel-track');
-  const itemWidth = track.clientWidth;
-  track.scrollBy({ left: dir * itemWidth, behavior: 'smooth' });
-}
-
-function viewImage(src) {
-  const lb = document.getElementById('lightbox');
-  document.getElementById('lightbox-img').src = src;
-  lb.style.display = 'flex';
-}
-function closeLightbox() {
-  document.getElementById('lightbox').style.display = 'none';
-}
-
+// SEGURIDAD & ADMIN
 async function hash(s) {
   const b = new TextEncoder().encode(s);
   const h = await crypto.subtle.digest('SHA-256', b);
@@ -751,7 +706,6 @@ async function forceLogin() {
   else alert("Denegado");
 }
 function closeAdmin() { document.getElementById('admin').style.display = 'none'; renderFront(); }
-
 async function genHash() {
   const v = document.getElementById('hash-input').value;
   if(!v) return;
@@ -760,27 +714,19 @@ async function genHash() {
   document.getElementById('hash-str').innerText = h;
 }
 
+// EDITORES
 function updateAutocomplete() {
-  const datalist = document.getElementById('cat-suggestions');
-  datalist.innerHTML = "";
-  const cats = new Set();
-  db.forEach(p => p.categoria.forEach(c => cats.add(c)));
-  cats.forEach(c => {
-    const opt = document.createElement('option');
-    opt.value = c;
-    datalist.appendChild(opt);
-  });
+  const datalist = document.getElementById('cat-suggestions'); datalist.innerHTML = "";
+  const cats = new Set(); db.forEach(p => p.categoria.forEach(c => cats.add(c)));
+  cats.forEach(c => { const opt = document.createElement('option'); opt.value = c; datalist.appendChild(opt); });
 }
-
 function renderAdminList() {
   document.getElementById('admin-list').innerHTML = db.map(p => `
     <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
       <span><b>${p.nombre}</b> <small>${p.precio}€</small> ${p.agotado ? '<span style="color:red;">[SOLD]</span>' : ''}</span>
       <div><button onclick="editP('${p.id}')">EDIT</button><button onclick="delP('${p.id}')" style="color:red">X</button></div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
-
 function editP(id) {
   const p = db.find(x => x.id === id);
   document.getElementById('e-id').value = p.id;
@@ -794,12 +740,9 @@ function editP(id) {
   document.getElementById('e-short').value = p.descripcionCorta || '';
   document.getElementById('e-long').value = p.descripcionLarga || '';
 }
-
 function insertTag(tag) {
     const el = document.getElementById('e-long');
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
-    const text = el.value;
+    const start = el.selectionStart; const end = el.selectionEnd; const text = el.value;
     const selection = text.substring(start, end);
     let replace = "";
     if (tag === 'b') replace = `<b>${selection}</b>`;
@@ -808,53 +751,38 @@ function insertTag(tag) {
     if (tag === 'br') replace = `<br>`;
     el.value = text.substring(0, start) + replace + text.substring(end);
 }
-
 function saveData() {
   const idField = document.getElementById('e-id').value;
   const nombre = document.getElementById('e-nombre').value;
   if(!nombre) return alert("Nombre obligatorio");
-  
   const id = idField || nombre.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
   const cats = document.getElementById('e-cat').value.split(',').map(s=>s.trim()).filter(s=>s);
   const imgs = document.getElementById('e-imgs').value.split('\n').map(s=>s.trim()).filter(s=>s);
   const vids = document.getElementById('e-videos').value.split(/[\n,]+/).map(s=>s.trim()).filter(s=>s);
   
   const nuevo = {
-    id, nombre, 
-    categoria: cats.length ? cats : ['otros'],
+    id, nombre, categoria: cats.length ? cats : ['otros'],
     precio: document.getElementById('e-precio').value,
     agotado: document.getElementById('e-agotado').checked,
-    imagenes: imgs,
-    videoIDs: vids,
+    imagenes: imgs, videoIDs: vids,
     descripcionCorta: document.getElementById('e-short').value,
     descripcionLarga: document.getElementById('e-long').value
   };
   
   const idx = db.findIndex(x => x.id === id);
   if(idx >= 0) db[idx] = nuevo; else db.push(nuevo);
-  
-  renderAdminList();
-  updateAutocomplete();
+  renderAdminList(); updateAutocomplete();
   alert("Guardado. DESCARGA EL JSON.");
   clearEditor();
 }
-
 function delP(id) { if(confirm("¿Eliminar?")) { db = db.filter(x => x.id !== id); renderAdminList(); } }
-function clearEditor() {
-  document.querySelectorAll('#admin input, #admin textarea').forEach(x => x.value = '');
-  document.getElementById('e-agotado').checked = false;
-}
-
-function downloadJson() {
-  const s = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
-  const a = document.createElement('a'); a.href = s; a.download = "pedales.json"; a.click();
-}
+function clearEditor() { document.querySelectorAll('#admin input, #admin textarea').forEach(x => x.value = ''); document.getElementById('e-agotado').checked = false; }
+function downloadJson() { const s = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2)); const a = document.createElement('a'); a.href = s; a.download = "pedales.json"; a.click(); }
 
 function downloadHTML() {
   document.getElementById('web-title').innerText = document.getElementById('txt-title').value;
   document.getElementById('web-subtitle').innerText = document.getElementById('txt-subtitle').value;
   document.getElementById('web-footer').innerText = document.getElementById('txt-footer').value;
-  
   document.getElementById('link-insta').href = document.getElementById('txt-insta').value;
   document.getElementById('link-yt').href = document.getElementById('txt-youtube').value;
   document.getElementById('link-email').href = 'mailto:' + document.getElementById('txt-email').value;
@@ -872,14 +800,12 @@ function downloadHTML() {
   scriptContent = scriptContent.replace(/const FORM_URL = ".*?";/, `const FORM_URL = "${newUrl}";`);
   scriptContent = scriptContent.replace(/const FORM_ENTRY = ".*?";/, `const FORM_ENTRY = "${newEntry}";`);
   
-  // INYECCIÓN DE HASH DE CONTRASEÑA
   const newHash = document.getElementById('hash-str').innerText;
   if (newHash && newHash.length > 10) {
       scriptContent = scriptContent.replace(/const H_PASS\s*=\s*".*?";/, `const H_PASS = "${newHash}";`);
   }
   
   clone.querySelector('script').innerHTML = scriptContent;
-
   const htmlContent = "<!DOCTYPE html>\n" + clone.outerHTML;
   const blob = new Blob([htmlContent], {type: "text/html"});
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "index.html"; a.click();
