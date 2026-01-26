@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="es"><head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ZAUNK! // PEDALES DE EFECTO</title>
   
   <meta name="description" content="Pedales de efecto boutique hechos a mano. Fuzz, Overdrive y ruido analógico.">
@@ -10,8 +11,8 @@
   <link rel="icon" type="image/png" href="img/Zaunk_Logo.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&amp;family=Oswald:wght@500;700&amp;display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -131,6 +132,7 @@
     .card:hover .card-img { transform: scale(1.05); }
     .card:hover .img-wrapper::after { opacity: 0; }
 
+    /* ESTADO SELECCIONADO */
     .card.active {
       border: 4px solid var(--zaunk-blue);
       transform: scale(1.02) rotate(-2deg) !important;
@@ -166,9 +168,10 @@
       width: 24px; height: 24px; border: 2px solid var(--zaunk-blue);
       display: flex; justify-content: center; align-items: center; background: #fff;
     }
-    input[type="checkbox"] { display: none; }
-    input[type="checkbox"]:checked + .box { background: var(--zaunk-blue); }
-    input[type="checkbox"]:checked + .box::after { content: 'X'; color: #fff; font-weight: bold; }
+    /* El checkbox se oculta, usamos label */
+    .chk-pedal { display: none; }
+    .chk-pedal:checked + .box { background: var(--zaunk-blue); }
+    .chk-pedal:checked + .box::after { content: 'X'; color: #fff; font-weight: bold; }
 
     /* === FOOTER === */
     footer {
@@ -194,7 +197,6 @@
     
     .modal-box {
       background: #fff; border: 4px solid #fff;
-      /* ANCHO CONTROLADO Y DISEÑO VERTICAL */
       width: 90%; max-width: 800px; 
       max-height: 90vh; overflow-y: auto;
       padding: 2rem; box-shadow: 20px 20px 0px var(--ink);
@@ -202,9 +204,7 @@
     }
 
     /* CARRUSEL */
-    #modal-media-col {
-        width: 100%; max-width: 500px; margin: 0 auto; 
-    }
+    #modal-media-col { width: 100%; max-width: 500px; margin: 0 auto; }
 
     .carousel-container {
       position: relative; width: 100%;
@@ -220,11 +220,12 @@
     .carousel-track::-webkit-scrollbar { display: none; }
     
     .carousel-item {
-      flex: 0 0 100%; scroll-snap-align: center; cursor: zoom-in;
+      flex: 0 0 100%;
+      scroll-snap-align: center;
+      cursor: zoom-in;
       display: flex; align-items: center; justify-content: center;
       height: auto; aspect-ratio: 1/1; overflow: hidden;
     }
-    
     .carousel-item img { width: 100%; height: 100%; object-fit: cover; }
     .carousel-item iframe { width: 100%; aspect-ratio: 16/9; border: none; }
     
@@ -240,7 +241,7 @@
     .carousel-dots {
       display: flex; justify-content: center; margin-top: 10px; gap: 5px;
     }
-    .dot { width: 10px; height: 10px; background: #ccc; border-radius: 50%; }
+    .dot { width: 10px; height: 10px; background: #ccc; border-radius: 50%; transition: background 0.3s; }
     .dot.active { background: var(--zaunk-blue); }
 
     /* INFO DETALLE */
@@ -278,14 +279,14 @@
     }
     .admin-card { background: #fff; border: 2px solid #000; padding: 1.5rem; margin-bottom: 2rem; }
     input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid #ccc; }
+    
+    /* Fix para checkboxes del admin */
     #admin input[type="checkbox"] { width: auto !important; display: inline-block; margin-right: 10px; transform: scale(1.5); }
+    
     .hash-box { background: #000; color: #0f0; padding: 1rem; font-family: monospace; border: 2px solid red; margin-bottom: 2rem; }
 
     .format-toolbar { display: flex; gap: 5px; margin-bottom: 5px; }
-    .format-btn { 
-        padding: 5px 10px; font-weight: bold; cursor: pointer; 
-        background: #eee; border: 1px solid #999;
-    }
+    .format-btn { padding: 5px 10px; font-weight: bold; cursor: pointer; background: #eee; border: 1px solid #999; }
     .format-btn:hover { background: #ddd; }
 
     #fab {
@@ -307,46 +308,47 @@
     <img src="img/Zaunk_Logo.png" alt="ZAUNK LOGO" onerror="this.style.display='none'">
   </div>
   <div style="margin-top: 1rem;">
-    <h2 id="web-title" style="margin:0; letter-spacing: 2px;">DIY EFFECT PEDALS</h2>
-    <p id="web-subtitle" style="font-family: var(--font-body); margin:0.5rem 0 0 0;">Custom Guitar, Bass and Synth Effects </p>
+    <h2 id="web-title" style="margin:0; letter-spacing: 2px;">PEDAL EFFECTS</h2>
+    <p id="web-subtitle" style="font-family: var(--font-body); margin:0.5rem 0 0 0;">HANDMADE NOISE DEVICES</p>
   </div>
 </header>
 
-<main class="container" id="catalog-root"><div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div></main>
+<main class="container" id="catalog-root">
+  <div style="text-align:center; padding: 4rem;">
+    <h2>CARGANDO ARTEFACTOS...</h2>
+  </div>
+</main>
 
 <footer>
   <div class="container">
     <div class="socials">
-      <a id="link-insta" href="https://www.instagram.com/zaunk_pedals/" target="_blank">
-        <svg class="social-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+      <a id="link-insta" href="https://instagram.com" target="_blank">
+        <svg class="social-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         INSTAGRAM
       </a>
-      
-      <a id="link-yt" href="https://www.youtube.com/@ZaunkPedals" target="_blank">
-        <svg class="social-icon" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg>
+      <a id="link-yt" href="https://youtube.com" target="_blank">
+        <svg class="social-icon" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
         YOUTUBE
       </a>
-      
-      <a id="link-email" href="mailto:zaunkpedals@gmail.com">
-        <svg class="social-icon" viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-11.179l4.623 5.467zm-4.488-6.353h21.73l-10.864 11.136-10.866-11.136zm7.393 7.06l3.473 3.56c.324.332.852.332 1.178 0l3.472-3.56 4.617 5.733h-17.356l4.616-5.733zm8.849-1.593l4.623-5.467v11.179l-4.623-5.712z"></path></svg>
+      <a id="link-email" href="mailto:info@zaunk.com">
+        <svg class="social-icon" viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-11.179l4.623 5.467zm-4.488-6.353h21.73l-10.864 11.136-10.866-11.136zm7.393 7.06l3.473 3.56c.324.332.852.332 1.178 0l3.472-3.56 4.617 5.733h-17.356l4.616-5.733zm8.849-1.593l4.623-5.467v11.179l-4.623-5.712z"/></svg>
         EMAIL
       </a>
     </div>
-    
-    <small id="web-footer">Making Pedals since 2020. Basque Country. DIY or die!</small>
+    <small id="web-footer">&copy; 2024 ZAUNK EFFECTS. HECHO EN CASA.</small>
   </div>
 </footer>
 
-<div id="fab" onclick="goToCheckout()" style="display: none;">
-  <span id="fab-count">1</span> -&gt; CONFIRMAR PEDIDO
+<div id="fab" onclick="goToCheckout()">
+  <span id="fab-count">0</span> -> CONFIRMAR PEDIDO
 </div>
 
-<div id="lightbox" onclick="closeLightbox()" style="display: none;">
-  <span class="lightbox-close-btn">×</span>
+<div id="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close-btn">&times;</span>
   <img id="lightbox-img" src="">
 </div>
 
-<div class="modal-overlay" id="modal" style="display: none;">
+<div class="modal-overlay" id="modal">
   <div class="modal-box">
     <div style="text-align:right;">
       <button class="btn" style="padding:5px 10px;" onclick="closeModal()">X CERRAR</button>
@@ -354,46 +356,30 @@
     
     <div id="modal-media-col">
       <div class="carousel-container">
-        <button class="carousel-btn prev" onclick="scrollCarousel(-1)" style="display: block;">&lt;</button>
+        <button class="carousel-btn prev" onclick="scrollCarousel(-1)">&lt;</button>
         <div class="carousel-track" id="carousel-track"></div>
-        <button class="carousel-btn next" onclick="scrollCarousel(1)" style="display: block;">&gt;</button>
+        <button class="carousel-btn next" onclick="scrollCarousel(1)">&gt;</button>
       </div>
-      <div id="carousel-dots" class="carousel-dots"><div class="dot active"></div><div class="dot "></div><div class="dot "></div><div class="dot"></div></div>
+      <div id="carousel-dots" class="carousel-dots"></div>
     </div>
 
     <div id="modal-info">
-      <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;">BASSATI</h2>
-      <div id="m-cats" style="margin-bottom:1rem;"><span style="background:var(--zaunk-blue); color:#fff; padding:2px 6px; margin-right:5px; font-size:0.8rem;">FUZZ</span><span style="background:var(--zaunk-blue); color:#fff; padding:2px 6px; margin-right:5px; font-size:0.8rem;">BASS</span></div>
+      <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;"></h2>
+      <div id="m-cats" style="margin-bottom:1rem;"></div>
       
       <div style="margin-bottom: 1rem; display:flex; align-items:center;">
-        <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px; margin:0;">65 €</h3>
-        <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px; opacity: 1;">LO QUIERO</button>
+        <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px; margin:0;">0 €</h3>
+        <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px;">LO QUIERO</button>
       </div>
 
-      <div id="m-desc">El BASSATI Woolly Mammoth es un pedal de fuzz perfecto para bajos, con una presencia de graves impresionante, lo que lo hace ideal tanto para bajistas como para guitarristas. Ofrece un tono de fuzz grueso, rico y agresivo que mantiene la claridad y el punch incluso en configuraciones extremas. Con una distorsión suave y sedosa, y una respuesta de graves profunda, el Woolly Mammoth es ideal para música rock pesada y experimental.
-
-CARACTERÍSTICAS:
-Sección de Control Fuzz:
-•Wool: Ajusta la intensidad y textura del fuzz, desde suave y sutil hasta masivo y agresivo.
-•Pinch: Controla la anchura del pulso del fuzz, creando un sonido fuzz apretado o uno más suelto y decaído.
-•EQ: Ajusta el equilibrio tonal del pedal, enfatizando frecuencias graves o agudas.
-•Volume: Controla el nivel de salida general, proporcionando un gran margen para tonos de fuzz contundentes.
-
-Destacados:
-•Diseño Amigable para Bajos: Mantiene el punch en las frecuencias graves, perfecto para bajistas y guitarristas.
-•Efecto Fuzz Puerta: La perilla "Pinch" ofrece sonidos fuzz únicos y entrecortados que sobresalen en la mezcla.
-•Amplio Rango Tonal: Desde un fuzz grueso y lleno de graves hasta un tono líder cortante y chisporroteante.
-
-*Funciona con una fuente de alimentación estándar para pedales: 9 Voltios DC, centro negativo (no incluida).
-</div>
+      <div id="m-desc"></div>
       <br>
-      
-      <button id="m-btn" class="btn" style="width: 100%; opacity: 1;" onclick="toggleFromModal()">LO QUIERO</button>
+      <button id="m-btn" class="btn" style="width:100%" onclick="toggleFromModal()">LO QUIERO</button>
     </div>
   </div>
 </div>
 
-<div id="admin" style="display: none;">
+<div id="admin">
   <div class="container">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
       <h1>PANEL DE CONTROL</h1>
@@ -402,13 +388,13 @@ Destacados:
 
     <div class="admin-card" style="border-color:red;">
       <h3 style="color:red; margin-top:0;">⚠️ GESTIÓN DE SEGURIDAD</h3>
-      <p>Genera hash SHA-256 para tus nuevas contraseñas y actualízalas en el archivo index.html.</p>
+      <p>Genera hash SHA-256 para tus nuevas contraseñas. Al descargar el HTML, se guardará este hash.</p>
       <div style="display:flex; gap:10px;">
         <input id="hash-input" placeholder="Escribe nueva clave..." style="margin:0;">
         <button class="btn" onclick="genHash()">GENERAR HASH</button>
       </div>
       <div id="hash-output" class="hash-box" style="display:none; margin-top:10px;">
-        Copia este código y pégalo en las líneas H_SECRET o H_PASS:<br>
+        Copia este código por si acaso: <br>
         <strong id="hash-str" style="color:#fff;"></strong>
       </div>
     </div>
@@ -422,7 +408,7 @@ Destacados:
           <label>Precio (€):</label> <input type="number" id="e-precio">
           <label>Categorías (separadas por coma):</label> 
           <input id="e-cat" list="cat-suggestions" placeholder="Ej: fuzz, bajo, merch">
-          <datalist id="cat-suggestions"><option value="Fuzz"></option><option value="Bass"></option><option value="dub"></option><option value="synth"></option></datalist>
+          <datalist id="cat-suggestions"></datalist>
           
           <label style="background:#ddd; padding:10px; display:flex; align-items:center; cursor:pointer; margin-bottom:1rem; margin-top:1rem;">
             <input type="checkbox" id="e-agotado"> 
@@ -430,9 +416,7 @@ Destacados:
           </label>
           
           <label>Imágenes (1 URL por línea):</label> <textarea id="e-imgs" rows="3"></textarea>
-          
-          <label>Youtube IDs (1 por línea o separados por comas):</label> <textarea id="e-videos" rows="2" placeholder="ej: dQw4w9WgXcQ"></textarea>
-          
+          <label>Youtube IDs (1 por línea):</label> <textarea id="e-videos" rows="2"></textarea>
           <label>Intro Corta:</label> <textarea id="e-short"></textarea>
           
           <label>Descripción Larga (HTML permitido):</label> 
@@ -453,14 +437,14 @@ Destacados:
 
       <div>
         <div class="admin-card" style="background:#eef;">
-          <h3>TEXTOS Y CONFIGURACIÓN</h3>
+          <h3>CONFIGURACIÓN WEB</h3>
           <label>Título:</label> <input id="txt-title">
           <label>Subtítulo:</label> <input id="txt-subtitle">
           <label>Footer:</label> <input id="txt-footer">
           
           <h4 style="margin:1.5rem 0 0.5rem 0; border-top:1px solid #999; padding-top:1rem;">GOOGLE FORMS</h4>
-          <label>Form URL (Link largo):</label> <input id="txt-form-url" placeholder="https://docs.google.com/forms/...">
-          <label>Entry ID (Ej: entry.12345):</label> <input id="txt-form-entry" placeholder="entry.123456789">
+          <label>Form URL:</label> <input id="txt-form-url">
+          <label>Entry ID:</label> <input id="txt-form-entry">
 
           <h4 style="margin:1.5rem 0 0.5rem 0; border-top:1px solid #999; padding-top:1rem;">REDES SOCIALES</h4>
           <label>Instagram URL:</label> <input id="txt-insta">
@@ -472,29 +456,7 @@ Destacados:
 
         <div class="admin-card">
           <h3>INVENTARIO</h3>
-          <div id="admin-list" style="max-height:300px; overflow-y:auto; border:1px solid #ccc; padding:5px;">
-    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
-      <span>
-        <b>BASSATI</b> <small>65€</small>
-        
-      </span>
-      <div>
-        <button onclick="editP('woolly-mammoth')">EDIT</button>
-        <button onclick="delP('woolly-mammoth')" style="color:red">X</button>
-      </div>
-    </div>
-  
-    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
-      <span>
-        <b>The Double Trouble: NJD Dub Siren &amp; Delay </b> <small>145€</small>
-        
-      </span>
-      <div>
-        <button onclick="editP('the-double-trouble-njd-dub-siren--delay-')">EDIT</button>
-        <button onclick="delP('the-double-trouble-njd-dub-siren--delay-')" style="color:red">X</button>
-      </div>
-    </div>
-  </div>
+          <div id="admin-list" style="max-height:300px; overflow-y:auto; border:1px solid #ccc; padding:5px;"></div>
           <br>
           <button class="btn" style="width:100%;" onclick="downloadJson()">💾 DESCARGAR PEDALES.JSON</button>
         </div>
@@ -506,10 +468,8 @@ Destacados:
 <div id="secret-btn" onclick="forceLogin()"></div>
 
 <script>
-/* ================= CONFIGURACIÓN ================= */
 const FORM_URL = "https://docs.google.com/forms/d/e/TU_ID_AQUI/viewform"; 
 const FORM_ENTRY = "entry.123456789";
-
 const H_SECRET = "8056214555075677813083110295627771746654160408542454559888927878";
 const H_PASS   = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
 
@@ -520,14 +480,11 @@ let keyBuffer = "";
 window.addEventListener('DOMContentLoaded', () => {
   loadData();
   setupKeys();
-  
   document.getElementById('txt-title').value = document.getElementById('web-title').innerText;
   document.getElementById('txt-subtitle').value = document.getElementById('web-subtitle').innerText;
   document.getElementById('txt-footer').value = document.getElementById('web-footer').innerText.replace('© 2024 ZAUNK EFFECTS. HECHO EN CASA.', '').trim();
-
   document.getElementById('txt-form-url').value = FORM_URL;
   document.getElementById('txt-form-entry').value = FORM_ENTRY;
-
   document.getElementById('txt-insta').value = document.getElementById('link-insta').href;
   document.getElementById('txt-youtube').value = document.getElementById('link-yt').href;
   document.getElementById('txt-email').value = document.getElementById('link-email').href.replace('mailto:', '');
@@ -538,28 +495,15 @@ async function loadData() {
     const r = await fetch('pedales.json');
     if(!r.ok) throw new Error("pedales.json no encontrado");
     const data = await r.json();
-    
     db = data.map(p => {
       let cats = [];
       if(Array.isArray(p.categoria)) cats = p.categoria;
       else if(p.categoria) cats = p.categoria.split(',').map(s => s.trim());
       else cats = ['otros'];
-      
-      // Parsear videos (soporte para JSON antiguo 'videoID' y nuevo 'videoIDs')
       let vids = p.videoIDs || [];
       if(!vids.length && p.videoID) vids = [p.videoID];
-
-      return {
-        ...p,
-        categoria: cats,
-        precio: p.precio || 0,
-        imagenes: p.imagenes || [],
-        videoIDs: vids,
-        agotado: !!p.agotado, 
-        id: p.id || Math.random().toString(36).substr(2, 9)
-      };
+      return { ...p, categoria: cats, precio: p.precio || 0, imagenes: p.imagenes || [], videoIDs: vids, agotado: !!p.agotado, id: p.id || Math.random().toString(36).substr(2, 9) };
     });
-    
     renderFront();
     updateAutocomplete(); 
     renderAdminList();
@@ -569,9 +513,7 @@ async function loadData() {
 
 function initScrollObserver() {
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   document.querySelectorAll('.card').forEach(el => observer.observe(el));
 }
@@ -579,7 +521,6 @@ function initScrollObserver() {
 function renderFront() {
   const root = document.getElementById('catalog-root');
   root.innerHTML = "";
-  
   const allCats = new Set();
   db.forEach(p => p.categoria.forEach(c => allCats.add(c.toLowerCase())));
   const sortedCats = Array.from(allCats).sort((a,b) => a === 'merch' ? 1 : b === 'merch' ? -1 : a.localeCompare(b));
@@ -588,10 +529,7 @@ function renderFront() {
     const items = db.filter(p => p.categoria.some(c => c.toLowerCase() === cat));
     if(items.length > 0) {
       const section = document.createElement('div');
-      section.innerHTML = `
-        <div class="cat-header"><div class="cat-badge"><h2>${cat.toUpperCase()}</h2></div></div>
-        <div class="grid"></div>
-      `;
+      section.innerHTML = `<div class="cat-header"><div class="cat-badge"><h2>${cat.toUpperCase()}</h2></div></div><div class="grid"></div>`;
       const grid = section.querySelector('.grid');
       items.forEach(p => {
         const isSel = cart.has(p.id);
@@ -602,7 +540,10 @@ function renderFront() {
         const chkDisabled = p.agotado ? 'disabled' : '';
 
         const card = document.createElement('div');
+        // AÑADIMOS data-id PARA LA SINCRONIZACIÓN
         card.className = `card ${activeClass} ${agotadoClass}`;
+        card.setAttribute('data-id', p.id);
+        
         card.innerHTML = `
           ${soldOutBadge}
           <div class="price-tag">${p.precio} €</div>
@@ -612,7 +553,7 @@ function renderFront() {
           <h3 onclick="openModal('${p.id}')" style="cursor:pointer">${p.nombre}</h3>
           <p>${p.descripcionCorta || ''}</p>
           <label class="check-area">
-            <input type="checkbox" onchange="toggleCart('${p.id}', this)" ${isSel?'checked':''} ${chkDisabled}>
+            <input type="checkbox" class="chk-pedal" data-id="${p.id}" onchange="toggleCart('${p.id}', this)" ${isSel?'checked':''} ${chkDisabled}>
             <span class="box"></span>
             <span>${p.agotado ? 'NO DISPONIBLE' : 'AÑADIR AL PEDIDO'}</span>
           </label>
@@ -625,16 +566,54 @@ function renderFront() {
   initScrollObserver();
 }
 
+// === LOGICA SINCRONIZADA CORREGIDA ===
 function toggleCart(id, chk) {
   if(chk.disabled) return;
-  const card = chk.closest('.card');
-  if(chk.checked) {
-    cart.add(id);
-    card.classList.add('active'); 
+  
+  // 1. Actualizar Set del Carrito
+  // La lógica es: si hay AL MENOS UN checkbox marcado con este ID, el producto se queda.
+  // Pero primero aplicamos el cambio actual.
+  
+  // Buscamos todos los checkboxes de este ID en la página
+  const allChecks = document.querySelectorAll(`.chk-pedal[data-id="${id}"]`);
+  
+  // Si el usuario acaba de desmarcar, verificamos si hay OTRO marcado
+  let keepInCart = false;
+  
+  // Si el usuario acaba de marcar, seguro que va al carrito.
+  // Si acaba de desmarcar, tenemos que ver si hay otro activado.
+  // Para simplificar, sincronizamos visualmente todo al estado del clic actual
+  // y luego decidimos.
+  
+  const newState = chk.checked;
+  
+  if (newState) {
+      cart.add(id);
   } else {
-    cart.delete(id);
-    card.classList.remove('active');
+      // Si desmarca, revisamos si hay algún OTRO checkbox marcado para este ID que NO sea el que acabamos de tocar?
+      // El usuario pidió: "al deseleccionar un pedal, desaparece de la cesta. No debería de ser así, ya que sigue seleccionado en otra sección."
+      // Esto implica que los checkboxes deben ser INDEPENDIENTES visualmente pero ambos alimentan el carrito?
+      // O que deben estar SINCRONIZADOS?
+      // "Sigue seleccionado en otra sección" implica que NO están sincronizados visualmente.
+      
+      // En ese caso, comprobamos si queda alguno marcado.
+      let anyChecked = false;
+      allChecks.forEach(c => {
+          if (c !== chk && c.checked) anyChecked = true;
+      });
+      
+      if (!anyChecked) {
+          cart.delete(id);
+      }
+      // Si anyChecked es true, NO borramos del carrito.
   }
+
+  // Actualizar clases visuales de las TARJETAS (Solo la actual o todas?)
+  // Si son independientes, solo actualizamos la tarjeta actual.
+  const card = chk.closest('.card');
+  if (newState) card.classList.add('active');
+  else card.classList.remove('active');
+
   updateFab();
 }
 
@@ -665,7 +644,6 @@ function openModal(id) {
   document.getElementById('m-cats').innerHTML = p.categoria.map(c => `<span style="background:var(--zaunk-blue); color:#fff; padding:2px 6px; margin-right:5px; font-size:0.8rem;">${c.toUpperCase()}</span>`).join('');
   document.getElementById('m-desc').innerHTML = p.descripcionLarga || '';
   
-  // Gestión de Botones (Arriba y Abajo)
   const btn = document.getElementById('m-btn');
   const btnSide = document.getElementById('m-btn-side');
   const buttons = [btn, btnSide];
@@ -676,8 +654,19 @@ function openModal(id) {
       } else {
         b.innerText = "LO QUIERO"; b.disabled = false; b.style.opacity = 1;
         b.onclick = () => {
+            // Al comprar desde el modal, marcamos TODAS las instancias visualmente
             if(cart.has(id)) { alert("Ya está en tu lista"); }
-            else { cart.add(id); renderFront(); updateFab(); closeModal(); }
+            else { 
+                cart.add(id); 
+                // Sincronizar UI forzosa al añadir desde modal
+                const allChecks = document.querySelectorAll(`.chk-pedal[data-id="${id}"]`);
+                allChecks.forEach(c => {
+                    c.checked = true;
+                    c.closest('.card').classList.add('active');
+                });
+                updateFab(); 
+                closeModal(); 
+            }
         };
       }
   });
@@ -687,7 +676,16 @@ function openModal(id) {
   track.innerHTML = "";
   dots.innerHTML = "";
   
-  // Agregar Imágenes
+  // Agregar listener de scroll para los puntos
+  track.onscroll = () => {
+      const idx = Math.round(track.scrollLeft / track.clientWidth);
+      const allDots = document.querySelectorAll('.dot');
+      allDots.forEach((d, i) => {
+          if (i === idx) d.classList.add('active');
+          else d.classList.remove('active');
+      });
+  };
+
   p.imagenes.forEach((src, idx) => {
     const div = document.createElement('div');
     div.className = 'carousel-item';
@@ -696,7 +694,6 @@ function openModal(id) {
     dots.innerHTML += `<div class="dot ${idx===0?'active':''}"></div>`;
   });
   
-  // Agregar Múltiples Videos
   if(p.videoIDs && p.videoIDs.length > 0) {
     p.videoIDs.forEach(vid => {
         const div = document.createElement('div');
@@ -778,14 +775,8 @@ function updateAutocomplete() {
 function renderAdminList() {
   document.getElementById('admin-list').innerHTML = db.map(p => `
     <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
-      <span>
-        <b>${p.nombre}</b> <small>${p.precio}€</small>
-        ${p.agotado ? '<span style="color:red; font-weight:bold;">[SOLD OUT]</span>' : ''}
-      </span>
-      <div>
-        <button onclick="editP('${p.id}')">EDIT</button>
-        <button onclick="delP('${p.id}')" style="color:red">X</button>
-      </div>
+      <span><b>${p.nombre}</b> <small>${p.precio}€</small> ${p.agotado ? '<span style="color:red;">[SOLD]</span>' : ''}</span>
+      <div><button onclick="editP('${p.id}')">EDIT</button><button onclick="delP('${p.id}')" style="color:red">X</button></div>
     </div>
   `).join('');
 }
@@ -798,11 +789,8 @@ function editP(id) {
   document.getElementById('e-cat').value = p.categoria.join(', ');
   document.getElementById('e-agotado').checked = !!p.agotado;
   document.getElementById('e-imgs').value = p.imagenes.join('\n');
-  
-  // Cargar videos
   const vids = p.videoIDs || [];
   document.getElementById('e-videos').value = vids.join('\n');
-  
   document.getElementById('e-short').value = p.descripcionCorta || '';
   document.getElementById('e-long').value = p.descripcionLarga || '';
 }
@@ -814,12 +802,10 @@ function insertTag(tag) {
     const text = el.value;
     const selection = text.substring(start, end);
     let replace = "";
-
     if (tag === 'b') replace = `<b>${selection}</b>`;
     if (tag === 'i') replace = `<i>${selection}</i>`;
     if (tag === 'ul') replace = `<ul>\n<li>${selection}</li>\n</ul>`;
     if (tag === 'br') replace = `<br>`;
-
     el.value = text.substring(0, start) + replace + text.substring(end);
 }
 
@@ -839,7 +825,7 @@ function saveData() {
     precio: document.getElementById('e-precio').value,
     agotado: document.getElementById('e-agotado').checked,
     imagenes: imgs,
-    videoIDs: vids, // Nuevo campo array de videos
+    videoIDs: vids,
     descripcionCorta: document.getElementById('e-short').value,
     descripcionLarga: document.getElementById('e-long').value
   };
@@ -849,16 +835,11 @@ function saveData() {
   
   renderAdminList();
   updateAutocomplete();
-  alert("Guardado en memoria. RECUERDA DESCARGAR EL JSON.");
+  alert("Guardado. DESCARGA EL JSON.");
   clearEditor();
 }
 
-function delP(id) {
-  if(confirm("¿Eliminar?")) {
-    db = db.filter(x => x.id !== id);
-    renderAdminList();
-  }
-}
+function delP(id) { if(confirm("¿Eliminar?")) { db = db.filter(x => x.id !== id); renderAdminList(); } }
 function clearEditor() {
   document.querySelectorAll('#admin input, #admin textarea').forEach(x => x.value = '');
   document.getElementById('e-agotado').checked = false;
@@ -866,9 +847,7 @@ function clearEditor() {
 
 function downloadJson() {
   const s = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
-  const a = document.createElement('a');
-  a.href = s; a.download = "pedales.json";
-  a.click();
+  const a = document.createElement('a'); a.href = s; a.download = "pedales.json"; a.click();
 }
 
 function downloadHTML() {
@@ -893,15 +872,18 @@ function downloadHTML() {
   scriptContent = scriptContent.replace(/const FORM_URL = ".*?";/, `const FORM_URL = "${newUrl}";`);
   scriptContent = scriptContent.replace(/const FORM_ENTRY = ".*?";/, `const FORM_ENTRY = "${newEntry}";`);
   
+  // INYECCIÓN DE HASH DE CONTRASEÑA
+  const newHash = document.getElementById('hash-str').innerText;
+  if (newHash && newHash.length > 10) {
+      scriptContent = scriptContent.replace(/const H_PASS\s*=\s*".*?";/, `const H_PASS = "${newHash}";`);
+  }
+  
   clone.querySelector('script').innerHTML = scriptContent;
 
   const htmlContent = "<!DOCTYPE html>\n" + clone.outerHTML;
   const blob = new Blob([htmlContent], {type: "text/html"});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = "index.html";
-  a.click();
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "index.html"; a.click();
 }
 </script>
-
-</body></html>
+</body>
+</html>
