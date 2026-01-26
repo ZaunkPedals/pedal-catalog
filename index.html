@@ -53,7 +53,6 @@
       text-align: center;
       padding: 3rem 1rem 1rem 1rem;
       background-color: #fff;
-      /* Sin borde negro */
     }
 
     .logo-wrapper {
@@ -72,7 +71,6 @@
       overflow-x: auto; white-space: nowrap;
       text-align: center;
       -webkit-overflow-scrolling: touch;
-      /* Sin borde negro abajo, solo en footer */
     }
     .nav-bar::-webkit-scrollbar { display: none; }
     .nav-bar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -83,7 +81,6 @@
       display: inline-block;
       text-transform: uppercase; letter-spacing: 1px; transition: 0.2s;
       cursor: pointer;
-      /* Sin separadores, estilo uniforme */
     }
     
     @media (hover: hover) {
@@ -215,11 +212,11 @@
     .add-btn:hover { background: #fff; color: var(--zaunk-blue); }
     .add-btn:disabled { opacity: 0.5; cursor: not-allowed; background: #ccc; border-color: #ccc; }
 
-    /* === FOOTER (BARRA NEGRA ARRIBA) === */
+    /* === FOOTER === */
     footer {
       background: var(--zaunk-blue); color: #fff;
       padding: 3rem 1rem; margin-top: auto; text-align: center;
-      border-top: 5px solid var(--ink); /* Única barra negra */
+      border-top: 5px solid var(--ink);
     }
     .socials { display: flex; justify-content: center; flex-wrap: wrap; gap: 2rem; margin-bottom: 2rem; }
     .socials a {
@@ -716,7 +713,7 @@ function openModal(id) {
             document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => c.classList.add('active'));
             document.querySelectorAll(`.card[data-id="${id}"] .add-btn`).forEach(b => b.innerText = "ACTUALIZAR");
             updateFab();
-            alert("Añadido +1 al pedido");
+            closeModal();
         };
       }
   });
