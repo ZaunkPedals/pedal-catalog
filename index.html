@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zaunk Pedals!</title>
   
-  <meta name="description" content="Custom Guitar, Bass and Synth Effects.">
+  <meta name="description" content="Pedales de efecto boutique hechos a mano. Fuzz, Overdrive y ruido analógico.">
   <meta property="og:title" content="Zaunk Pedals!">
   <meta property="og:image" content="img/Zaunk_Logo.png">
   <link rel="icon" type="image/png" href="img/Zaunk_Logo.png">
@@ -804,9 +804,12 @@ function openCheckout() {
     const select = document.getElementById('shipping-select');
     list.innerHTML = "";
     
-    // Rellenar selector de envios dinámicamente
-    const shipPen = parseInt(document.getElementById('txt-shipping').value) || 0;
-    const shipEU = parseInt(document.getElementById('txt-shipping-eu').value) || 0;
+    // Rellenar selector de envios dinámicamente CON SEGURIDAD
+    const elPen = document.getElementById('txt-shipping');
+    const elEU = document.getElementById('txt-shipping-eu');
+    
+    const shipPen = elPen ? (parseInt(elPen.value) || 6) : 6;
+    const shipEU = elEU ? (parseInt(elEU.value) || 0) : 0;
     
     select.innerHTML = `<option value="${shipPen}" data-name="Península">Península (${shipPen} €)</option>`;
     if (shipEU > 0) {
@@ -849,6 +852,8 @@ function updateCheckoutTotal() {
     });
     
     const select = document.getElementById('shipping-select');
+    if(!select) return; // Seguridad
+    
     const envio = parseInt(select.value) || 0;
     
     document.getElementById('ck-subtotal').innerText = subtotal;
@@ -1129,7 +1134,7 @@ function downloadHTML() {
   clone.querySelector('#toast').style.display = 'none';
   clone.querySelector('#fab').style.display = 'none';
   clone.querySelector('#scroll-up').style.display = 'none';
-  clone.querySelector('#checkout-modal').style.display = 'none'; // Aseguramos que el checkout esté cerrado
+  clone.querySelector('#checkout-modal').style.display = 'none'; 
 
   let scriptContent = clone.querySelector('script').innerHTML;
   const newUrl = document.getElementById('txt-form-url').value;
