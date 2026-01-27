@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zaunk Pedals!</title>
   
-  <meta name="description" content="Pedales de efecto boutique hechos a mano. Fuzz, Overdrive y ruido analógico.">
+  <meta name="description" content="Custom Guitar, Bass and Synth Effects.">
   <meta property="og:title" content="Zaunk Pedals!">
   <meta property="og:image" content="img/Zaunk_Logo.png">
   <link rel="icon" type="image/png" href="img/Zaunk_Logo.png">
@@ -67,7 +67,6 @@
     }
     #fab:hover { transform: scale(1.05); }
     
-    /* FLECHA ARRIBA (IZQUIERDA) */
     #scroll-up {
       position: fixed; bottom: 20px; left: 20px;
       width: 40px; height: 40px; background: #fff; border: 2px solid var(--zaunk-blue);
@@ -272,11 +271,7 @@
     
     /* FIX MÓVIL: Ajustar modal para que no se desborde */
     @media (max-width: 600px) {
-        .modal-box {
-            width: 95%;
-            padding: 1rem;
-            max-height: 85vh;
-        }
+        .modal-box { width: 95%; padding: 1rem; max-height: 85vh; }
     }
 
     #modal-media-col { width: 100%; max-width: 500px; margin: 0 auto; }
@@ -334,6 +329,15 @@
         background: #eef; padding: 1rem; margin-top: 1rem; border: 2px solid var(--zaunk-blue);
         font-family: var(--font-title); font-size: 1.1rem; text-align: right;
     }
+    
+    .checkout-shipping-select {
+        font-family: var(--font-body);
+        font-size: 1rem;
+        padding: 5px;
+        margin-left: 10px;
+        border: 2px solid #000;
+        background: #fff;
+    }
 
     /* LIGHTBOX */
     #lightbox {
@@ -359,6 +363,7 @@
     .hash-box { background: #000; color: #0f0; padding: 1rem; font-family: monospace; border: 2px solid red; margin-bottom: 2rem; }
     .format-toolbar { display: flex; gap: 5px; margin-bottom: 5px; }
     .format-btn { padding: 5px 10px; font-weight: bold; cursor: pointer; background: #eee; border: 1px solid #999; }
+    .admin-group h4 { color: var(--zaunk-blue); border-bottom: 2px solid #ccc; padding-bottom: 5px; margin-top: 1.5rem; margin-bottom: 1rem; }
     
     /* INFO PAGES (About / FAQ) */
     .info-page { display: none; padding: 4rem 0; }
@@ -480,7 +485,10 @@
     <div id="checkout-list"></div>
     <div id="checkout-summary">
         Subtotal: <span id="ck-subtotal">0</span> €<br>
-        Envío: <span id="ck-shipping">0</span> €<br>
+        <div>
+            <label for="shipping-select">Envío:</label>
+            <select id="shipping-select" class="checkout-shipping-select" onchange="updateCheckoutTotal()"></select>
+        </div>
         <hr>
         <strong style="font-size:1.5rem;">TOTAL: <span id="ck-total">0</span> €</strong>
     </div>
@@ -538,23 +546,45 @@
       </div>
       <div>
         <div class="admin-card" style="background:#eef;">
-          <h3>CONFIG WEB & TEXTOS</h3>
-          <label>Gastos de Envío (€):</label> <input id="txt-shipping" type="number" value="6">
-          <hr>
-          <label>Browser Tab Title:</label> <input id="txt-tab-title">
-          <label>Título:</label> <input id="txt-title">
-          <label>Subtítulo:</label> <input id="txt-subtitle">
-          <label>Footer:</label> <input id="txt-footer">
-          <hr>
-          <label>About Us (HTML):</label> <textarea id="txt-about" rows="4"></textarea>
-          <label>FAQ (HTML):</label> <textarea id="txt-faq" rows="4"></textarea>
-          <hr>
-          <label>Form URL:</label> <input id="txt-form-url">
-          <label>Entry ID (Resumen):</label> <input id="txt-form-entry">
-          <label>Entry ID (Ref. Pedido):</label> <input id="txt-form-entry-ref">
-          <label>Instagram URL:</label> <input id="txt-insta">
-          <label>YouTube URL:</label> <input id="txt-youtube">
-          <label>Email:</label> <input id="txt-email">
+          <h3>CONFIGURACIÓN WEB</h3>
+          
+          <div class="admin-group">
+              <h4>WEB</h4>
+              <label>Browser Tab Title:</label> <input id="txt-tab-title">
+              <label>Título Web:</label> <input id="txt-title">
+              <label>Subtítulo:</label> <input id="txt-subtitle">
+              <label>Footer:</label> <input id="txt-footer">
+              <label>About Us (HTML):</label> <textarea id="txt-about" rows="3"></textarea>
+              <label>FAQ (HTML):</label> <textarea id="txt-faq" rows="3"></textarea>
+          </div>
+
+          <div class="admin-group">
+              <h4>FORMULARIO</h4>
+              <label>Form URL:</label> <input id="txt-form-url">
+              <label>Entry ID (Resumen):</label> <input id="txt-form-entry">
+              <label>Entry ID (Ref. Pedido):</label> <input id="txt-form-entry-ref">
+          </div>
+
+          <div class="admin-group">
+              <h4>REDES Y CONTACTO</h4>
+              <label>Instagram URL:</label> <input id="txt-insta">
+              <label>YouTube URL:</label> <input id="txt-youtube">
+              <label>Email:</label> <input id="txt-email">
+          </div>
+
+          <div class="admin-group">
+              <h4>ENVÍOS (€)</h4>
+              <div style="display:flex; gap:10px;">
+                  <div style="flex:1">
+                      <label>Península:</label> <input id="txt-shipping" type="number" value="6">
+                  </div>
+                  <div style="flex:1">
+                      <label>Internacional (EU):</label> <input id="txt-shipping-eu" type="number" value="0" placeholder="0 = Desactivado">
+                  </div>
+              </div>
+          </div>
+
+          <br>
           <button class="btn" style="width:100%; background:var(--ink); color:#fff;" onclick="downloadHTML()">💾 DESCARGAR INDEX.HTML</button>
         </div>
         <div class="admin-card">
@@ -771,14 +801,22 @@ window.onscroll = updateFab;
 function openCheckout() {
     const modal = document.getElementById('checkout-modal');
     const list = document.getElementById('checkout-list');
+    const select = document.getElementById('shipping-select');
     list.innerHTML = "";
     
-    let subtotal = 0;
+    // Rellenar selector de envios dinámicamente
+    const shipPen = parseInt(document.getElementById('txt-shipping').value) || 0;
+    const shipEU = parseInt(document.getElementById('txt-shipping-eu').value) || 0;
     
+    select.innerHTML = `<option value="${shipPen}" data-name="Península">Península (${shipPen} €)</option>`;
+    if (shipEU > 0) {
+        select.innerHTML += `<option value="${shipEU}" data-name="Internacional EU">Internacional EU (${shipEU} €)</option>`;
+    }
+    
+    // Construir lista de items
     cart.forEach((qty, id) => {
         const p = db.find(x => x.id === id);
         if(p) {
-            subtotal += (parseInt(p.precio) * qty);
             const img = p.imagenes[0] || '';
             const row = document.createElement('div');
             row.className = 'checkout-item';
@@ -799,14 +837,23 @@ function openCheckout() {
         }
     });
     
-    // Calcular envio
-    const envio = parseInt(document.getElementById('txt-shipping').value) || 6;
+    updateCheckoutTotal();
+    modal.style.display = 'flex';
+}
+
+function updateCheckoutTotal() {
+    let subtotal = 0;
+    cart.forEach((qty, id) => {
+        const p = db.find(x => x.id === id);
+        if(p) subtotal += (parseInt(p.precio) * qty);
+    });
+    
+    const select = document.getElementById('shipping-select');
+    const envio = parseInt(select.value) || 0;
     
     document.getElementById('ck-subtotal').innerText = subtotal;
     document.getElementById('ck-shipping').innerText = envio;
     document.getElementById('ck-total').innerText = subtotal + envio;
-    
-    modal.style.display = 'flex';
 }
 
 function closeCheckout() {
@@ -818,7 +865,6 @@ function updateCheckoutQty(id, change) {
     let next = current + change;
     if(next < 1) next = 0;
     
-    // Actualizar visual en la rejilla principal también
     const display = document.querySelector(`#vis-qty-${id}`);
     if(display) display.innerText = next;
     
@@ -833,9 +879,8 @@ function updateCheckoutQty(id, change) {
     }
     
     updateFab();
-    
     if(cart.size === 0) closeCheckout();
-    else openCheckout(); // Re-renderizar lista
+    else openCheckout(); 
 }
 
 function confirmOrder() {
@@ -850,8 +895,11 @@ function confirmOrder() {
       }
   });
 
-  const envio = parseInt(document.getElementById('txt-shipping').value) || 6;
-  const total = subtotal + envio;
+  const select = document.getElementById('shipping-select');
+  const envioPrice = parseInt(select.value);
+  const envioName = select.options[select.selectedIndex].getAttribute('data-name');
+  
+  const total = subtotal + envioPrice;
 
   // 1. REF SEGURIDAD (SIMPLE: ZNK-P-XXX)
   const securityRef = `ZNK-P-${total}`;
@@ -862,7 +910,7 @@ function confirmOrder() {
   const randomStr = Math.floor(Math.random() * 1000).toString().padStart(3, '0'); 
   const trackingID = `ZNK-${dateStr}-${randomStr}`;
 
-  const text = `HOLA ZAUNK! ESTE ES MI PEDIDO:\n\n${itemsStr}\n------------------\nSubtotal: ${subtotal} €\nEnvío: ${envio} €\n------------------\nTOTAL ESTIMADO: ${total} €\n\n[REF: ${securityRef}]\n\n(Espero confirmación de stock y datos de pago)`;
+  const text = `HOLA ZAUNK! ESTE ES MI PEDIDO:\n\n${itemsStr}\n------------------\nSubtotal: ${subtotal} €\nEnvío (${envioName}): ${envioPrice} €\n------------------\nTOTAL ESTIMADO: ${total} €\n\n[REF: ${securityRef}]\n\n(Espero confirmación de stock y datos de pago)`;
   
   const finalUrl = `${FORM_URL}?usp=pp_url&${FORM_ENTRY}=${encodeURIComponent(text)}&${FORM_ENTRY_REF}=${encodeURIComponent(trackingID)}`;
   window.open(finalUrl, '_blank');
@@ -1079,7 +1127,6 @@ function downloadHTML() {
   clone.querySelector('#admin').style.display = 'none';
   clone.querySelector('#lightbox').style.display = 'none';
   clone.querySelector('#toast').style.display = 'none';
-  // Ocultar botones flotantes
   clone.querySelector('#fab').style.display = 'none';
   clone.querySelector('#scroll-up').style.display = 'none';
   clone.querySelector('#checkout-modal').style.display = 'none'; // Aseguramos que el checkout esté cerrado
@@ -1089,14 +1136,14 @@ function downloadHTML() {
   const newEntry = document.getElementById('txt-form-entry').value;
   const newEntryRef = document.getElementById('txt-form-entry-ref').value;
   const newShipping = document.getElementById('txt-shipping').value;
+  const newShippingEU = document.getElementById('txt-shipping-eu').value;
   
   scriptContent = scriptContent.replace(/const FORM_URL = ".*?";/, `const FORM_URL = "${newUrl}";`);
   scriptContent = scriptContent.replace(/const FORM_ENTRY = ".*?";/, `const FORM_ENTRY = "${newEntry}";`);
   scriptContent = scriptContent.replace(/const FORM_ENTRY_REF = ".*?";/, `const FORM_ENTRY_REF = "${newEntryRef}";`);
   
-  // Para guardar el precio de envio, necesitamos inyectarlo en el HTML estático o leerlo
-  // Truco: actualizamos el atributo value del input en el clon
   clone.querySelector('#txt-shipping').setAttribute('value', newShipping);
+  clone.querySelector('#txt-shipping-eu').setAttribute('value', newShippingEU);
   
   const newHash = document.getElementById('hash-str').innerText;
   if (newHash && newHash.length > 10) {
