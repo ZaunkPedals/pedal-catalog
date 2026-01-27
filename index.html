@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zaunk Pedals!</title>
   
-  <meta name="description" content="Pedales de efecto boutique hechos a mano. Fuzz, Overdrive y ruido analógico.">
+  <meta name="description" content="Custom Guitar, Bass and Synth Effects.">
   <meta property="og:title" content="Zaunk Pedals!">
   <meta property="og:image" content="img/Zaunk_Logo.png">
   <link rel="icon" type="image/png" href="img/Zaunk_Logo.png">
@@ -484,6 +484,7 @@
     <div id="checkout-list"></div>
     <div id="checkout-summary">
         Subtotal: <span id="ck-subtotal">0</span> €<br>
+        <h4 style="margin:10px 0 5px 0;">Tipo de envío:</h4>
         <div id="shipping-options"></div>
         <hr>
         <strong style="font-size:1.5rem;">TOTAL: <span id="ck-total">0</span> €</strong>
@@ -521,7 +522,7 @@
           <label style="background:#ddd; padding:10px; display:flex; align-items:center; margin:1rem 0;">
             <input type="checkbox" id="e-agotado"> <span style="margin-left:5px; font-weight:bold;">MARCAR COMO AGOTADO</span>
           </label>
-          <label>Imágenes (1 URL/línea):</label> <textarea id="e-imgs" rows="3"></textarea>
+          <label>Imágenes (1 URL/línea):</label> <textarea id="e-imgs" rows="3" placeholder="Arrastra aquí tus fotos desde la carpeta 'img' o pega las rutas..."></textarea>
           <label>Youtube IDs:</label> <textarea id="e-videos" rows="2"></textarea>
           <label>Intro Corta:</label> <textarea id="e-short"></textarea>
           <label>Descripción:</label> 
@@ -555,17 +556,17 @@
           </div>
 
           <div class="admin-group">
-              <h4>FORMULARIO</h4>
-              <label>Form URL:</label> <input id="txt-form-url">
-              <label>Entry ID (Resumen):</label> <input id="txt-form-entry">
-              <label>Entry ID (Ref. Pedido):</label> <input id="txt-form-entry-ref">
-          </div>
-
-          <div class="admin-group">
               <h4>REDES Y CONTACTO</h4>
               <label>Instagram URL:</label> <input id="txt-insta">
               <label>YouTube URL:</label> <input id="txt-youtube">
               <label>Email:</label> <input id="txt-email">
+          </div>
+
+          <div class="admin-group">
+              <h4>FORMULARIO</h4>
+              <label>Form URL:</label> <input id="txt-form-url">
+              <label>Entry ID (Resumen):</label> <input id="txt-form-entry">
+              <label>Entry ID (Ref. Pedido):</label> <input id="txt-form-entry-ref">
           </div>
 
           <div class="admin-group">
@@ -617,6 +618,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   loadData();
   setupKeys();
+  setupDragDrop(); // Inicializar Drag & Drop
   cart.clear(); 
   updateFab();  
   
@@ -1040,6 +1042,25 @@ async function genHash() {
   } catch(e) {
       alert("Error al generar hash");
   }
+}
+
+// SETUP DRAG & DROP
+function setupDragDrop() {
+    const imgArea = document.getElementById('e-imgs');
+    if(!imgArea) return;
+    
+    imgArea.addEventListener('dragover', e => { e.preventDefault(); e.target.style.background = '#eef'; });
+    imgArea.addEventListener('dragleave', e => { e.preventDefault(); e.target.style.background = '#fff'; });
+    imgArea.addEventListener('drop', e => {
+        e.preventDefault();
+        e.target.style.background = '#fff';
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            // Añadir ruta asumiendo carpeta 'img'
+            const path = "img/" + files[0].name;
+            e.target.value = e.target.value ? e.target.value + "\n" + path : path;
+        }
+    });
 }
 
 // EDITORES
