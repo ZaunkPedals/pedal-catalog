@@ -257,59 +257,71 @@
     .socials a:hover { transform: scale(1.1); text-shadow: 2px 2px 0 #000; }
     .social-icon { width: 24px; height: 24px; fill: currentColor; }
 
-    /* === MODAL / FICHA === */
+    /* === MODALES (CSS SEPARADO) === */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(37,52,148,0.95);
       display: none; align-items: center; justify-content: center; z-index: 100;
     }
     
-    /* MODAL BOX GENERAL */
     .modal-box {
       background: #fff; border: 4px solid #fff;
       width: 90%; max-width: 800px;
-      /* FLEXBOX PARA ESTRUCTURA LIMPIA EN MÓVIL */
-      display: flex; flex-direction: column; 
-      max-height: 90vh; /* Altura máxima */
-      padding: 2rem; box-shadow: 20px 20px 0px var(--ink);
-      gap: 1.5rem;
+      box-shadow: 20px 20px 0px var(--ink);
+    }
+
+    /* 1. MODAL FICHA PRODUCTO */
+    #modal .modal-box {
+        display: block; max-height: 90vh; overflow-y: auto; padding: 2rem;
+    }
+    #modal-media-col { width: 100%; max-width: 500px; margin: 0 auto; margin-bottom: 1.5rem; }
+
+    /* 2. MODAL CHECKOUT - DISEÑO FLEXBOX ELÁSTICO */
+    #checkout-modal .modal-box {
+        display: flex; flex-direction: column;
+        max-height: 90vh; padding: 2rem; gap: 1rem;
     }
     
-    /* OPTIMIZACIÓN CHECKOUT MÓVIL */
+    /* CABECERA COMPACTA DEL CHECKOUT */
+    .checkout-header {
+        display: flex; justify-content: space-between; align-items: center;
+        border-bottom: 2px dashed var(--zaunk-blue);
+        padding-bottom: 10px; margin-bottom: 0; flex-shrink: 0;
+    }
+    .checkout-header h2 { margin: 0; font-size: 1.8rem; }
+
+    /* LISTA SCROLLABLE */
+    #checkout-list { 
+        flex-grow: 1; overflow-y: auto; min-height: 0; margin: 0;
+    }
+    .checkout-item {
+        display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #eee;
+    }
+    .checkout-img { width: 50px; height: 50px; object-fit: cover; border: 1px solid #000; }
+    .checkout-details { flex: 1; }
+    .checkout-details h4 { margin: 0; font-size: 1rem; color: var(--ink); }
+    .checkout-price { font-family: var(--font-title); font-weight: bold; }
+    .checkout-actions { display: flex; align-items: center; gap: 5px; }
+    .checkout-btn { width: 25px; height: 25px; cursor: pointer; background: #eee; border: 1px solid #000; font-weight: bold; }
+    .del-btn { color: red; border-color: red; background: #fff; }
+    
+    /* RESUMEN PIE */
+    #checkout-summary {
+        background: #eef; padding: 1rem; border: 2px solid var(--zaunk-blue);
+        font-family: var(--font-title); font-size: 1.1rem; text-align: right; flex-shrink: 0;
+    }
+    
+    /* MEDIA QUERIES PARA MÓVIL */
     @media (max-width: 600px) {
-        .modal-box {
-            width: 95%;
-            height: 85vh; /* Altura fija en móvil */
-            padding: 1rem; 
-            gap: 10px;
-        }
-        /* Título del modal más pequeño y pegado arriba */
-        .modal-box h2 { margin: 5px 0 10px 0; font-size: 1.5rem; flex-shrink: 0; }
+        #modal .modal-box { width: 95%; padding: 1rem; max-height: 85vh; }
         
-        /* Botón cerrar más compacto */
-        .modal-box .btn-close-wrapper { margin-bottom: 5px; }
-        
-        /* Lista de items: Ocupa todo el espacio disponible (Scrollable) */
-        #checkout-list {
-            flex-grow: 1; /* Crece para llenar hueco */
-            max-height: none !important; /* Quitar limite fijo */
-            overflow-y: auto;
-            min-height: 0; /* Fix flexbox scroll */
-            margin-top: 0 !important;
-            border-bottom: 1px dashed #ccc;
-        }
-        
-        /* Resumen abajo: Compacto */
-        #checkout-summary {
-            flex-shrink: 0; /* No encoger */
-            padding: 10px !important;
-            font-size: 0.9rem;
-        }
-        /* Imagen item más pequeña */
+        #checkout-modal .modal-box { width: 95%; padding: 1rem; height: 85vh; gap: 5px; }
+        .checkout-header h2 { font-size: 1.3rem; }
+        .checkout-header .btn { padding: 5px 10px; font-size: 0.8rem; }
         .checkout-img { width: 40px !important; height: 40px !important; }
+        #checkout-summary { padding: 10px; font-size: 0.9rem; }
     }
 
-    #modal-media-col { width: 100%; max-width: 500px; margin: 0 auto; overflow-y: auto; } /* Scroll si el contenido es alto */
-
+    /* CAROUSEL */
     .carousel-container {
       position: relative; width: 100%;
       border: 2px solid #000; box-shadow: 5px 5px 0 rgba(0,0,0,0.1); background: #000;
@@ -346,27 +358,6 @@
     #m-desc li { margin-bottom: 5px; }
     #m-desc p { margin-bottom: 1rem; }
 
-    /* === NUEVO CSS PARA EL CHECKOUT MODAL === */
-    #checkout-list { 
-        border-top: 2px dashed #000; margin-top: 1rem; 
-        max-height: 40vh; overflow-y: auto; /* Default desktop */
-    }
-    .checkout-item {
-        display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #eee;
-    }
-    .checkout-img { width: 50px; height: 50px; object-fit: cover; border: 1px solid #000; }
-    .checkout-details { flex: 1; }
-    .checkout-details h4 { margin: 0; font-size: 1rem; color: var(--ink); }
-    .checkout-price { font-family: var(--font-title); font-weight: bold; }
-    .checkout-actions { display: flex; align-items: center; gap: 5px; }
-    .checkout-btn { width: 25px; height: 25px; cursor: pointer; background: #eee; border: 1px solid #000; font-weight: bold; }
-    .del-btn { color: red; border-color: red; background: #fff; }
-    
-    #checkout-summary {
-        background: #eef; padding: 1rem; margin-top: 1rem; border: 2px solid var(--zaunk-blue);
-        font-family: var(--font-title); font-size: 1.1rem; text-align: right;
-    }
-    
     /* ALINEACIÓN IZQUIERDA PARA EL SELECTOR DE ENVÍO */
     #shipping-section { text-align: left; }
     #shipping-options {
@@ -488,7 +479,8 @@
 </div>
 
 <div class="modal-overlay" id="modal">
-  <div class="modal-box" id="modal-box-inner"> <div style="text-align:right;" class="btn-close-wrapper">
+  <div class="modal-box">
+    <div style="text-align:right;">
       <button class="btn" style="padding:5px 10px;" onclick="closeModal()">X CERRAR</button>
     </div>
     <div id="modal-media-col">
@@ -515,10 +507,11 @@
 
 <div class="modal-overlay" id="checkout-modal">
   <div class="modal-box">
-    <div style="text-align:right;">
+    <div class="checkout-header">
+      <h2>REVISA TU PEDIDO</h2>
       <button class="btn" style="padding:5px 10px;" onclick="closeCheckout()">X CERRAR</button>
     </div>
-    <h2 style="margin-top:0;">REVISA TU PEDIDO</h2>
+    
     <div id="checkout-list"></div>
     <div id="checkout-summary">
         Subtotal: <span id="ck-subtotal">0</span> €<br>
@@ -852,6 +845,9 @@ window.onscroll = updateFab;
 
 // === GESTIÓN DEL MODAL CHECKOUT ===
 function openCheckout() {
+    // BLOQUEAR SCROLL DE FONDO
+    document.body.style.overflow = 'hidden';
+
     const modal = document.getElementById('checkout-modal');
     const list = document.getElementById('checkout-list');
     const shipOptionsDiv = document.getElementById('shipping-options');
@@ -918,6 +914,7 @@ function updateCheckoutTotal() {
 }
 
 function closeCheckout() {
+    document.body.style.overflow = ''; // DESBLOQUEAR SCROLL
     document.getElementById('checkout-modal').style.display = 'none';
 }
 
@@ -978,6 +975,9 @@ function confirmOrder() {
 }
 
 function openModal(id) {
+  // BLOQUEAR SCROLL DE FONDO
+  document.body.style.overflow = 'hidden';
+
   const p = db.find(x => x.id === id);
   if(!p) return;
   
@@ -1051,7 +1051,11 @@ function openModal(id) {
   document.getElementById('modal').style.display = 'flex';
 }
 
-function closeModal() { document.getElementById('modal').style.display = 'none'; document.getElementById('carousel-track').innerHTML = ""; }
+function closeModal() { 
+    document.body.style.overflow = ''; // DESBLOQUEAR SCROLL
+    document.getElementById('modal').style.display = 'none'; 
+    document.getElementById('carousel-track').innerHTML = ""; 
+}
 function scrollCarousel(dir) { const track = document.getElementById('carousel-track'); track.scrollBy({ left: dir * track.clientWidth, behavior: 'smooth' }); }
 function viewImage(src) { document.getElementById('lightbox').style.display = 'flex'; document.getElementById('lightbox-img').src = src; }
 function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
