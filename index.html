@@ -67,6 +67,7 @@
     }
     #fab:hover { transform: scale(1.05); }
     
+    /* FLECHA ARRIBA (IZQUIERDA) */
     #scroll-up {
       position: fixed; bottom: 20px; left: 20px;
       width: 40px; height: 40px; background: #fff; border: 2px solid var(--zaunk-blue);
@@ -268,6 +269,16 @@
       padding: 2rem; box-shadow: 20px 20px 0px var(--ink);
       display: flex; flex-direction: column; gap: 1.5rem;
     }
+    
+    /* FIX MÓVIL: Ajustar modal para que no se desborde */
+    @media (max-width: 600px) {
+        .modal-box {
+            width: 95%;
+            padding: 1rem;
+            max-height: 85vh; /* Dejar hueco para barras navegador */
+        }
+    }
+
     #modal-media-col { width: 100%; max-width: 500px; margin: 0 auto; }
 
     .carousel-container {
@@ -340,18 +351,14 @@
 </head>
 <body>
 
-<div id="intro-layer">
+<div id="intro-layer" style="opacity: 1; display: flex;">
   <img src="img/Zaunk_Logo.png" class="intro-logo">
   <div class="intro-text">LOADING NOISE...</div>
 </div>
 
-<div id="toast">¡AÑADIDO A LA CESTA!</div>
+<div id="toast" style="display: none;">¡AÑADIDO A LA CESTA!</div>
 
-<div id="scroll-up" onclick="goHome()" style="display:none;">↑</div>
-
-<div id="fab" onclick="goToCheckout()" style="display:none;">
-  <span id="fab-count">0</span> -> CONFIRMAR PEDIDO
-</div>
+<div id="scroll-up" onclick="goHome()" style="display: none;">↑</div>
 
 <header>
   <div class="logo-wrapper" onclick="goHome()">
@@ -363,16 +370,13 @@
   </div>
 </header>
 
-<nav class="nav-bar" id="main-nav">
-  </nav>
+<nav class="nav-bar" id="main-nav"></nav>
 
 <main class="container">
   
-  <div id="catalog-root">
-    <div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div>
-  </div>
+  <div id="catalog-root" style="display: block;"><div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div></div>
 
-  <div id="sec-about" class="info-page">
+  <div id="sec-about" class="info-page" style="display: none;">
     <h2>ABOUT US</h2>
     <div class="info-content" id="txt-about-content">
       Somos Zaunk Effects. Construimos ruido desde el País Vasco con nuestras propias manos.<br>
@@ -380,7 +384,7 @@
     </div>
   </div>
 
-  <div id="sec-faq" class="info-page">
+  <div id="sec-faq" class="info-page" style="display: none;">
     <h2>FAQ</h2>
     <div class="info-content" id="txt-faq-content">
       <strong>¿Hacéis envíos?</strong><br>Sí, a todo el mundo.<br><br>
@@ -410,9 +414,43 @@
   </div>
 </footer>
 
-<div id="secret-btn" onclick="forceLogin()"></div>
+<div id="fab" onclick="goToCheckout()" style="display: none;">
+  <span id="fab-count">0</span> -> CONFIRMAR PEDIDO
+</div>
 
-<div id="admin">
+<div id="lightbox" onclick="closeLightbox()" style="display: none;">
+  <span class="lightbox-close-btn">&times;</span>
+  <img id="lightbox-img" src="">
+</div>
+
+<div class="modal-overlay" id="modal" style="display: none;">
+  <div class="modal-box">
+    <div style="text-align:right;">
+      <button class="btn" style="padding:5px 10px;" onclick="closeModal()">X CERRAR</button>
+    </div>
+    <div id="modal-media-col">
+      <div class="carousel-container">
+        <button class="carousel-btn prev" onclick="scrollCarousel(-1)" style="display: block;">&lt;</button>
+        <div class="carousel-track" id="carousel-track"></div>
+        <button class="carousel-btn next" onclick="scrollCarousel(1)" style="display: block;">&gt;</button>
+      </div>
+      <div id="carousel-dots" class="carousel-dots"></div>
+    </div>
+    <div id="modal-info">
+      <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;"></h2>
+      <div id="m-cats" style="margin-bottom:1rem;"></div>
+      <div style="margin-bottom: 1rem; display:flex; align-items:center;">
+        <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px; margin:0;">0 €</h3>
+        <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px;">LO QUIERO (+1)</button>
+      </div>
+      <div id="m-desc"></div>
+      <br>
+      <button id="m-btn" class="btn" style="width:100%" onclick="toggleFromModal()">LO QUIERO (+1)</button>
+    </div>
+  </div>
+</div>
+
+<div id="admin" style="display: none;">
   <div class="container">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
       <h1>PANEL DE CONTROL</h1>
@@ -472,7 +510,7 @@
           <hr>
           <label>Form URL:</label> <input id="txt-form-url">
           <label>Entry ID (Resumen):</label> <input id="txt-form-entry">
-          <label>Entry ID (Referencia):</label> <input id="txt-form-entry-ref">
+          <label>Entry ID (Ref. Pedido):</label> <input id="txt-form-entry-ref">
           <label>Instagram URL:</label> <input id="txt-insta">
           <label>YouTube URL:</label> <input id="txt-youtube">
           <label>Email:</label> <input id="txt-email">
@@ -490,17 +528,16 @@
 
 <script>
 const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe6Jz1f86UZjYZTeeKw_DR7oanSK1aIpG_Sd0HoYhlgFjYciQ/viewform"; 
-const FORM_ENTRY = "entry.614982379";
-const FORM_ENTRY_REF = "entry.290444409";
-const SECRET_WORD = "nagusi"; // TEXTO PLANO
-const H_PASS = "7938e835c55906d701a4b828aa65f41d80ab14f7b61428b75266ab8f6bdd1cc6"; // "admin"
+const FORM_ENTRY = "entry.614982379"; // Campo de Texto Resumen
+const FORM_ENTRY_REF = "entry.290444409"; // Campo de ID Unico
+const SECRET_WORD = "nagusi"; 
+const H_PASS = "7938e835c55906d701a4b828aa65f41d80ab14f7b61428b75266ab8f6bdd1cc6"; 
 
 let db = [];
 let cart = new Map();
 let keyBuffer = "";
 
 window.addEventListener('DOMContentLoaded', () => {
-  // Aseguramos que elementos flotantes empiecen ocultos para evitar parpadeos
   document.getElementById('fab').style.display = 'none';
   document.getElementById('scroll-up').style.display = 'none';
 
@@ -702,17 +739,16 @@ function goToCheckout() {
   const envio = 6;
   const total = subtotal + envio;
 
-  // 1. ID ÚNICO (Para el Excel/Seguimiento)
+  // 1. REF DE SEGURIDAD (SIMPLE: ZNK-P-XXX)
+  const securityRef = `ZNK-P-${total}`;
+
+  // 2. ID ÚNICO DE SEGUIMIENTO (PARA EL EXCEL)
   const now = new Date();
-  const dateStr = now.toISOString().slice(2,10).replace(/-/g, ""); // AAMMDD
-  const randomID = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-  const trackingID = `ZNK-${dateStr}-${randomID}`; 
+  const dateStr = now.toISOString().slice(2,10).replace(/-/g, ""); // 231027
+  const randomStr = Math.floor(Math.random() * 1000).toString().padStart(3, '0'); 
+  const trackingID = `ZNK-${dateStr}-${randomStr}`;
 
-  // 2. CÓDIGO DE SEGURIDAD (Para validar el precio en el texto)
-  // Incluimos el precio total para que no puedan falsificarlo
-  const securityRef = `SEC-${total}E-${Math.random().toString(36).substring(7).toUpperCase()}`; 
-
-  const text = `HOLA ZAUNK! ESTE ES MI PEDIDO:\n\n${itemsStr}\n------------------\nSubtotal: ${subtotal} €\nEnvío: ${envio} €\n------------------\nTOTAL ESTIMADO: ${total} €\n\n[VALIDACIÓN PRECIO: ${securityRef}]\n\n(Espero confirmación de stock y datos de pago)`;
+  const text = `HOLA ZAUNK! ESTE ES MI PEDIDO:\n\n${itemsStr}\n------------------\nSubtotal: ${subtotal} €\nEnvío: ${envio} €\n------------------\nTOTAL ESTIMADO: ${total} €\n\n[REF: ${securityRef}]\n\n(Espero confirmación de stock y datos de pago)`;
   
   const finalUrl = `${FORM_URL}?usp=pp_url&${FORM_ENTRY}=${encodeURIComponent(text)}&${FORM_ENTRY_REF}=${encodeURIComponent(trackingID)}`;
   window.open(finalUrl, '_blank');
@@ -924,7 +960,7 @@ function downloadHTML() {
   clone.querySelector('#catalog-root').innerHTML = '<div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div>';
   clone.querySelector('#intro-layer').style.opacity = '1';
   clone.querySelector('#intro-layer').style.display = 'flex';
-  clone.querySelector('#main-nav').innerHTML = ''; 
+  clone.querySelector('#main-nav').innerHTML = ''; // Limpiar menu generado
   clone.querySelector('#modal').style.display = 'none';
   clone.querySelector('#admin').style.display = 'none';
   clone.querySelector('#lightbox').style.display = 'none';
