@@ -330,14 +330,13 @@
         font-family: var(--font-title); font-size: 1.1rem; text-align: right;
     }
     
-    .checkout-shipping-select {
-        font-family: var(--font-body);
-        font-size: 1rem;
-        padding: 5px;
-        margin-left: 10px;
-        border: 2px solid #000;
-        background: #fff;
+    #shipping-options {
+        text-align: left; margin: 10px 0; background: #fff; padding: 10px; border: 1px solid #ccc;
     }
+    #shipping-options label {
+        display: block; cursor: pointer; margin-bottom: 5px;
+    }
+    #shipping-options input { width: auto !important; margin-right: 10px; }
 
     /* LIGHTBOX */
     #lightbox {
@@ -485,10 +484,7 @@
     <div id="checkout-list"></div>
     <div id="checkout-summary">
         Subtotal: <span id="ck-subtotal">0</span> €<br>
-        <div>
-            <label for="shipping-select">Envío:</label>
-            <select id="shipping-select" class="checkout-shipping-select" onchange="updateCheckoutTotal()"></select>
-        </div>
+        <div id="shipping-options"></div>
         <hr>
         <strong style="font-size:1.5rem;">TOTAL: <span id="ck-total">0</span> €</strong>
     </div>
@@ -801,20 +797,24 @@ window.onscroll = updateFab;
 function openCheckout() {
     const modal = document.getElementById('checkout-modal');
     const list = document.getElementById('checkout-list');
-    const select = document.getElementById('shipping-select');
+    const shipOptionsDiv = document.getElementById('shipping-options');
     list.innerHTML = "";
     
-    // Rellenar selector de envios dinámicamente CON SEGURIDAD
+    // OBTENER PRECIOS CON SEGURIDAD (Si no existen, usa default)
     const elPen = document.getElementById('txt-shipping');
     const elEU = document.getElementById('txt-shipping-eu');
     
     const shipPen = elPen ? (parseInt(elPen.value) || 6) : 6;
     const shipEU = elEU ? (parseInt(elEU.value) || 0) : 0;
     
-    select.innerHTML = `<option value="${shipPen}" data-name="Península">Península (${shipPen} €)</option>`;
-    if (shipEU > 0) {
-        select.innerHTML += `<option value="${shipEU}" data-name="Internacional EU">Internacional EU (${shipEU} €)</option>`;
+    // CREAR RADIO BUTTONS
+    let htmlShips = `<label><input type="radio" name="ship" value="${shipPen}" data-name="Península" checked onchange="updateCheckoutTotal()"> Península (${shipPen} €)</label>`;
+    
+    if(shipEU > 0) {
+        htmlShips += `<label><input type="radio" name="ship" value="${shipEU}" data-name="Unión Europea" onchange="updateCheckoutTotal()"> Internacional EU (${shipEU} €)</label>`;
     }
+    
+    shipOptionsDiv.innerHTML = htmlShips;
     
     // Construir lista de items
     cart.forEach((qty, id) => {
@@ -851,13 +851,12 @@ function updateCheckoutTotal() {
         if(p) subtotal += (parseInt(p.precio) * qty);
     });
     
-    const select = document.getElementById('shipping-select');
-    if(!select) return; // Seguridad
-    
-    const envio = parseInt(select.value) || 0;
+    // Buscar el radio seleccionado
+    const selectedRadio = document.querySelector('input[name="ship"]:checked');
+    const envio = selectedRadio ? parseInt(selectedRadio.value) : 0;
     
     document.getElementById('ck-subtotal').innerText = subtotal;
-    document.getElementById('ck-shipping').innerText = envio;
+    // document.getElementById('ck-shipping').innerText = envio; // Ya se ve en el radio
     document.getElementById('ck-total').innerText = subtotal + envio;
 }
 
@@ -900,9 +899,9 @@ function confirmOrder() {
       }
   });
 
-  const select = document.getElementById('shipping-select');
-  const envioPrice = parseInt(select.value);
-  const envioName = select.options[select.selectedIndex].getAttribute('data-name');
+  const selectedRadio = document.querySelector('input[name="ship"]:checked');
+  const envioPrice = selectedRadio ? parseInt(selectedRadio.value) : 0;
+  const envioName = selectedRadio ? selectedRadio.getAttribute('data-name') : "N/A";
   
   const total = subtotal + envioPrice;
 
