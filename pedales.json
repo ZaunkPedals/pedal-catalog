@@ -30,16 +30,15 @@
     "precio": "145",
     "agotado": false,
     "imagenes": [
-      "img/pedales/dub_siren/Zaunk_Add_Siren_Cover.png",
-      "img/pedales/dub_siren/Zaunk_Add_siren_EN.png",
-      "img/pedales/dub_siren/Zaunk_Add_siren_ES.png"
+      "img/pedales/dub-siren/Zaunk_Add_Siren_Cover.png",
+      "img/pedales/dub-siren/Zaunk_Add_siren_EN.png",
+      "img/pedales/dub-siren/Zaunk_Add_siren_ES.png"
     ],
-    "videoID": "hhkBgY2TfvI",
-    "descripcionCorta": "No solo la clásica Sirena DUB NJD, sino que además incluye una sección dedicada para Echo/Delay y mods con sonidos bizarros. ",
-    "descripcionLarga": "No solo la clásica Sirena DUB NJD, sino que además incluye una sección dedicada para Echo/Delay y mods con sonidos bizarros. Una de las sirenas más famosas usada por los pioneros de los Sound-System desde la década de los 70.\n\n\nCARACTERÍSTICAS:\n\nSección Dub Siren:\n•Trigger: Interruptor para activar la sirena.\n•Tone: Controla el tono de Graves a Agudos (4 posiciones).\n•Mode: Controla la forma de la onda de sonido (4 posiciones).\n•Rate: Controla la velocidad del efecto o selecciona el modo off/manual (4 posiciones).\n•Botón Siren: Lanza un ciclo de sirena.\n•Botón Manual: Modifica la forma de la onda. (Funciona cuando: Rate=Off y Mode=1 o 4).\n\nSección Echo/Delay:\n•Mix: Añade Echo/Delay a la señal original.\n•Echo: Establece el tiempo de Echo/Delay.\n•Botón Feedback: Establece el Echo/Delay a niveles de infarto para generar retroalimentación/oscilación. \n•Botón Warp: Añade efectos locos a la sección Echo/Delay.\n•Botón Blast: Añade efectos locos y funciona como un filtro de frecuencias. \n•Combos: Presiona más de un botón al mismo tiempo para obtener sonidos extraños y sorprendentes.\n\n* Funciona con una fuente alimentación standard para pedales de: 9Volt DC centro negativo.  (No incluido)\n* Salida: Conectores RCA\n",
     "videoIDs": [
       "hhkBgY2TfvI"
-    ]
+    ],
+    "descripcionCorta": "No solo la clásica Sirena DUB NJD, sino que además incluye una sección dedicada para Echo/Delay y mods con sonidos bizarros. ",
+    "descripcionLarga": "No solo la clásica Sirena DUB NJD, sino que además incluye una sección dedicada para Echo/Delay y mods con sonidos bizarros. Una de las sirenas más famosas usada por los pioneros de los Sound-System desde la década de los 70.\n\n\nCARACTERÍSTICAS:\n\nSección Dub Siren:\n•Trigger: Interruptor para activar la sirena.\n•Tone: Controla el tono de Graves a Agudos (4 posiciones).\n•Mode: Controla la forma de la onda de sonido (4 posiciones).\n•Rate: Controla la velocidad del efecto o selecciona el modo off/manual (4 posiciones).\n•Botón Siren: Lanza un ciclo de sirena.\n•Botón Manual: Modifica la forma de la onda. (Funciona cuando: Rate=Off y Mode=1 o 4).\n\nSección Echo/Delay:\n•Mix: Añade Echo/Delay a la señal original.\n•Echo: Establece el tiempo de Echo/Delay.\n•Botón Feedback: Establece el Echo/Delay a niveles de infarto para generar retroalimentación/oscilación. \n•Botón Warp: Añade efectos locos a la sección Echo/Delay.\n•Botón Blast: Añade efectos locos y funciona como un filtro de frecuencias. \n•Combos: Presiona más de un botón al mismo tiempo para obtener sonidos extraños y sorprendentes.\n\n* Funciona con una fuente alimentación standard para pedales de: 9Volt DC centro negativo.  (No incluido)\n* Salida: Conectores RCA\n"
   },
   {
     "id": "the-red-artifact",
@@ -50,9 +49,9 @@
     "precio": "80",
     "agotado": false,
     "imagenes": [
-      "img/pedales/red_artifact/The_Red_Artifact_Cover.png",
-      "img/pedales/red_artifact/The_Red_Artifact_Back_ES.png",
-      "img/pedales/red_artifact/The_Red_Artifact_Back_EN.png"
+      "img/pedales/red-artifact/The_Red_Artifact_Cover.png",
+      "img/pedales/red-artifact/The_Red_Artifact_Back_ES.png",
+      "img/pedales/red-artifact/The_Red_Artifact_Back_EN.png"
     ],
     "videoIDs": [
       "UKjNidYJeH4",
