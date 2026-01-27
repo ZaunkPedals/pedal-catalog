@@ -61,6 +61,7 @@
         padding: 15px; font-family: var(--font-title); font-size: 1.1rem;
         cursor: pointer; letter-spacing: 1px;
         transition: 0.3s;
+        border-top: 2px solid #fff;
     }
     #access-banner:hover { background: var(--zaunk-blue); }
 
@@ -154,6 +155,12 @@
     }
 
     /* === CATÁLOGO === */
+    #public-catalog-title {
+        text-align: center; margin-top: 2rem; margin-bottom: 2rem; 
+        border-bottom: 2px solid var(--zaunk-blue); padding-bottom: 10px;
+        font-size: 2rem; letter-spacing: 3px;
+    }
+
     .cat-header {
       margin-top: 4rem; border-bottom: 2px dashed var(--zaunk-blue);
       margin-bottom: 2rem; scroll-margin-top: 80px;
@@ -318,6 +325,7 @@
     .checkout-btn { width: 25px; height: 25px; cursor: pointer; background: #eee; border: 1px solid #000; font-weight: bold; }
     .del-btn { color: red; border-color: red; background: #fff; }
     
+    /* RESUMEN PIE */
     #checkout-summary {
         background: #eef; padding: 1rem; border: 2px solid var(--zaunk-blue);
         font-family: var(--font-title); font-size: 1.1rem; text-align: right; flex-shrink: 0;
@@ -331,6 +339,7 @@
         .checkout-header .btn { padding: 5px 10px; font-size: 0.8rem; }
         .checkout-img { width: 40px !important; height: 40px !important; }
         #checkout-summary { padding: 10px; font-size: 0.9rem; }
+        #public-catalog-title { font-size: 1.5rem; margin: 1rem 0; }
     }
 
     /* CAROUSEL */
@@ -438,15 +447,17 @@
   </div>
 </header>
 
+<nav class="nav-bar" id="main-nav">
+  </nav>
+
 <div id="access-banner" onclick="openClientGate()">
     ¿TE INTERESA ALGÚN PEDAL? ¡HAZ CLICK AQUÍ!
 </div>
 
-<nav class="nav-bar" id="main-nav">
-  </nav>
-
 <main class="container">
   
+  <h2 id="public-catalog-title">CATÁLOGO</h2>
+
   <div id="catalog-root">
     <div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div>
   </div>
@@ -511,12 +522,12 @@
       <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;"></h2>
       <div id="m-cats" style="margin-bottom:1rem;"></div>
       <div style="margin-bottom: 1rem; display:flex; align-items:center;">
-        <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:inline-block; padding:5px 10px; margin:0;">0 €</h3>
-        <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px;">LO QUIERO (+1)</button>
+        <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:none; padding:5px 10px; margin:0;">0 €</h3>
+        <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px; display:none;">LO QUIERO (+1)</button>
       </div>
       <div id="m-desc"></div>
       <br>
-      <button id="m-btn" class="btn" style="width:100%" onclick="toggleFromModal()">LO QUIERO (+1)</button>
+      <button id="m-btn" class="btn" style="width:100%">LO QUIERO (+1)</button>
     </div>
   </div>
 </div>
@@ -546,11 +557,11 @@
 <div id="client-gate-modal" class="modal-overlay">
    <div class="modal-box" style="max-width:400px; text-align:center; height:auto;">
       <h3 style="margin-top:0;">ACCEDE A LA TRASTIENDA</h3>
-      <p style="margin-bottom:1.5rem;">Introduce tu contraseña para ver precios y comprar.</p>
+      <p style="margin-bottom:1.5rem;">Introduce tu clave de acceso</p>
       <input type="password" id="client-pass" placeholder="Contraseña..." style="font-size:1.2rem; text-align:center;">
       <div style="display:flex; flex-direction:column; gap:10px; margin-top:1rem;">
           <button class="btn" onclick="checkClientAccess()">ENTRAR</button>
-          <a href="https://forms.gle/TU_ENLACE_DE_SOLICITUD" target="_blank" class="btn" style="background:#eee; color:#000; border-color:#999; text-align:center; text-decoration:none;">PIDE TU ACCESO</a>
+          <a id="access-request-link" href="#" target="_blank" class="btn" style="background:#eee; color:#000; border-color:#999; text-align:center; text-decoration:none;">PIDE TU ACCESO</a>
           <button class="btn" onclick="closeClientGate()" style="border-color:red; color:red; margin-top:5px;">CANCELAR</button>
       </div>
    </div>
@@ -633,7 +644,13 @@
           </div>
 
           <div class="admin-group">
-              <h4>FORMULARIO</h4>
+              <h4>FORMULARIO ACCESO (Trastienda)</h4>
+              <label>URL Formulario Acceso:</label> <input id="txt-form-access-url" placeholder="https://docs.google.com/forms/...">
+              <label>Entry ID (Identificador):</label> <input id="txt-form-access-entry" placeholder="entry.XXXXXX">
+          </div>
+
+          <div class="admin-group">
+              <h4>FORMULARIO PEDIDOS</h4>
               <label>Form URL:</label> <input id="txt-form-url">
               <label>Entry ID (Resumen):</label> <input id="txt-form-entry">
               <label>Entry ID (Ref. Pedido):</label> <input id="txt-form-entry-ref">
@@ -649,6 +666,12 @@
                       <label>Internacional (EU):</label> <input id="txt-shipping-eu" type="number" value="0" placeholder="0 = Desactivado">
                   </div>
               </div>
+          </div>
+          
+          <div class="admin-group">
+              <h4>HASH ACCESO CLIENTES</h4>
+              <input id="txt-client-hash" readonly style="background:#ddd;">
+              <small>Usa el generador de abajo y pega el resultado aquí.</small>
           </div>
 
           <br>
@@ -676,9 +699,14 @@
 const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe6Jz1f86UZjYZTeeKw_DR7oanSK1aIpG_Sd0HoYhlgFjYciQ/viewform"; 
 const FORM_ENTRY = "entry.614982379";
 const FORM_ENTRY_REF = "entry.290444409";
+
+// CONFIGURACION FORMULARIO DE ACCESO (RELLENA ESTO CON TUS DATOS)
+const FORM_ACCESS_URL = "https://docs.google.com/forms/d/e/TU_ID_DE_FORMULARIO_DE_ACCESO/viewform"; 
+const FORM_ACCESS_ENTRY = "entry.TU_ID_DE_CAMPO"; 
+
 const SECRET_WORD = "nagusi"; 
 const H_PASS = "7938e835c55906d701a4b828aa65f41d80ab14f7b61428b75266ab8f6bdd1cc6"; 
-const CLIENT_PASS_HASH = "d9d3c50965e6d623253b2f567f293a9c79427042502720230232b73372553075"; // Hash para 'cliente'
+const CLIENT_PASS_HASH = "4983a0ab83ed86e0e7213c8783940193232960b77878655e0526323116e09f59"; // Hash correcto para 'cliente'
 
 let db = [];
 let cart = new Map();
@@ -714,6 +742,12 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('txt-form-url').value = FORM_URL;
   document.getElementById('txt-form-entry').value = FORM_ENTRY;
   document.getElementById('txt-form-entry-ref').value = FORM_ENTRY_REF;
+  
+  document.getElementById('txt-form-access-url').value = FORM_ACCESS_URL;
+  document.getElementById('txt-form-access-entry').value = FORM_ACCESS_ENTRY;
+  
+  document.getElementById('txt-client-hash').value = CLIENT_PASS_HASH;
+
   document.getElementById('txt-insta').value = document.getElementById('link-insta').href;
   document.getElementById('txt-youtube').value = document.getElementById('link-yt').href;
   document.getElementById('txt-email').value = document.getElementById('link-email').href.replace('mailto:', '');
@@ -721,9 +755,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // === LOGICA CLIENTE VIP ===
 function openClientGate() {
-    if(isVip) return; // Si ya esta dentro, no hace nada
+    if(isVip) return; 
     const input = document.getElementById('client-pass');
     input.value = '';
+    
+    // Generar enlace dinámico para petición de acceso
+    const accessId = "REQ-" + Math.floor(Math.random() * 1000000);
+    const finalAccessUrl = `${FORM_ACCESS_URL}?usp=pp_url&${FORM_ACCESS_ENTRY}=${accessId}`;
+    document.getElementById('access-request-link').href = finalAccessUrl;
+
     document.getElementById('client-gate-modal').style.display = 'flex';
     setTimeout(() => input.focus(), 50);
 }
@@ -737,20 +777,22 @@ async function checkClientAccess() {
     if(!pass) return;
     try {
         const h = await hash(pass);
-        if(h === CLIENT_PASS_HASH) {
+        // Compara con el valor que haya en el admin (o la constante si no se ha cambiado aun en runtime)
+        const currentHash = document.getElementById('txt-client-hash').value || CLIENT_PASS_HASH;
+        
+        if(h === currentHash) {
             closeClientGate();
             enableVipMode();
         } else {
             alert("Contraseña incorrecta");
         }
-    } catch(e) { alert("Error"); }
+    } catch(e) { alert("Error de seguridad"); }
 }
 
 function enableVipMode() {
     isVip = true;
     document.body.classList.add('vip-mode');
     
-    // Mostrar intro de nuevo con texto diferente
     const intro = document.getElementById('intro-layer');
     document.getElementById('intro-txt').innerText = "ACCEDIENDO A LA TRASTIENDA...";
     intro.style.display = 'flex';
@@ -759,8 +801,9 @@ function enableVipMode() {
     setTimeout(() => {
         intro.style.opacity = '0';
         setTimeout(() => intro.style.display = 'none', 800);
-        renderFront(); // Re-renderizar para mostrar precios
-        document.getElementById('access-banner').style.display = 'none'; // Ocultar banner
+        renderFront(); 
+        document.getElementById('access-banner').style.display = 'none'; 
+        document.getElementById('public-catalog-title').style.display = 'none'; // Ocultar titulo catálogo
     }, 1500);
 }
 
@@ -808,7 +851,11 @@ function renderFront() {
   sortedCats.forEach(cat => {
       nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="scrollToCat('${cat}')">${cat}</a>`;
   });
-  nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="showInfoPage('faq')">FAQ</a>`;
+  
+  // LOGICA: FAQ SOLO VISIBLE SI ES VIP
+  if(isVip) {
+      nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="showInfoPage('faq')">FAQ</a>`;
+  }
   nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="showInfoPage('about')">ABOUT US</a>`;
 
   const root = document.getElementById('catalog-root');
@@ -1069,47 +1116,64 @@ function openModal(id) {
   const p = db.find(x => x.id === id);
   if(!p) return;
   
+  // RESET CARRUSEL (Scroll al inicio)
+  document.getElementById('carousel-track').scrollLeft = 0;
+
   document.getElementById('m-title').innerText = p.nombre;
-  // Solo mostrar precio si es VIP
-  document.getElementById('m-price').innerText = isVip ? (p.precio + " €") : "???"; 
   
-  document.getElementById('m-cats').innerHTML = p.categoria.map(c => `<span style="background:var(--zaunk-blue); color:#fff; padding:2px 6px; margin-right:5px; font-size:0.8rem;">${c.toUpperCase()}</span>`).join('');
-  document.getElementById('m-desc').innerHTML = p.descripcionLarga || '';
-  
-  const btn = document.getElementById('m-btn');
+  // MODIFICACION: PRECIO Y BOTON SOLO SI ES VIP
+  const priceLabel = document.getElementById('m-price');
   const btnSide = document.getElementById('m-btn-side');
-  const buttons = [btn, btnSide];
-  
-  buttons.forEach(b => {
-      // Si NO es VIP, ocultar botones de compra en el modal
-      if(!isVip) {
-          b.style.display = 'none';
-      } else {
-          b.style.display = 'inline-block';
-          if(p.agotado) {
-            b.innerText = "AGOTADO"; b.disabled = true; b.style.opacity = 0.5;
-          } else {
-            b.innerText = "LO QUIERO (+1)"; b.disabled = false; b.style.opacity = 1;
-            b.onclick = () => {
+  const btnMain = document.getElementById('m-btn');
+
+  if(isVip) {
+      priceLabel.style.display = 'inline-block';
+      priceLabel.innerText = p.precio + " €";
+      
+      btnSide.style.display = 'inline-block';
+      btnMain.innerText = "LO QUIERO (+1)";
+      
+      // Asignar funcion de compra a ambos botones
+      [btnSide, btnMain].forEach(b => {
+          b.onclick = () => {
+                if(p.agotado) return;
                 let current = cart.get(id) || 0;
                 let next = current + 1;
                 cart.set(id, next);
                 document.querySelectorAll(`#vis-qty-${id}`).forEach(s => s.innerText = next);
                 document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => c.classList.add('active'));
                 document.querySelectorAll(`.card[data-id="${id}"] .add-btn`).forEach(b => b.innerText = "ACTUALIZAR");
-                
                 updateFab();
-                
                 const t = document.getElementById('toast');
                 t.style.display = 'block';
-                setTimeout(() => {
-                    t.style.display = 'none';
-                    closeModal();
-                }, 1000);
-            };
-          }
-      }
-  });
+                setTimeout(() => { t.style.display = 'none'; closeModal(); }, 1000);
+          };
+      });
+
+  } else {
+      // SI NO ES VIP
+      priceLabel.style.display = 'none';
+      btnSide.style.display = 'none';
+      
+      // Botón principal se convierte en "¿TE INTERESA?"
+      btnMain.innerText = "¿TE INTERESA?";
+      btnMain.onclick = () => {
+          closeModal();
+          openClientGate();
+      };
+  }
+  
+  // Gestion AGOTADO (común)
+  if(p.agotado && isVip) {
+      btnSide.innerText = "AGOTADO"; btnSide.disabled = true; btnSide.style.opacity = 0.5;
+      btnMain.innerText = "AGOTADO"; btnMain.disabled = true; btnMain.style.opacity = 0.5;
+  } else {
+      btnSide.disabled = false; btnSide.style.opacity = 1;
+      btnMain.disabled = false; btnMain.style.opacity = 1;
+  }
+
+  document.getElementById('m-cats').innerHTML = p.categoria.map(c => `<span style="background:var(--zaunk-blue); color:#fff; padding:2px 6px; margin-right:5px; font-size:0.8rem;">${c.toUpperCase()}</span>`).join('');
+  document.getElementById('m-desc').innerHTML = p.descripcionLarga || '';
 
   const track = document.getElementById('carousel-track');
   const dots = document.getElementById('carousel-dots');
@@ -1353,10 +1417,18 @@ function downloadHTML() {
   clone.querySelector('#login-modal').style.display = 'none'; 
   clone.querySelector('#client-gate-modal').style.display = 'none';
 
+  // Mostrar cosas que se ocultan en VIP mode
+  clone.querySelector('#access-banner').style.display = 'block'; 
+  clone.querySelector('#public-catalog-title').style.display = 'block';
+
   let scriptContent = clone.querySelector('script').innerHTML;
   const newUrl = document.getElementById('txt-form-url').value;
   const newEntry = document.getElementById('txt-form-entry').value;
   const newEntryRef = document.getElementById('txt-form-entry-ref').value;
+  
+  const newAccessUrl = document.getElementById('txt-form-access-url').value;
+  const newAccessEntry = document.getElementById('txt-form-access-entry').value;
+  
   const newShipping = document.getElementById('txt-shipping').value;
   const newShippingEU = document.getElementById('txt-shipping-eu').value;
   
@@ -1364,12 +1436,20 @@ function downloadHTML() {
   scriptContent = scriptContent.replace(/const FORM_ENTRY = ".*?";/, `const FORM_ENTRY = "${newEntry}";`);
   scriptContent = scriptContent.replace(/const FORM_ENTRY_REF = ".*?";/, `const FORM_ENTRY_REF = "${newEntryRef}";`);
   
+  scriptContent = scriptContent.replace(/const FORM_ACCESS_URL = ".*?";/, `const FORM_ACCESS_URL = "${newAccessUrl}";`);
+  scriptContent = scriptContent.replace(/const FORM_ACCESS_ENTRY = ".*?";/, `const FORM_ACCESS_ENTRY = "${newAccessEntry}";`);
+  
   clone.querySelector('#txt-shipping').setAttribute('value', newShipping);
   clone.querySelector('#txt-shipping-eu').setAttribute('value', newShippingEU);
   
   const newHash = document.getElementById('hash-str').innerText;
   if (newHash && newHash.length > 10) {
       scriptContent = scriptContent.replace(/const H_PASS\s*=\s*".*?";/, `const H_PASS = "${newHash}";`);
+  }
+  
+  const newClientHash = document.getElementById('txt-client-hash').value;
+  if (newClientHash && newClientHash.length > 10) {
+      scriptContent = scriptContent.replace(/const CLIENT_PASS_HASH\s*=\s*".*?";/, `const CLIENT_PASS_HASH = "${newClientHash}";`);
   }
   
   clone.querySelector('script').innerHTML = scriptContent;
