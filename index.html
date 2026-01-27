@@ -275,7 +275,7 @@
         .modal-box {
             width: 95%;
             padding: 1rem;
-            max-height: 85vh; /* Dejar hueco para barras navegador */
+            max-height: 85vh;
         }
     }
 
@@ -317,6 +317,24 @@
     #m-desc li { margin-bottom: 5px; }
     #m-desc p { margin-bottom: 1rem; }
 
+    /* === NUEVO CSS PARA EL CHECKOUT MODAL === */
+    #checkout-list { border-top: 2px dashed #000; margin-top: 1rem; max-height: 40vh; overflow-y: auto; }
+    .checkout-item {
+        display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #eee;
+    }
+    .checkout-img { width: 50px; height: 50px; object-fit: cover; border: 1px solid #000; }
+    .checkout-details { flex: 1; }
+    .checkout-details h4 { margin: 0; font-size: 1rem; color: var(--ink); }
+    .checkout-price { font-family: var(--font-title); font-weight: bold; }
+    .checkout-actions { display: flex; align-items: center; gap: 5px; }
+    .checkout-btn { width: 25px; height: 25px; cursor: pointer; background: #eee; border: 1px solid #000; font-weight: bold; }
+    .del-btn { color: red; border-color: red; background: #fff; }
+    
+    #checkout-summary {
+        background: #eef; padding: 1rem; margin-top: 1rem; border: 2px solid var(--zaunk-blue);
+        font-family: var(--font-title); font-size: 1.1rem; text-align: right;
+    }
+
     /* LIGHTBOX */
     #lightbox {
       position: fixed; inset: 0; z-index: 5000; background: rgba(0,0,0,0.95);
@@ -351,14 +369,18 @@
 </head>
 <body>
 
-<div id="intro-layer" style="opacity: 1; display: flex;">
+<div id="intro-layer">
   <img src="img/Zaunk_Logo.png" class="intro-logo">
   <div class="intro-text">LOADING NOISE...</div>
 </div>
 
-<div id="toast" style="display: none;">¡AÑADIDO A LA CESTA!</div>
+<div id="toast">¡AÑADIDO A LA CESTA!</div>
 
-<div id="scroll-up" onclick="goHome()" style="display: none;">↑</div>
+<div id="scroll-up" onclick="goHome()" style="display:none;">↑</div>
+
+<div id="fab" onclick="openCheckout()" style="display:none;">
+  <span id="fab-count">0</span> -> REVISAR PEDIDO
+</div>
 
 <header>
   <div class="logo-wrapper" onclick="goHome()">
@@ -370,13 +392,16 @@
   </div>
 </header>
 
-<nav class="nav-bar" id="main-nav"></nav>
+<nav class="nav-bar" id="main-nav">
+  </nav>
 
 <main class="container">
   
-  <div id="catalog-root" style="display: block;"><div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div></div>
+  <div id="catalog-root">
+    <div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div>
+  </div>
 
-  <div id="sec-about" class="info-page" style="display: none;">
+  <div id="sec-about" class="info-page">
     <h2>ABOUT US</h2>
     <div class="info-content" id="txt-about-content">
       Somos Zaunk Effects. Construimos ruido desde el País Vasco con nuestras propias manos.<br>
@@ -384,7 +409,7 @@
     </div>
   </div>
 
-  <div id="sec-faq" class="info-page" style="display: none;">
+  <div id="sec-faq" class="info-page">
     <h2>FAQ</h2>
     <div class="info-content" id="txt-faq-content">
       <strong>¿Hacéis envíos?</strong><br>Sí, a todo el mundo.<br><br>
@@ -414,25 +439,21 @@
   </div>
 </footer>
 
-<div id="fab" onclick="goToCheckout()" style="display: none;">
-  <span id="fab-count">0</span> -> CONFIRMAR PEDIDO
-</div>
-
-<div id="lightbox" onclick="closeLightbox()" style="display: none;">
+<div id="lightbox" onclick="closeLightbox()">
   <span class="lightbox-close-btn">&times;</span>
   <img id="lightbox-img" src="">
 </div>
 
-<div class="modal-overlay" id="modal" style="display: none;">
+<div class="modal-overlay" id="modal">
   <div class="modal-box">
     <div style="text-align:right;">
       <button class="btn" style="padding:5px 10px;" onclick="closeModal()">X CERRAR</button>
     </div>
     <div id="modal-media-col">
       <div class="carousel-container">
-        <button class="carousel-btn prev" onclick="scrollCarousel(-1)" style="display: block;">&lt;</button>
+        <button class="carousel-btn prev" onclick="scrollCarousel(-1)">&lt;</button>
         <div class="carousel-track" id="carousel-track"></div>
-        <button class="carousel-btn next" onclick="scrollCarousel(1)" style="display: block;">&gt;</button>
+        <button class="carousel-btn next" onclick="scrollCarousel(1)">&gt;</button>
       </div>
       <div id="carousel-dots" class="carousel-dots"></div>
     </div>
@@ -450,7 +471,25 @@
   </div>
 </div>
 
-<div id="admin" style="display: none;">
+<div class="modal-overlay" id="checkout-modal">
+  <div class="modal-box">
+    <div style="text-align:right;">
+      <button class="btn" style="padding:5px 10px;" onclick="closeCheckout()">X CERRAR</button>
+    </div>
+    <h2 style="margin-top:0;">REVISA TU PEDIDO</h2>
+    <div id="checkout-list"></div>
+    <div id="checkout-summary">
+        Subtotal: <span id="ck-subtotal">0</span> €<br>
+        Envío: <span id="ck-shipping">0</span> €<br>
+        <hr>
+        <strong style="font-size:1.5rem;">TOTAL: <span id="ck-total">0</span> €</strong>
+    </div>
+    <br>
+    <button class="btn" style="width:100%; background:var(--ink); color:#fff;" onclick="confirmOrder()">TODO OK, CONFIRMAR PEDIDO</button>
+  </div>
+</div>
+
+<div id="admin">
   <div class="container">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
       <h1>PANEL DE CONTROL</h1>
@@ -500,6 +539,8 @@
       <div>
         <div class="admin-card" style="background:#eef;">
           <h3>CONFIG WEB & TEXTOS</h3>
+          <label>Gastos de Envío (€):</label> <input id="txt-shipping" type="number" value="6">
+          <hr>
           <label>Browser Tab Title:</label> <input id="txt-tab-title">
           <label>Título:</label> <input id="txt-title">
           <label>Subtítulo:</label> <input id="txt-subtitle">
@@ -526,10 +567,12 @@
   </div>
 </div>
 
+<div id="secret-btn" onclick="forceLogin()"></div>
+
 <script>
 const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe6Jz1f86UZjYZTeeKw_DR7oanSK1aIpG_Sd0HoYhlgFjYciQ/viewform"; 
-const FORM_ENTRY = "entry.614982379"; // Campo de Texto Resumen
-const FORM_ENTRY_REF = "entry.290444409"; // Campo de ID Unico
+const FORM_ENTRY = "entry.614982379";
+const FORM_ENTRY_REF = "entry.290444409";
 const SECRET_WORD = "nagusi"; 
 const H_PASS = "7938e835c55906d701a4b828aa65f41d80ab14f7b61428b75266ab8f6bdd1cc6"; 
 
@@ -724,7 +767,78 @@ function updateFab() {
 
 window.onscroll = updateFab;
 
-function goToCheckout() {
+// === GESTIÓN DEL MODAL CHECKOUT ===
+function openCheckout() {
+    const modal = document.getElementById('checkout-modal');
+    const list = document.getElementById('checkout-list');
+    list.innerHTML = "";
+    
+    let subtotal = 0;
+    
+    cart.forEach((qty, id) => {
+        const p = db.find(x => x.id === id);
+        if(p) {
+            subtotal += (parseInt(p.precio) * qty);
+            const img = p.imagenes[0] || '';
+            const row = document.createElement('div');
+            row.className = 'checkout-item';
+            row.innerHTML = `
+                ${img ? `<img src="${img}" class="checkout-img">` : ''}
+                <div class="checkout-details">
+                    <h4>${p.nombre}</h4>
+                    <small>${p.precio} €/ud</small>
+                </div>
+                <div class="checkout-actions">
+                    <button class="checkout-btn" onclick="updateCheckoutQty('${id}', -1)">-</button>
+                    <span style="width:20px; text-align:center;">${qty}</span>
+                    <button class="checkout-btn" onclick="updateCheckoutQty('${id}', 1)">+</button>
+                    <button class="checkout-btn del-btn" onclick="updateCheckoutQty('${id}', -999)">X</button>
+                </div>
+            `;
+            list.appendChild(row);
+        }
+    });
+    
+    // Calcular envio
+    const envio = parseInt(document.getElementById('txt-shipping').value) || 6;
+    
+    document.getElementById('ck-subtotal').innerText = subtotal;
+    document.getElementById('ck-shipping').innerText = envio;
+    document.getElementById('ck-total').innerText = subtotal + envio;
+    
+    modal.style.display = 'flex';
+}
+
+function closeCheckout() {
+    document.getElementById('checkout-modal').style.display = 'none';
+}
+
+function updateCheckoutQty(id, change) {
+    let current = cart.get(id) || 0;
+    let next = current + change;
+    if(next < 1) next = 0;
+    
+    // Actualizar visual en la rejilla principal también
+    const display = document.querySelector(`#vis-qty-${id}`);
+    if(display) display.innerText = next;
+    
+    if(next > 0) {
+        cart.set(id, next);
+        document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => c.classList.add('active'));
+        document.querySelectorAll(`.card[data-id="${id}"] .add-btn`).forEach(b => b.innerText = "ACTUALIZAR");
+    } else {
+        cart.delete(id);
+        document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => c.classList.remove('active'));
+        document.querySelectorAll(`.card[data-id="${id}"] .add-btn`).forEach(b => b.innerText = "AÑADIR");
+    }
+    
+    updateFab();
+    
+    if(cart.size === 0) closeCheckout();
+    else openCheckout(); // Re-renderizar lista
+}
+
+function confirmOrder() {
   let itemsStr = "";
   let subtotal = 0;
   
@@ -736,15 +850,15 @@ function goToCheckout() {
       }
   });
 
-  const envio = 6;
+  const envio = parseInt(document.getElementById('txt-shipping').value) || 6;
   const total = subtotal + envio;
 
-  // 1. REF DE SEGURIDAD (SIMPLE: ZNK-P-XXX)
+  // 1. REF SEGURIDAD (SIMPLE: ZNK-P-XXX)
   const securityRef = `ZNK-P-${total}`;
 
-  // 2. ID ÚNICO DE SEGUIMIENTO (PARA EL EXCEL)
+  // 2. ID UNICO
   const now = new Date();
-  const dateStr = now.toISOString().slice(2,10).replace(/-/g, ""); // 231027
+  const dateStr = now.toISOString().slice(2,10).replace(/-/g, ""); // AAMMDD
   const randomStr = Math.floor(Math.random() * 1000).toString().padStart(3, '0'); 
   const trackingID = `ZNK-${dateStr}-${randomStr}`;
 
@@ -960,22 +1074,29 @@ function downloadHTML() {
   clone.querySelector('#catalog-root').innerHTML = '<div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div>';
   clone.querySelector('#intro-layer').style.opacity = '1';
   clone.querySelector('#intro-layer').style.display = 'flex';
-  clone.querySelector('#main-nav').innerHTML = ''; // Limpiar menu generado
+  clone.querySelector('#main-nav').innerHTML = ''; 
   clone.querySelector('#modal').style.display = 'none';
   clone.querySelector('#admin').style.display = 'none';
   clone.querySelector('#lightbox').style.display = 'none';
   clone.querySelector('#toast').style.display = 'none';
+  // Ocultar botones flotantes
   clone.querySelector('#fab').style.display = 'none';
   clone.querySelector('#scroll-up').style.display = 'none';
+  clone.querySelector('#checkout-modal').style.display = 'none'; // Aseguramos que el checkout esté cerrado
 
   let scriptContent = clone.querySelector('script').innerHTML;
   const newUrl = document.getElementById('txt-form-url').value;
   const newEntry = document.getElementById('txt-form-entry').value;
   const newEntryRef = document.getElementById('txt-form-entry-ref').value;
+  const newShipping = document.getElementById('txt-shipping').value;
   
   scriptContent = scriptContent.replace(/const FORM_URL = ".*?";/, `const FORM_URL = "${newUrl}";`);
   scriptContent = scriptContent.replace(/const FORM_ENTRY = ".*?";/, `const FORM_ENTRY = "${newEntry}";`);
   scriptContent = scriptContent.replace(/const FORM_ENTRY_REF = ".*?";/, `const FORM_ENTRY_REF = "${newEntryRef}";`);
+  
+  // Para guardar el precio de envio, necesitamos inyectarlo en el HTML estático o leerlo
+  // Truco: actualizamos el atributo value del input en el clon
+  clone.querySelector('#txt-shipping').setAttribute('value', newShipping);
   
   const newHash = document.getElementById('hash-str').innerText;
   if (newHash && newHash.length > 10) {
