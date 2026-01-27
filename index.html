@@ -16,12 +16,18 @@
 
   <style>
     :root {
-      --zaunk-blue: #253494;
+      /* COLOR PÚBLICO (AZUL) */
+      --zaunk-blue: #253494; 
       --paper: #fcfcfc;
       --ink: #1a1a1a;
       
       --font-body: 'Courier Prime', monospace;
       --font-title: 'Oswald', sans-serif;
+    }
+
+    /* COLOR PRIVADO (LA TRASTIENDA - ROJO LADRILLO) */
+    body.vip-mode {
+        --zaunk-blue: #b93b3b; 
     }
 
     * { box-sizing: border-box; }
@@ -33,6 +39,7 @@
       font-family: var(--font-body);
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
       overflow-x: hidden;
+      transition: --zaunk-blue 0.5s ease;
     }
 
     /* === INTRO SPLASH SCREEN === */
@@ -47,6 +54,15 @@
     @keyframes spin-intro { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .intro-text { font-family: var(--font-title); font-size: 1.5rem; letter-spacing: 5px; color: var(--zaunk-blue); animation: blink 1s infinite; }
     @keyframes blink { 50% { opacity: 0.5; } }
+
+    /* === BANNER DE ACCESO === */
+    #access-banner {
+        background: var(--ink); color: #fff; text-align: center;
+        padding: 15px; font-family: var(--font-title); font-size: 1.1rem;
+        cursor: pointer; letter-spacing: 1px;
+        transition: 0.3s;
+    }
+    #access-banner:hover { background: var(--zaunk-blue); }
 
     /* === TOAST NOTIFICATION === */
     #toast {
@@ -81,7 +97,7 @@
     /* === HEADER === */
     header {
       text-align: center;
-      padding: 3rem 1rem 1rem 1rem;
+      padding: 2rem 1rem 1rem 1rem;
       background-color: #fff;
     }
 
@@ -275,13 +291,12 @@
     }
     #modal-media-col { width: 100%; max-width: 500px; margin: 0 auto; margin-bottom: 1.5rem; }
 
-    /* 2. MODAL CHECKOUT - DISEÑO FLEXBOX ELÁSTICO */
+    /* 2. MODAL CHECKOUT */
     #checkout-modal .modal-box {
         display: flex; flex-direction: column;
         max-height: 90vh; padding: 2rem; gap: 1rem;
     }
     
-    /* CABECERA COMPACTA DEL CHECKOUT */
     .checkout-header {
         display: flex; justify-content: space-between; align-items: center;
         border-bottom: 2px dashed var(--zaunk-blue);
@@ -289,7 +304,6 @@
     }
     .checkout-header h2 { margin: 0; font-size: 1.8rem; }
 
-    /* LISTA SCROLLABLE */
     #checkout-list { 
         flex-grow: 1; overflow-y: auto; min-height: 0; margin: 0;
     }
@@ -304,7 +318,6 @@
     .checkout-btn { width: 25px; height: 25px; cursor: pointer; background: #eee; border: 1px solid #000; font-weight: bold; }
     .del-btn { color: red; border-color: red; background: #fff; }
     
-    /* RESUMEN PIE */
     #checkout-summary {
         background: #eef; padding: 1rem; border: 2px solid var(--zaunk-blue);
         font-family: var(--font-title); font-size: 1.1rem; text-align: right; flex-shrink: 0;
@@ -313,7 +326,6 @@
     /* MEDIA QUERIES PARA MÓVIL */
     @media (max-width: 600px) {
         #modal .modal-box { width: 95%; padding: 1rem; max-height: 85vh; }
-        
         #checkout-modal .modal-box { width: 95%; padding: 1rem; height: 85vh; gap: 5px; }
         .checkout-header h2 { font-size: 1.3rem; }
         .checkout-header .btn { padding: 5px 10px; font-size: 0.8rem; }
@@ -405,7 +417,7 @@
 
 <div id="intro-layer">
   <img src="img/Zaunk_Logo.png" class="intro-logo">
-  <div class="intro-text">LOADING NOISE...</div>
+  <div class="intro-text" id="intro-txt">LOADING NOISE...</div>
 </div>
 
 <div id="toast">¡AÑADIDO A LA CESTA!</div>
@@ -425,6 +437,10 @@
     <p id="web-subtitle" style="font-family: var(--font-body); margin:0.5rem 0 0 0;">Custom Guitar, Bass and Synth Effects</p>
   </div>
 </header>
+
+<div id="access-banner" onclick="openClientGate()">
+    ¿TE INTERESA ALGÚN PEDAL? ¡HAZ CLICK AQUÍ!
+</div>
 
 <nav class="nav-bar" id="main-nav">
   </nav>
@@ -525,6 +541,19 @@
     <br>
     <button class="btn" style="width:100%; background:var(--ink); color:#fff;" onclick="confirmOrder()">TODO OK, CONFIRMAR PEDIDO</button>
   </div>
+</div>
+
+<div id="client-gate-modal" class="modal-overlay">
+   <div class="modal-box" style="max-width:400px; text-align:center; height:auto;">
+      <h3 style="margin-top:0;">ACCEDE A LA TRASTIENDA</h3>
+      <p style="margin-bottom:1.5rem;">Introduce tu contraseña para ver precios y comprar.</p>
+      <input type="password" id="client-pass" placeholder="Contraseña..." style="font-size:1.2rem; text-align:center;">
+      <div style="display:flex; flex-direction:column; gap:10px; margin-top:1rem;">
+          <button class="btn" onclick="checkClientAccess()">ENTRAR</button>
+          <a href="https://forms.gle/TU_ENLACE_DE_SOLICITUD" target="_blank" class="btn" style="background:#eee; color:#000; border-color:#999; text-align:center; text-decoration:none;">PIDE TU ACCESO</a>
+          <button class="btn" onclick="closeClientGate()" style="border-color:red; color:red; margin-top:5px;">CANCELAR</button>
+      </div>
+   </div>
 </div>
 
 <div id="login-modal" class="modal-overlay">
@@ -649,15 +678,18 @@ const FORM_ENTRY = "entry.614982379";
 const FORM_ENTRY_REF = "entry.290444409";
 const SECRET_WORD = "nagusi"; 
 const H_PASS = "7938e835c55906d701a4b828aa65f41d80ab14f7b61428b75266ab8f6bdd1cc6"; 
+const CLIENT_PASS_HASH = "d9d3c50965e6d623253b2f567f293a9c79427042502720230232b73372553075"; // Hash para 'cliente'
 
 let db = [];
 let cart = new Map();
 let keyBuffer = "";
+let isVip = false;
 
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('fab').style.display = 'none';
   document.getElementById('scroll-up').style.display = 'none';
-  document.getElementById('login-modal').style.display = 'none'; // Asegurar oculto
+  document.getElementById('login-modal').style.display = 'none'; 
+  document.getElementById('client-gate-modal').style.display = 'none';
 
   setTimeout(() => {
     document.getElementById('intro-layer').style.opacity = '0';
@@ -686,6 +718,51 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('txt-youtube').value = document.getElementById('link-yt').href;
   document.getElementById('txt-email').value = document.getElementById('link-email').href.replace('mailto:', '');
 });
+
+// === LOGICA CLIENTE VIP ===
+function openClientGate() {
+    if(isVip) return; // Si ya esta dentro, no hace nada
+    const input = document.getElementById('client-pass');
+    input.value = '';
+    document.getElementById('client-gate-modal').style.display = 'flex';
+    setTimeout(() => input.focus(), 50);
+}
+
+function closeClientGate() {
+    document.getElementById('client-gate-modal').style.display = 'none';
+}
+
+async function checkClientAccess() {
+    const pass = document.getElementById('client-pass').value;
+    if(!pass) return;
+    try {
+        const h = await hash(pass);
+        if(h === CLIENT_PASS_HASH) {
+            closeClientGate();
+            enableVipMode();
+        } else {
+            alert("Contraseña incorrecta");
+        }
+    } catch(e) { alert("Error"); }
+}
+
+function enableVipMode() {
+    isVip = true;
+    document.body.classList.add('vip-mode');
+    
+    // Mostrar intro de nuevo con texto diferente
+    const intro = document.getElementById('intro-layer');
+    document.getElementById('intro-txt').innerText = "ACCEDIENDO A LA TRASTIENDA...";
+    intro.style.display = 'flex';
+    intro.style.opacity = '1';
+    
+    setTimeout(() => {
+        intro.style.opacity = '0';
+        setTimeout(() => intro.style.display = 'none', 800);
+        renderFront(); // Re-renderizar para mostrar precios
+        document.getElementById('access-banner').style.display = 'none'; // Ocultar banner
+    }, 1500);
+}
 
 async function loadData() {
   try {
@@ -754,28 +831,37 @@ function renderFront() {
         const disabled = p.agotado ? 'disabled' : '';
         const img = p.imagenes[0] || ''; 
 
+        // LOGICA CONDICIONAL: Si no es VIP, no mostramos controles
+        let controlsHTML = '';
+        let priceBadge = '';
+        
+        if (isVip) {
+            priceBadge = `<div class="price-tag">${p.precio} €</div>`;
+            controlsHTML = `
+              <div class="qty-control">
+                <div class="qty-selector">
+                    <button class="qty-btn" onclick="adjustVisualQty('${p.id}', -1)" ${disabled}>-</button>
+                    <span class="qty-num vis-qty-${p.id}">${displayQty}</span>
+                    <button class="qty-btn" onclick="adjustVisualQty('${p.id}', 1)" ${disabled}>+</button>
+                </div>
+                <button class="add-btn" onclick="saveToCart('${p.id}')" ${disabled}>${inCartQty > 0 ? 'ACTUALIZAR' : 'AÑADIR'}</button>
+              </div>`;
+        }
+
         const card = document.createElement('div');
         card.className = `card ${activeClass} ${agotadoClass}`;
         card.setAttribute('data-id', p.id);
         
         card.innerHTML = `
           ${soldOutBadge}
-          <div class="price-tag">${p.precio} €</div>
+          ${priceBadge}
           <div onclick="openModal('${p.id}')" class="img-wrapper">
             ${img ? `<img src="${img}" class="card-img">` : '<div class="card-img" style="background:#eee; display:flex; align-items:center; justify-content:center;">NO FOTO</div>'}
           </div>
           <button class="btn-info" onclick="openModal('${p.id}')">[ + INFO ]</button>
           <h3 onclick="openModal('${p.id}')" style="cursor:pointer">${p.nombre}</h3>
           <p>${p.descripcionCorta || ''}</p>
-          
-          <div class="qty-control">
-            <div class="qty-selector">
-                <button class="qty-btn" onclick="adjustVisualQty('${p.id}', -1)" ${disabled}>-</button>
-                <span class="qty-num vis-qty-${p.id}">${displayQty}</span>
-                <button class="qty-btn" onclick="adjustVisualQty('${p.id}', 1)" ${disabled}>+</button>
-            </div>
-            <button class="add-btn" onclick="saveToCart('${p.id}')" ${disabled}>${inCartQty > 0 ? 'ACTUALIZAR' : 'AÑADIR'}</button>
-          </div>
+          ${controlsHTML}
         `;
         grid.appendChild(card);
       });
@@ -860,7 +946,7 @@ function openCheckout() {
     const shipPen = elPen ? (parseInt(elPen.value) || 6) : 6;
     const shipEU = elEU ? (parseInt(elEU.value) || 0) : 0;
     
-    // CREAR RADIO BUTTONS
+    // CREAR RADIO BUTTONS (Orden: Recogida -> Península -> EU)
     let htmlShips = `<label><input type="radio" name="ship" value="0" data-name="Recogida en mano" onchange="updateCheckoutTotal()"> Recogida en mano [Gratis]</label>`;
     
     htmlShips += `<label><input type="radio" name="ship" value="${shipPen}" data-name="Península" checked onchange="updateCheckoutTotal()"> Península [${shipPen} €]</label>`;
@@ -984,7 +1070,9 @@ function openModal(id) {
   if(!p) return;
   
   document.getElementById('m-title').innerText = p.nombre;
-  document.getElementById('m-price').innerText = p.precio + " €";
+  // Solo mostrar precio si es VIP
+  document.getElementById('m-price').innerText = isVip ? (p.precio + " €") : "???"; 
+  
   document.getElementById('m-cats').innerHTML = p.categoria.map(c => `<span style="background:var(--zaunk-blue); color:#fff; padding:2px 6px; margin-right:5px; font-size:0.8rem;">${c.toUpperCase()}</span>`).join('');
   document.getElementById('m-desc').innerHTML = p.descripcionLarga || '';
   
@@ -993,27 +1081,33 @@ function openModal(id) {
   const buttons = [btn, btnSide];
   
   buttons.forEach(b => {
-      if(p.agotado) {
-        b.innerText = "AGOTADO"; b.disabled = true; b.style.opacity = 0.5;
+      // Si NO es VIP, ocultar botones de compra en el modal
+      if(!isVip) {
+          b.style.display = 'none';
       } else {
-        b.innerText = "LO QUIERO (+1)"; b.disabled = false; b.style.opacity = 1;
-        b.onclick = () => {
-            let current = cart.get(id) || 0;
-            let next = current + 1;
-            cart.set(id, next);
-            document.querySelectorAll(`#vis-qty-${id}`).forEach(s => s.innerText = next);
-            document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => c.classList.add('active'));
-            document.querySelectorAll(`.card[data-id="${id}"] .add-btn`).forEach(b => b.innerText = "ACTUALIZAR");
-            
-            updateFab();
-            
-            const t = document.getElementById('toast');
-            t.style.display = 'block';
-            setTimeout(() => {
-                t.style.display = 'none';
-                closeModal();
-            }, 1000);
-        };
+          b.style.display = 'inline-block';
+          if(p.agotado) {
+            b.innerText = "AGOTADO"; b.disabled = true; b.style.opacity = 0.5;
+          } else {
+            b.innerText = "LO QUIERO (+1)"; b.disabled = false; b.style.opacity = 1;
+            b.onclick = () => {
+                let current = cart.get(id) || 0;
+                let next = current + 1;
+                cart.set(id, next);
+                document.querySelectorAll(`#vis-qty-${id}`).forEach(s => s.innerText = next);
+                document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => c.classList.add('active'));
+                document.querySelectorAll(`.card[data-id="${id}"] .add-btn`).forEach(b => b.innerText = "ACTUALIZAR");
+                
+                updateFab();
+                
+                const t = document.getElementById('toast');
+                t.style.display = 'block';
+                setTimeout(() => {
+                    t.style.display = 'none';
+                    closeModal();
+                }, 1000);
+            };
+          }
       }
   });
 
@@ -1085,6 +1179,10 @@ function setupKeys() {
   // Listener especifico para el input del login (ENTER KEY)
   document.getElementById('login-pass').addEventListener('keydown', (e) => {
       if(e.key === 'Enter') checkLogin();
+  });
+  // Listener para el input de cliente
+  document.getElementById('client-pass').addEventListener('keydown', (e) => {
+      if(e.key === 'Enter') checkClientAccess();
   });
 }
 
@@ -1253,6 +1351,7 @@ function downloadHTML() {
   clone.querySelector('#scroll-up').style.display = 'none';
   clone.querySelector('#checkout-modal').style.display = 'none'; 
   clone.querySelector('#login-modal').style.display = 'none'; 
+  clone.querySelector('#client-gate-modal').style.display = 'none';
 
   let scriptContent = clone.querySelector('script').innerHTML;
   const newUrl = document.getElementById('txt-form-url').value;
