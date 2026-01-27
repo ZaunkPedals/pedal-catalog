@@ -61,7 +61,8 @@
         padding: 15px; font-family: var(--font-title); font-size: 1.1rem;
         cursor: pointer; letter-spacing: 1px;
         transition: 0.3s;
-        border-top: 2px solid #fff;
+        /* Sin borde superior para pegarlo al menú */
+        border: none;
     }
     #access-banner:hover { background: var(--zaunk-blue); }
 
@@ -525,6 +526,13 @@
         <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:none; padding:5px 10px; margin:0;">0 €</h3>
         <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px; display:none;">LO QUIERO (+1)</button>
       </div>
+      
+      <div id="m-interest-btn-wrapper" style="margin-bottom:1rem; display:none;">
+          <button class="btn" style="padding:5px 10px; font-size:0.9rem; background:#eee; color:var(--ink);" onclick="closeModal(); openClientGate();">
+              ¿TE INTERESA?
+          </button>
+      </div>
+
       <div id="m-desc"></div>
       <br>
       <button id="m-btn" class="btn" style="width:100%">LO QUIERO (+1)</button>
@@ -644,16 +652,16 @@
           </div>
 
           <div class="admin-group">
-              <h4>FORMULARIO ACCESO (Trastienda)</h4>
-              <label>URL Formulario Acceso:</label> <input id="txt-form-access-url" placeholder="https://docs.google.com/forms/...">
-              <label>Entry ID (Identificador):</label> <input id="txt-form-access-entry" placeholder="entry.XXXXXX">
-          </div>
-
-          <div class="admin-group">
               <h4>FORMULARIO PEDIDOS</h4>
               <label>Form URL:</label> <input id="txt-form-url">
               <label>Entry ID (Resumen):</label> <input id="txt-form-entry">
               <label>Entry ID (Ref. Pedido):</label> <input id="txt-form-entry-ref">
+          </div>
+
+          <div class="admin-group">
+              <h4>FORMULARIO ACCESO (Trastienda)</h4>
+              <label>URL Formulario Acceso:</label> <input id="txt-form-access-url" placeholder="https://docs.google.com/forms/...">
+              <label>Entry ID (Identificador):</label> <input id="txt-form-access-entry" placeholder="entry.XXXXXX">
           </div>
 
           <div class="admin-group">
@@ -706,7 +714,7 @@ const FORM_ACCESS_ENTRY = "entry.TU_ID_DE_CAMPO";
 
 const SECRET_WORD = "nagusi"; 
 const H_PASS = "7938e835c55906d701a4b828aa65f41d80ab14f7b61428b75266ab8f6bdd1cc6"; 
-const CLIENT_PASS_HASH = "4983a0ab83ed86e0e7213c8783940193232960b77878655e0526323116e09f59"; // Hash correcto para 'cliente'
+const CLIENT_PASS_HASH = "4983a0ab83ed86e0e7213c8783940193232960b77878655e0526323116e09f59"; // CORREGIDO: Hash para 'cliente'
 
 let db = [];
 let cart = new Map();
@@ -839,6 +847,9 @@ function goHome() {
     document.getElementById('catalog-root').style.display = 'block';
     document.querySelectorAll('.info-page').forEach(p => p.style.display = 'none');
     window.scrollTo({top: 0, behavior: 'smooth'});
+    
+    // Mostrar título catálogo solo si no es VIP
+    if(!isVip) document.getElementById('public-catalog-title').style.display = 'block';
 }
 
 function renderFront() {
@@ -921,12 +932,16 @@ function renderFront() {
 function scrollToCat(cat) {
     document.getElementById('catalog-root').style.display = 'block';
     document.querySelectorAll('.info-page').forEach(p => p.style.display = 'none');
+    document.getElementById('public-catalog-title').style.display = 'block'; // Mostrar titulo en scroll
+    if(isVip) document.getElementById('public-catalog-title').style.display = 'none';
+
     const el = document.getElementById(`cat-${cat}`);
     if(el) el.scrollIntoView({ behavior: 'smooth' });
 }
 
 function showInfoPage(page) {
     document.getElementById('catalog-root').style.display = 'none';
+    document.getElementById('public-catalog-title').style.display = 'none'; // Ocultar título catálogo
     document.querySelectorAll('.info-page').forEach(p => p.style.display = 'none');
     document.getElementById(`sec-${page}`).style.display = 'block';
     window.scrollTo(0,0);
@@ -1125,6 +1140,7 @@ function openModal(id) {
   const priceLabel = document.getElementById('m-price');
   const btnSide = document.getElementById('m-btn-side');
   const btnMain = document.getElementById('m-btn');
+  const btnInterest = document.getElementById('m-interest-btn-wrapper');
 
   if(isVip) {
       priceLabel.style.display = 'inline-block';
@@ -1132,6 +1148,7 @@ function openModal(id) {
       
       btnSide.style.display = 'inline-block';
       btnMain.innerText = "LO QUIERO (+1)";
+      btnInterest.style.display = 'none';
       
       // Asignar funcion de compra a ambos botones
       [btnSide, btnMain].forEach(b => {
@@ -1154,9 +1171,10 @@ function openModal(id) {
       // SI NO ES VIP
       priceLabel.style.display = 'none';
       btnSide.style.display = 'none';
+      btnInterest.style.display = 'block'; // Mostrar boton pequeño "te interesa"
       
       // Botón principal se convierte en "¿TE INTERESA?"
-      btnMain.innerText = "¿TE INTERESA?";
+      btnMain.innerText = "LO QUIERO";
       btnMain.onclick = () => {
           closeModal();
           openClientGate();
