@@ -555,7 +555,14 @@
             <button class="btn" onclick="clearEditor()">LIMPIAR</button>
           </div>
         </div>
+        
+        <div class="admin-card">
+          <h3>INVENTARIO</h3>
+          <div id="admin-list" style="max-height:300px; overflow-y:auto; border:1px solid #ccc; padding:5px;"></div>
+          <br><button class="btn" style="width:100%;" onclick="downloadJson()">💾 DESCARGAR PEDALES.JSON</button>
+        </div>
       </div>
+      
       <div>
         <div class="admin-card" style="background:#eef;">
           <h3>CONFIGURACIÓN WEB</h3>
@@ -598,11 +605,6 @@
 
           <br>
           <button class="btn" style="width:100%; background:var(--ink); color:#fff;" onclick="downloadHTML()">💾 DESCARGAR INDEX.HTML</button>
-        </div>
-        <div class="admin-card">
-          <h3>INVENTARIO</h3>
-          <div id="admin-list" style="max-height:300px; overflow-y:auto; border:1px solid #ccc; padding:5px;"></div>
-          <br><button class="btn" style="width:100%;" onclick="downloadJson()">💾 DESCARGAR PEDALES.JSON</button>
         </div>
       </div>
     </div>
@@ -739,7 +741,7 @@ function renderFront() {
           <div class="qty-control">
             <div class="qty-selector">
                 <button class="qty-btn" onclick="adjustVisualQty('${p.id}', -1)" ${disabled}>-</button>
-                <span class="qty-num" id="vis-qty-${p.id}">${displayQty}</span>
+                <span class="qty-num vis-qty-${p.id}">${displayQty}</span>
                 <button class="qty-btn" onclick="adjustVisualQty('${p.id}', 1)" ${disabled}>+</button>
             </div>
             <button class="add-btn" onclick="saveToCart('${p.id}')" ${disabled}>${inCartQty > 0 ? 'ACTUALIZAR' : 'AÑADIR'}</button>
@@ -768,7 +770,7 @@ function showInfoPage(page) {
 }
 
 function adjustVisualQty(id, change) {
-    const displays = document.querySelectorAll(`#vis-qty-${id}`);
+    const displays = document.querySelectorAll(`.vis-qty-${id}`);
     displays.forEach(d => {
         let val = parseInt(d.innerText);
         let newVal = val + change;
@@ -778,7 +780,7 @@ function adjustVisualQty(id, change) {
 }
 
 function saveToCart(id) {
-    const display = document.querySelector(`#vis-qty-${id}`);
+    const display = document.querySelector(`.vis-qty-${id}`);
     if(!display) return;
     const qty = parseInt(display.innerText);
     if(qty > 0) {
@@ -887,8 +889,8 @@ function updateCheckoutQty(id, change) {
     let next = current + change;
     if(next < 1) next = 0;
     
-    const display = document.querySelector(`#vis-qty-${id}`);
-    if(display) display.innerText = next;
+    const displays = document.querySelectorAll(`.vis-qty-${id}`);
+    displays.forEach(d => d.innerText = next);
     
     if(next > 0) {
         cart.set(id, next);
@@ -1029,14 +1031,25 @@ function setupKeys() {
   window.addEventListener('keydown', e => {
     keyBuffer += e.key.toLowerCase();
     if(keyBuffer.length > 20) keyBuffer = keyBuffer.slice(-20);
-    if(keyBuffer.endsWith(SECRET_WORD)) forceLogin();
+    
+    // Si se detecta la palabra secreta
+    if(keyBuffer.endsWith(SECRET_WORD)) {
+        e.preventDefault(); // Evitar que la ultima letra se escriba si es input
+        forceLogin();
+    }
   });
 }
 
 function forceLogin() {
-    document.getElementById('login-pass').value = '';
+    const input = document.getElementById('login-pass');
+    input.value = ''; // Limpiar
     document.getElementById('login-modal').style.display = 'flex';
-    document.getElementById('login-pass').focus();
+    
+    // Retraso para evitar que la tecla 'i' se cuele en el focus
+    setTimeout(() => {
+        input.focus();
+        input.value = ''; // Asegurar limpieza
+    }, 50);
 }
 
 function closeLogin() {
