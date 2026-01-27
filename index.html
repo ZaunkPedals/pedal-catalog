@@ -494,6 +494,17 @@
   </div>
 </div>
 
+<div id="login-modal" class="modal-overlay">
+   <div class="modal-box" style="max-width:400px; text-align:center;">
+      <h3 style="margin-top:0;">ACCESO ADMIN</h3>
+      <input type="password" id="login-pass" placeholder="Contraseña..." style="font-size:1.5rem; letter-spacing:5px; text-align:center;">
+      <div style="display:flex; gap:10px; justify-content:center; margin-top:1rem;">
+          <button class="btn" onclick="checkLogin()">ENTRAR</button>
+          <button class="btn" onclick="closeLogin()" style="border-color:red; color:red;">CANCELAR</button>
+      </div>
+   </div>
+</div>
+
 <div id="admin">
   <div class="container">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
@@ -610,6 +621,7 @@ let keyBuffer = "";
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('fab').style.display = 'none';
   document.getElementById('scroll-up').style.display = 'none';
+  document.getElementById('login-modal').style.display = 'none'; // Asegurar oculto
 
   setTimeout(() => {
     document.getElementById('intro-layer').style.opacity = '0';
@@ -618,7 +630,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   loadData();
   setupKeys();
-  setupDragDrop(); // Inicializar Drag & Drop
+  setupDragDrop(); 
   cart.clear(); 
   updateFab();  
   
@@ -810,10 +822,10 @@ function openCheckout() {
     const shipEU = elEU ? (parseInt(elEU.value) || 0) : 0;
     
     // CREAR RADIO BUTTONS
-    let htmlShips = `<label><input type="radio" name="ship" value="${shipPen}" data-name="Península" checked onchange="updateCheckoutTotal()"> Península (${shipPen} €)</label>`;
+    let htmlShips = `<label><input type="radio" name="ship" value="${shipPen}" data-name="Península" checked onchange="updateCheckoutTotal()"> Península [${shipPen} €]</label>`;
     
     if(shipEU > 0) {
-        htmlShips += `<label><input type="radio" name="ship" value="${shipEU}" data-name="Unión Europea" onchange="updateCheckoutTotal()"> Internacional EU (${shipEU} €)</label>`;
+        htmlShips += `<label><input type="radio" name="ship" value="${shipEU}" data-name="Europe International" onchange="updateCheckoutTotal()"> Europe International [${shipEU} €]</label>`;
     }
     
     shipOptionsDiv.innerHTML = htmlShips;
@@ -1017,16 +1029,28 @@ function setupKeys() {
   });
 }
 
-async function forceLogin() {
-  const pass = prompt("PASSWORD ADMIN:");
-  if(!pass) return;
-  try {
-      const h = await hash(pass);
-      if(h === H_PASS) document.getElementById('admin').style.display = 'block';
-      else alert("Denegado");
-  } catch(e) {
-      alert("Error de seguridad (¿Estás en HTTPS?)");
-  }
+function forceLogin() {
+    document.getElementById('login-modal').style.display = 'flex';
+    document.getElementById('login-pass').value = '';
+    document.getElementById('login-pass').focus();
+}
+
+function closeLogin() {
+    document.getElementById('login-modal').style.display = 'none';
+}
+
+async function checkLogin() {
+    const pass = document.getElementById('login-pass').value;
+    if(!pass) return;
+    try {
+        const h = await hash(pass);
+        if(h === H_PASS) {
+            closeLogin();
+            document.getElementById('admin').style.display = 'block';
+        } else {
+            alert("Denegado");
+        }
+    } catch(e) { alert("Error"); }
 }
 
 function closeAdmin() { document.getElementById('admin').style.display = 'none'; renderFront(); }
@@ -1044,7 +1068,7 @@ async function genHash() {
   }
 }
 
-// SETUP DRAG & DROP
+// SETUP DRAG & DROP (SMART PATH)
 function setupDragDrop() {
     const imgArea = document.getElementById('e-imgs');
     if(!imgArea) return;
@@ -1056,9 +1080,17 @@ function setupDragDrop() {
         e.target.style.background = '#fff';
         const files = e.dataTransfer.files;
         if (files.length > 0) {
-            // Añadir ruta asumiendo carpeta 'img'
-            const path = "img/" + files[0].name;
-            e.target.value = e.target.value ? e.target.value + "\n" + path : path;
+            // Intentar obtener el ID del pedal para crear la carpeta virtual
+            let pedalID = document.getElementById('e-id').value;
+            if(!pedalID) {
+                // Si no hay ID, generarlo desde el nombre
+                const name = document.getElementById('e-nombre').value;
+                if(name) pedalID = name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+                else pedalID = "general"; // Fallback
+            }
+            
+            const path = `img/pedales/${pedalID}/${files[0].name}`;
+            imgArea.value = imgArea.value ? imgArea.value + "\n" + path : path;
         }
     });
 }
@@ -1155,6 +1187,7 @@ function downloadHTML() {
   clone.querySelector('#fab').style.display = 'none';
   clone.querySelector('#scroll-up').style.display = 'none';
   clone.querySelector('#checkout-modal').style.display = 'none'; 
+  clone.querySelector('#login-modal').style.display = 'none'; 
 
   let scriptContent = clone.querySelector('script').innerHTML;
   const newUrl = document.getElementById('txt-form-url').value;
