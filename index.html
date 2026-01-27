@@ -262,19 +262,53 @@
       position: fixed; inset: 0; background: rgba(37,52,148,0.95);
       display: none; align-items: center; justify-content: center; z-index: 100;
     }
+    
+    /* MODAL BOX GENERAL */
     .modal-box {
       background: #fff; border: 4px solid #fff;
-      width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto;
+      width: 90%; max-width: 800px;
+      /* FLEXBOX PARA ESTRUCTURA LIMPIA EN MÓVIL */
+      display: flex; flex-direction: column; 
+      max-height: 90vh; /* Altura máxima */
       padding: 2rem; box-shadow: 20px 20px 0px var(--ink);
-      display: flex; flex-direction: column; gap: 1.5rem;
+      gap: 1.5rem;
     }
     
-    /* FIX MÓVIL: Ajustar modal para que no se desborde */
+    /* OPTIMIZACIÓN CHECKOUT MÓVIL */
     @media (max-width: 600px) {
-        .modal-box { width: 95%; padding: 1rem; max-height: 85vh; }
+        .modal-box {
+            width: 95%;
+            height: 85vh; /* Altura fija en móvil */
+            padding: 1rem; 
+            gap: 10px;
+        }
+        /* Título del modal más pequeño y pegado arriba */
+        .modal-box h2 { margin: 5px 0 10px 0; font-size: 1.5rem; flex-shrink: 0; }
+        
+        /* Botón cerrar más compacto */
+        .modal-box .btn-close-wrapper { margin-bottom: 5px; }
+        
+        /* Lista de items: Ocupa todo el espacio disponible (Scrollable) */
+        #checkout-list {
+            flex-grow: 1; /* Crece para llenar hueco */
+            max-height: none !important; /* Quitar limite fijo */
+            overflow-y: auto;
+            min-height: 0; /* Fix flexbox scroll */
+            margin-top: 0 !important;
+            border-bottom: 1px dashed #ccc;
+        }
+        
+        /* Resumen abajo: Compacto */
+        #checkout-summary {
+            flex-shrink: 0; /* No encoger */
+            padding: 10px !important;
+            font-size: 0.9rem;
+        }
+        /* Imagen item más pequeña */
+        .checkout-img { width: 40px !important; height: 40px !important; }
     }
 
-    #modal-media-col { width: 100%; max-width: 500px; margin: 0 auto; }
+    #modal-media-col { width: 100%; max-width: 500px; margin: 0 auto; overflow-y: auto; } /* Scroll si el contenido es alto */
 
     .carousel-container {
       position: relative; width: 100%;
@@ -313,7 +347,10 @@
     #m-desc p { margin-bottom: 1rem; }
 
     /* === NUEVO CSS PARA EL CHECKOUT MODAL === */
-    #checkout-list { border-top: 2px dashed #000; margin-top: 1rem; max-height: 40vh; overflow-y: auto; }
+    #checkout-list { 
+        border-top: 2px dashed #000; margin-top: 1rem; 
+        max-height: 40vh; overflow-y: auto; /* Default desktop */
+    }
     .checkout-item {
         display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #eee;
     }
@@ -451,8 +488,7 @@
 </div>
 
 <div class="modal-overlay" id="modal">
-  <div class="modal-box">
-    <div style="text-align:right;">
+  <div class="modal-box" id="modal-box-inner"> <div style="text-align:right;" class="btn-close-wrapper">
       <button class="btn" style="padding:5px 10px;" onclick="closeModal()">X CERRAR</button>
     </div>
     <div id="modal-media-col">
@@ -499,7 +535,7 @@
 </div>
 
 <div id="login-modal" class="modal-overlay">
-   <div class="modal-box" style="max-width:400px; text-align:center;">
+   <div class="modal-box" style="max-width:400px; text-align:center; height: auto;">
       <h3 style="margin-top:0;">ACCESO ADMIN</h3>
       <input type="password" id="login-pass" placeholder="Contraseña..." style="font-size:1.5rem; letter-spacing:5px; text-align:center;">
       <div style="display:flex; gap:10px; justify-content:center; margin-top:1rem;">
@@ -514,16 +550,6 @@
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
       <h1>PANEL DE CONTROL</h1>
       <button class="btn" onclick="closeAdmin()">CERRAR</button>
-    </div>
-    <div class="admin-card" style="border-color:red;">
-      <h3 style="color:red; margin-top:0;">⚠️ SEGURIDAD</h3>
-      <div style="display:flex; gap:10px;">
-        <input id="hash-input" placeholder="Nueva clave..." style="margin:0;">
-        <button class="btn" onclick="genHash()">GENERAR HASH</button>
-      </div>
-      <div id="hash-output" class="hash-box" style="display:none; margin-top:10px;">
-        Copia esto: <strong id="hash-str" style="color:#fff;"></strong> (Se borra en 10s)
-      </div>
     </div>
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem;">
       <div>
@@ -606,6 +632,17 @@
           <br>
           <button class="btn" style="width:100%; background:var(--ink); color:#fff;" onclick="downloadHTML()">💾 DESCARGAR INDEX.HTML</button>
         </div>
+      </div>
+    </div>
+    
+    <div class="admin-card" style="border-color:red; margin-top:2rem;">
+      <h3 style="color:red; margin-top:0;">⚠️ SEGURIDAD</h3>
+      <div style="display:flex; gap:10px;">
+        <input id="hash-input" placeholder="Nueva clave..." style="margin:0;">
+        <button class="btn" onclick="genHash()">GENERAR HASH</button>
+      </div>
+      <div id="hash-output" class="hash-box" style="display:none; margin-top:10px;">
+        Copia esto: <strong id="hash-str" style="color:#fff;"></strong> (Se borra en 10s)
       </div>
     </div>
   </div>
@@ -1038,17 +1075,22 @@ function setupKeys() {
         forceLogin();
     }
   });
+  
+  // Listener especifico para el input del login (ENTER KEY)
+  document.getElementById('login-pass').addEventListener('keydown', (e) => {
+      if(e.key === 'Enter') checkLogin();
+  });
 }
 
 function forceLogin() {
     const input = document.getElementById('login-pass');
-    input.value = ''; // Limpiar
+    input.value = ''; // Limpiar primero
     document.getElementById('login-modal').style.display = 'flex';
     
     // Retraso para evitar que la tecla 'i' se cuele en el focus
     setTimeout(() => {
+        input.value = ''; // Asegurar limpieza total
         input.focus();
-        input.value = ''; // Asegurar limpieza
     }, 50);
 }
 
