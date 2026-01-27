@@ -861,7 +861,9 @@ function openCheckout() {
     const shipEU = elEU ? (parseInt(elEU.value) || 0) : 0;
     
     // CREAR RADIO BUTTONS
-    let htmlShips = `<label><input type="radio" name="ship" value="${shipPen}" data-name="Península" checked onchange="updateCheckoutTotal()"> Península [${shipPen} €]</label>`;
+    let htmlShips = `<label><input type="radio" name="ship" value="0" data-name="Recogida en mano" onchange="updateCheckoutTotal()"> Recogida en mano [Gratis]</label>`;
+    
+    htmlShips += `<label><input type="radio" name="ship" value="${shipPen}" data-name="Península" checked onchange="updateCheckoutTotal()"> Península [${shipPen} €]</label>`;
     
     if(shipEU > 0) {
         htmlShips += `<label><input type="radio" name="ship" value="${shipEU}" data-name="Europe International" onchange="updateCheckoutTotal()"> Europe International [${shipEU} €]</label>`;
