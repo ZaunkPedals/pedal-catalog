@@ -61,7 +61,6 @@
         padding: 15px; font-family: var(--font-title); font-size: 1.1rem;
         cursor: pointer; letter-spacing: 1px;
         transition: 0.3s;
-        /* Sin borde superior para pegarlo al menú */
         border: none;
     }
     #access-banner:hover { background: var(--zaunk-blue); }
@@ -157,7 +156,8 @@
 
     /* === CATÁLOGO === */
     #public-catalog-title {
-        text-align: center; margin-top: 2rem; margin-bottom: 2rem; 
+        text-align: left; /* ALINEADO IZQUIERDA */
+        margin-top: 2rem; margin-bottom: 2rem; 
         border-bottom: 2px solid var(--zaunk-blue); padding-bottom: 10px;
         font-size: 2rem; letter-spacing: 3px;
     }
@@ -521,18 +521,17 @@
     </div>
     <div id="modal-info">
       <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;"></h2>
-      <div id="m-cats" style="margin-bottom:1rem;"></div>
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem;">
+          <div id="m-cats"></div>
+          <button id="m-btn-interest-small" class="btn" style="padding: 2px 8px; font-size: 0.8rem; background: #eee; color: var(--ink); border: 1px solid #999; display:none;" onclick="closeModal(); openClientGate();">
+              ¿TE INTERESA?
+          </button>
+      </div>
       <div style="margin-bottom: 1rem; display:flex; align-items:center;">
         <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:none; padding:5px 10px; margin:0;">0 €</h3>
         <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px; display:none;">LO QUIERO (+1)</button>
       </div>
       
-      <div id="m-interest-btn-wrapper" style="margin-bottom:1rem; display:none;">
-          <button class="btn" style="padding:5px 10px; font-size:0.9rem; background:#eee; color:var(--ink);" onclick="closeModal(); openClientGate();">
-              ¿TE INTERESA?
-          </button>
-      </div>
-
       <div id="m-desc"></div>
       <br>
       <button id="m-btn" class="btn" style="width:100%">LO QUIERO (+1)</button>
@@ -714,7 +713,7 @@ const FORM_ACCESS_ENTRY = "entry.TU_ID_DE_CAMPO";
 
 const SECRET_WORD = "nagusi"; 
 const H_PASS = "7938e835c55906d701a4b828aa65f41d80ab14f7b61428b75266ab8f6bdd1cc6"; 
-const CLIENT_PASS_HASH = "4983a0ab83ed86e0e7213c8783940193232960b77878655e0526323116e09f59"; // CORREGIDO: Hash para 'cliente'
+const CLIENT_PASS_HASH = "4983a0ab83ed86e0e7213c8783940193232960b77878655e0526323116e09f59"; // Hash para 'cliente'
 
 let db = [];
 let cart = new Map();
@@ -781,11 +780,14 @@ function closeClientGate() {
 }
 
 async function checkClientAccess() {
-    const pass = document.getElementById('client-pass').value;
+    // 1. OBTENER Y LIMPIAR PASSWORD (TRIM + LOWERCASE)
+    const rawPass = document.getElementById('client-pass').value;
+    const pass = rawPass.trim().toLowerCase();
+    
     if(!pass) return;
+    
     try {
         const h = await hash(pass);
-        // Compara con el valor que haya en el admin (o la constante si no se ha cambiado aun en runtime)
         const currentHash = document.getElementById('txt-client-hash').value || CLIENT_PASS_HASH;
         
         if(h === currentHash) {
@@ -932,8 +934,9 @@ function renderFront() {
 function scrollToCat(cat) {
     document.getElementById('catalog-root').style.display = 'block';
     document.querySelectorAll('.info-page').forEach(p => p.style.display = 'none');
-    document.getElementById('public-catalog-title').style.display = 'block'; // Mostrar titulo en scroll
-    if(isVip) document.getElementById('public-catalog-title').style.display = 'none';
+    
+    // Si no es VIP, mostrar título catálogo
+    if(!isVip) document.getElementById('public-catalog-title').style.display = 'block';
 
     const el = document.getElementById(`cat-${cat}`);
     if(el) el.scrollIntoView({ behavior: 'smooth' });
@@ -941,7 +944,7 @@ function scrollToCat(cat) {
 
 function showInfoPage(page) {
     document.getElementById('catalog-root').style.display = 'none';
-    document.getElementById('public-catalog-title').style.display = 'none'; // Ocultar título catálogo
+    document.getElementById('public-catalog-title').style.display = 'none'; // Ocultar título catálogo siempre en info
     document.querySelectorAll('.info-page').forEach(p => p.style.display = 'none');
     document.getElementById(`sec-${page}`).style.display = 'block';
     window.scrollTo(0,0);
@@ -1140,15 +1143,15 @@ function openModal(id) {
   const priceLabel = document.getElementById('m-price');
   const btnSide = document.getElementById('m-btn-side');
   const btnMain = document.getElementById('m-btn');
-  const btnInterest = document.getElementById('m-interest-btn-wrapper');
+  const btnInterest = document.getElementById('m-btn-interest-small');
 
   if(isVip) {
       priceLabel.style.display = 'inline-block';
       priceLabel.innerText = p.precio + " €";
       
       btnSide.style.display = 'inline-block';
+      btnInterest.style.display = 'none'; // Ocultar boton pequeño
       btnMain.innerText = "LO QUIERO (+1)";
-      btnInterest.style.display = 'none';
       
       // Asignar funcion de compra a ambos botones
       [btnSide, btnMain].forEach(b => {
@@ -1171,10 +1174,10 @@ function openModal(id) {
       // SI NO ES VIP
       priceLabel.style.display = 'none';
       btnSide.style.display = 'none';
-      btnInterest.style.display = 'block'; // Mostrar boton pequeño "te interesa"
+      btnInterest.style.display = 'inline-block'; // Mostrar boton pequeño
       
       // Botón principal se convierte en "¿TE INTERESA?"
-      btnMain.innerText = "LO QUIERO";
+      btnMain.innerText = "¿TE INTERESA?";
       btnMain.onclick = () => {
           closeModal();
           openClientGate();
