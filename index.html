@@ -16,11 +16,11 @@
 
   <style>
     :root {
-      /* COLOR PÚBLICO (AZUL ZAUNK) */
-      --main-color: #253494; 
+      /* COLOR PÚBLICO (VERDE ZAUNK EXACTO) */
+      --main-color: #006847; 
       
-      /* COLOR PRIVADO (VERDE OSCURO) */
-      --vip-color: #006847;
+      /* COLOR PRIVADO (AZUL ZAUNK EXACTO) */
+      --vip-color: #253494;
 
       --paper: #fcfcfc;
       --ink: #1a1a1a;
@@ -60,10 +60,10 @@
     .intro-text { font-family: var(--font-title); font-size: 1.5rem; letter-spacing: 5px; color: var(--main-color); animation: blink 1s infinite; }
     @keyframes blink { 50% { opacity: 0.5; } }
 
-    /* === BANNER DE ACCESO (BLANCO CON BORDE DE COLOR) === */
+    /* === BANNER DE ACCESO (ESTILO INDUSTRIAL / PRECAUCIÓN) === */
     #access-banner {
-        background: #fff; 
-        color: var(--main-color); 
+        background: #ffcc00; /* Amarillo industrial */
+        color: #000; /* Texto negro */
         text-align: center;
         padding: 15px; 
         font-family: var(--font-title); 
@@ -73,22 +73,23 @@
         font-weight: 900; /* Extra negrita */
         text-transform: uppercase;
         
-        /* ESTILO UNIFICADO */
+        /* ESTILO UNIFICADO PERO DESTACADO */
         border: 4px solid var(--main-color); /* Borde del color del tema */
         margin: 0; 
         
-        /* Transformación suave */
+        /* Transformación estática para llamar la atención */
         position: relative;
         z-index: 50;
-        transition: all 0.3s ease;
+        box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+        transition: all 0.2s ease;
     }
     
-    /* EFECTO HOVER: INVERSIÓN + ZOOM */
     #access-banner:hover { 
-        background: var(--main-color); 
-        color: #fff;
-        transform: scale(1.02); /* Pequeño zoom */
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        background: #000; 
+        color: #ffcc00;
+        border-color: #ffcc00;
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 rgba(0,0,0,0.2);
     }
 
     /* === TOAST NOTIFICATION === */
@@ -466,7 +467,7 @@
 <body>
 
 <div id="intro-layer">
-  <img id="intro-logo-img" src="img/Zaunk_Logo.png" class="intro-logo">
+  <img id="intro-logo-img" src="img/zaunk-logo-2.png" class="intro-logo">
   <div class="intro-text" id="intro-txt">LOADING NOISE...</div>
 </div>
 
@@ -480,7 +481,7 @@
 
 <header>
   <div class="logo-wrapper" onclick="goHome()">
-    <img id="header-logo" src="img/Zaunk_Logo.png" alt="ZAUNK LOGO" onerror="this.style.display='none'">
+    <img id="header-logo" src="img/zaunk-logo-2.png" alt="ZAUNK LOGO" onerror="this.style.display='none'">
   </div>
   <div style="margin-top: 1rem;">
     <h2 id="web-title" style="margin:0; letter-spacing: 2px;">DIY PEDALS</h2>
@@ -568,9 +569,6 @@
       
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
           <div id="m-cats"></div>
-          <button id="m-btn-interest-small" class="btn" style="padding: 2px 8px; font-size: 0.8rem; background: #eee; color: var(--ink); border: 1px solid #999; display:none;" onclick="closeModal(); openClientGate();">
-              ¿TE INTERESA?
-          </button>
       </div>
 
       <div style="margin-bottom: 1rem; display:flex; align-items:center;">
@@ -872,23 +870,12 @@ function enableVipMode() {
     isVip = true;
     document.body.classList.add('vip-mode');
     
-    // CAMBIO LOGO Y TEXTO A VERSIÓN VIP (VERDE -> LOGO VERDE)
-    // Cuando entramos en VIP mode, el CSS cambia el color a VERDE (--vip-color)
-    // Por tanto, la imagen que pega con el fondo verde es el logo de letras blancas
-    // o el que tenga mejor contraste. Según tu instrucción:
-    // "Usa el logo azul para adecuar el color de la trastienda" (pero antes dijiste "trastienda de verde")
-    // Siguiendo tu última instrucción: "Trastienda de verde".
-    // El logo verde (zaunk-logo-2.png) es el que has subido.
-    // El logo azul (Zaunk_logo.png) es el clásico.
-    // Si el fondo es VERDE, pondremos el logo que contraste mejor. 
-    // Como has pedido "Trastienda verde", usaré el logo zaunk-logo-2.png que es el verde para mantener coherencia monocromática o el blanco si existiera.
-    // Asumiré que quieres ver el logo "zaunk-logo-2.png" al entrar en la trastienda verde.
-
-    document.getElementById('header-logo').src = "img/zaunk-logo-2.png"; 
+    // CAMBIO LOGO Y TEXTO A VERSIÓN VIP
+    document.getElementById('header-logo').src = "img/Zaunk_Logo.png";
     document.getElementById('web-title').innerText = "DIY EFFECTS";
 
     const intro = document.getElementById('intro-layer');
-    document.getElementById('intro-logo-img').src = "img/zaunk-logo-2.png"; 
+    document.getElementById('intro-logo-img').src = "img/zaunk-logo-2.png"; // Cambiar logo en intro
     document.getElementById('intro-txt').innerText = "ENTRANDO A LA TRASTIENDA...";
     intro.style.display = 'flex';
     intro.style.opacity = '1';
@@ -977,7 +964,7 @@ function renderFront() {
         // LOGICA CONDICIONAL
         let controlsHTML = '';
         let priceBadge = '';
-        let btnInterest = '';
+        // Sin botón en el grid para público
         
         if (isVip) {
             priceBadge = `<div class="price-tag">${p.precio} €</div>`;
@@ -990,9 +977,6 @@ function renderFront() {
                 </div>
                 <button class="add-btn" onclick="saveToCart('${p.id}')" ${disabled}>${inCartQty > 0 ? 'ACTUALIZAR' : 'AÑADIR'}</button>
               </div>`;
-        } else {
-            // SI NO ES VIP, PONER BOTON DE INTERES EN LA GRID
-            btnInterest = `<button class="btn" style="width:100%; margin-top:10px; font-size:0.9rem;" onclick="openClientGate()">¿TE INTERESA?</button>`;
         }
 
         const card = document.createElement('div');
@@ -1009,7 +993,6 @@ function renderFront() {
           <h3 onclick="openModal('${p.id}')" style="cursor:pointer">${p.nombre}</h3>
           <p>${p.descripcionCorta || ''}</p>
           ${controlsHTML}
-          ${btnInterest}
         `;
         grid.appendChild(card);
       });
@@ -1230,14 +1213,12 @@ function openModal(id) {
   const priceLabel = document.getElementById('m-price');
   const btnSide = document.getElementById('m-btn-side');
   const btnMain = document.getElementById('m-btn');
-  const btnInterest = document.getElementById('m-btn-interest-small');
 
   if(isVip) {
       priceLabel.style.display = 'inline-block';
       priceLabel.innerText = p.precio + " €";
       
       btnSide.style.display = 'inline-block';
-      btnInterest.style.display = 'none'; // Ocultar boton pequeño
       btnMain.innerText = "LO QUIERO (+1)";
       
       // Asignar funcion de compra a ambos botones
@@ -1261,10 +1242,9 @@ function openModal(id) {
       // SI NO ES VIP
       priceLabel.style.display = 'none';
       btnSide.style.display = 'none';
-      btnInterest.style.display = 'inline-block'; // Mostrar boton pequeño
       
-      // Botón principal se convierte en "¿TE INTERESA?"
-      btnMain.innerText = "¿TE INTERESA?";
+      // Botón principal se convierte en "¡ME INTERESA!"
+      btnMain.innerText = "¡ME INTERESA!";
       btnMain.onclick = () => {
           closeModal();
           openClientGate();
