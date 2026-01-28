@@ -909,19 +909,13 @@ function openClientGate() {
     const input = document.getElementById('client-pass');
     input.value = '';
     
-    // === GENERACIÓN ID PETICION FORMULARIO (Mismo método que en pedidos) ===
-    const now = new Date();
-    const dateStr = now.toISOString().slice(2,10).replace(/-/g, ""); // Formato: AAMMDD
-    const randomStr = Math.floor(Math.random() * 1000).toString().padStart(3, '0'); // 3 dígitos aleatorios
-    
-    const accessId = `ACS-${dateStr}-${randomStr}`;
-    // ===================================================
-
+    // Generar enlace dinámico para petición de acceso
+    const accessId = "REQ-" + Math.floor(Math.random() * 1000000);
     const finalAccessUrl = `${FORM_ACCESS_URL}?usp=pp_url&${FORM_ACCESS_ENTRY}=${accessId}`;
     document.getElementById('access-request-link').href = finalAccessUrl;
 
     document.getElementById('client-gate-modal').style.display = 'flex';
-    document.body.style.overflow = 'hidden'; 
+    document.body.style.overflow = 'hidden'; // BLOQUEAR SCROLL
     setTimeout(() => input.focus(), 50);
 }
 
