@@ -43,6 +43,7 @@
       font-family: var(--font-body);
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
       overflow-x: hidden;
+      /* Transición suave de color al cambiar de modo */
       transition: background-color 0.5s ease, color 0.5s ease; 
     }
 
@@ -59,7 +60,7 @@
     .intro-text { font-family: var(--font-title); font-size: 1.5rem; letter-spacing: 5px; color: var(--main-color); animation: blink 1s infinite; }
     @keyframes blink { 50% { opacity: 0.5; } }
 
-    /* === BANNER DE ACCESO (BLANCO/AZUL) === */
+    /* === BANNER DE ACCESO (BLANCO CON BORDE DE COLOR) === */
     #access-banner {
         background: #fff; 
         color: var(--main-color); 
@@ -69,23 +70,26 @@
         font-size: 1.2rem;
         cursor: pointer; 
         letter-spacing: 1px;
-        font-weight: 900; /* Extra negrita */
+        font-weight: 900; 
         text-transform: uppercase;
         
         /* ESTILO UNIFICADO */
         border-bottom: 4px solid var(--main-color); 
         border-left: 4px solid var(--main-color); 
         border-right: 4px solid var(--main-color); 
-        
         margin: 0; 
+        
         position: relative;
         z-index: 50;
         transition: all 0.3s ease;
     }
     
+    /* EFECTO HOVER: INVERSIÓN + ZOOM */
     #access-banner:hover { 
         background: var(--main-color); 
         color: #fff;
+        transform: scale(1.02);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
     /* === TOAST NOTIFICATION === */
@@ -399,7 +403,7 @@
         
         /* Ajuste específico para login en móvil */
         #client-gate-modal .modal-box {
-            padding: 2rem 1.5rem; /* Reducir padding en móvil para que quepa */
+            padding: 2rem 1.5rem; 
             width: 90%;
         }
     }
@@ -589,10 +593,6 @@
       
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
           <div id="m-cats"></div>
-          
-          <button id="m-btn-interest-small" class="btn" style="padding: 2px 8px; font-size: 0.8rem; background: #eee; color: var(--ink); border: 1px solid #999; display:none;" onclick="closeModal(); openClientGate();">
-              ¿TE INTERESA?
-          </button>
       </div>
 
       <div style="margin-bottom: 1rem; display:flex; align-items:center;">
@@ -990,7 +990,7 @@ function renderFront() {
         // LOGICA CONDICIONAL
         let controlsHTML = '';
         let priceBadge = '';
-        // Sin botón de interés en la GRID (Petición usuario)
+        // Sin botón en el grid
         
         if (isVip) {
             priceBadge = `<div class="price-tag">${p.precio} €</div>`;
@@ -1239,14 +1239,12 @@ function openModal(id) {
   const priceLabel = document.getElementById('m-price');
   const btnSide = document.getElementById('m-btn-side');
   const btnMain = document.getElementById('m-btn');
-  const btnInterest = document.getElementById('m-btn-interest-small');
 
   if(isVip) {
       priceLabel.style.display = 'inline-block';
       priceLabel.innerText = p.precio + " €";
       
       btnSide.style.display = 'inline-block';
-      btnInterest.style.display = 'none'; // Ocultar boton pequeño
       btnMain.innerText = "LO QUIERO (+1)";
       
       // Asignar funcion de compra a ambos botones
@@ -1270,7 +1268,6 @@ function openModal(id) {
       // SI NO ES VIP
       priceLabel.style.display = 'none';
       btnSide.style.display = 'none';
-      btnInterest.style.display = 'inline-block'; // Mostrar boton pequeño
       
       // Botón principal se convierte en "¡ME INTERESA!" (con exclamaciones)
       btnMain.innerText = "¡ME INTERESA!";
@@ -1524,69 +1521,77 @@ function clearEditor() { document.querySelectorAll('#pedal-editor-card input, #p
 function downloadJson() { const s = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2)); const a = document.createElement('a'); a.href = s; a.download = "pedales.json"; a.click(); }
 
 function downloadHTML() {
-  document.getElementById('web-title').innerText = document.getElementById('txt-title').value;
-  document.getElementById('web-subtitle').innerText = document.getElementById('txt-subtitle').value;
-  document.getElementById('web-footer').innerText = document.getElementById('txt-footer').value;
-  document.getElementById('link-insta').href = document.getElementById('txt-insta').value;
-  document.getElementById('link-yt').href = document.getElementById('txt-youtube').value;
-  document.getElementById('link-email').href = 'mailto:' + document.getElementById('txt-email').value;
-  
-  document.getElementById('txt-about-content').innerHTML = document.getElementById('txt-about').value;
-  document.getElementById('txt-faq-content').innerHTML = document.getElementById('txt-faq').value;
-  
-  document.title = document.getElementById('txt-tab-title').value;
-
-  const clone = document.documentElement.cloneNode(true);
-  clone.querySelector('#catalog-root').innerHTML = '<div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div>';
-  clone.querySelector('#intro-layer').style.opacity = '1';
-  clone.querySelector('#intro-layer').style.display = 'flex';
-  clone.querySelector('#main-nav').innerHTML = ''; 
-  clone.querySelector('#modal').style.display = 'none';
-  clone.querySelector('#admin').style.display = 'none';
-  clone.querySelector('#lightbox').style.display = 'none';
-  clone.querySelector('#toast').style.display = 'none';
-  clone.querySelector('#fab').style.display = 'none';
-  clone.querySelector('#scroll-up').style.display = 'none';
-  clone.querySelector('#checkout-modal').style.display = 'none'; 
-  clone.querySelector('#login-modal').style.display = 'none'; 
-  clone.querySelector('#client-gate-modal').style.display = 'none';
-
-  // Mostrar cosas que se ocultan en VIP mode
-  clone.querySelector('#access-banner').style.display = 'block'; 
-  clone.querySelector('#public-catalog-title-container').style.display = 'block';
-
-  let scriptContent = clone.querySelector('script').innerHTML;
-  const newUrl = document.getElementById('txt-form-url').value;
-  const newEntry = document.getElementById('txt-form-entry').value;
-  const newEntryRef = document.getElementById('txt-form-entry-ref').value;
-  const newShipping = document.getElementById('txt-shipping').value;
-  const newShippingEU = document.getElementById('txt-shipping-eu').value;
-  
-  scriptContent = scriptContent.replace(/const FORM_URL = ".*?";/, `const FORM_URL = "${newUrl}";`);
-  scriptContent = scriptContent.replace(/const FORM_ENTRY = ".*?";/, `const FORM_ENTRY = "${newEntry}";`);
-  scriptContent = scriptContent.replace(/const FORM_ENTRY_REF = ".*?";/, `const FORM_ENTRY_REF = "${newEntryRef}";`);
-  
-  scriptContent = scriptContent.replace(/const FORM_ACCESS_URL = ".*?";/, `const FORM_ACCESS_URL = "${newAccessUrl}";`);
-  scriptContent = scriptContent.replace(/const FORM_ACCESS_ENTRY = ".*?";/, `const FORM_ACCESS_ENTRY = "${newAccessEntry}";`);
-  
-  clone.querySelector('#txt-shipping').setAttribute('value', newShipping);
-  clone.querySelector('#txt-shipping-eu').setAttribute('value', newShippingEU);
-  
-  // GUARDAR HASHS
-  const newAdminHash = document.getElementById('txt-admin-hash').value;
-  if (newAdminHash && newAdminHash.length > 10) {
-      scriptContent = scriptContent.replace(/const H_PASS\s*=\s*".*?";/, `const H_PASS = "${newAdminHash}";`);
+  try {
+      document.getElementById('web-title').innerText = document.getElementById('txt-title').value;
+      document.getElementById('web-subtitle').innerText = document.getElementById('txt-subtitle').value;
+      document.getElementById('web-footer').innerText = document.getElementById('txt-footer').value;
+      document.getElementById('link-insta').href = document.getElementById('txt-insta').value;
+      document.getElementById('link-yt').href = document.getElementById('txt-youtube').value;
+      document.getElementById('link-email').href = 'mailto:' + document.getElementById('txt-email').value;
+      
+      document.getElementById('txt-about-content').innerHTML = document.getElementById('txt-about').value;
+      document.getElementById('txt-faq-content').innerHTML = document.getElementById('txt-faq').value;
+      
+      document.title = document.getElementById('txt-tab-title').value;
+    
+      const clone = document.documentElement.cloneNode(true);
+      clone.querySelector('#catalog-root').innerHTML = '<div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div>';
+      clone.querySelector('#intro-layer').style.opacity = '1';
+      clone.querySelector('#intro-layer').style.display = 'flex';
+      clone.querySelector('#main-nav').innerHTML = ''; 
+      clone.querySelector('#modal').style.display = 'none';
+      clone.querySelector('#admin').style.display = 'none';
+      clone.querySelector('#lightbox').style.display = 'none';
+      clone.querySelector('#toast').style.display = 'none';
+      clone.querySelector('#fab').style.display = 'none';
+      clone.querySelector('#scroll-up').style.display = 'none';
+      clone.querySelector('#checkout-modal').style.display = 'none'; 
+      clone.querySelector('#login-modal').style.display = 'none'; 
+      clone.querySelector('#client-gate-modal').style.display = 'none';
+    
+      // Mostrar cosas que se ocultan en VIP mode
+      clone.querySelector('#access-banner').style.display = 'block'; 
+      clone.querySelector('#public-catalog-title-container').style.display = 'block';
+    
+      let scriptContent = clone.querySelector('script').innerHTML;
+      const newUrl = document.getElementById('txt-form-url').value;
+      const newEntry = document.getElementById('txt-form-entry').value;
+      const newEntryRef = document.getElementById('txt-form-entry-ref').value;
+      
+      const newAccessUrl = document.getElementById('txt-form-access-url').value;
+      const newAccessEntry = document.getElementById('txt-form-access-entry').value;
+      
+      const newShipping = document.getElementById('txt-shipping').value;
+      const newShippingEU = document.getElementById('txt-shipping-eu').value;
+      
+      scriptContent = scriptContent.replace(/const FORM_URL = ".*?";/, `const FORM_URL = "${newUrl}";`);
+      scriptContent = scriptContent.replace(/const FORM_ENTRY = ".*?";/, `const FORM_ENTRY = "${newEntry}";`);
+      scriptContent = scriptContent.replace(/const FORM_ENTRY_REF = ".*?";/, `const FORM_ENTRY_REF = "${newEntryRef}";`);
+      
+      scriptContent = scriptContent.replace(/const FORM_ACCESS_URL = ".*?";/, `const FORM_ACCESS_URL = "${newAccessUrl}";`);
+      scriptContent = scriptContent.replace(/const FORM_ACCESS_ENTRY = ".*?";/, `const FORM_ACCESS_ENTRY = "${newAccessEntry}";`);
+      
+      clone.querySelector('#txt-shipping').setAttribute('value', newShipping);
+      clone.querySelector('#txt-shipping-eu').setAttribute('value', newShippingEU);
+      
+      // GUARDAR HASHS
+      const newAdminHash = document.getElementById('txt-admin-hash').value;
+      if (newAdminHash && newAdminHash.length > 10) {
+          scriptContent = scriptContent.replace(/const H_PASS\s*=\s*".*?";/, `const H_PASS = "${newAdminHash}";`);
+      }
+      
+      const newClientHash = document.getElementById('txt-client-hash').value;
+      if (newClientHash && newClientHash.length > 10) {
+          scriptContent = scriptContent.replace(/const CLIENT_PASS_HASH\s*=\s*".*?";/, `const CLIENT_PASS_HASH = "${newClientHash}";`);
+      }
+      
+      clone.querySelector('script').innerHTML = scriptContent;
+      const htmlContent = "<!DOCTYPE html>\n" + clone.outerHTML;
+      const blob = new Blob([htmlContent], {type: "text/html"});
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "index.html"; a.click();
+  } catch(e) {
+      alert("Error al descargar: " + e.message);
   }
-  
-  const newClientHash = document.getElementById('txt-client-hash').value;
-  if (newClientHash && newClientHash.length > 10) {
-      scriptContent = scriptContent.replace(/const CLIENT_PASS_HASH\s*=\s*".*?";/, `const CLIENT_PASS_HASH = "${newClientHash}";`);
-  }
-  
-  clone.querySelector('script').innerHTML = scriptContent;
-  const htmlContent = "<!DOCTYPE html>\n" + clone.outerHTML;
-  const blob = new Blob([htmlContent], {type: "text/html"});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "index.html"; a.click();
 }
 </script>
 </body>
