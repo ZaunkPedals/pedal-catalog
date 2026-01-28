@@ -60,10 +60,10 @@
     .intro-text { font-family: var(--font-title); font-size: 1.5rem; letter-spacing: 5px; color: var(--main-color); animation: blink 1s infinite; }
     @keyframes blink { 50% { opacity: 0.5; } }
 
-    /* === BANNER DE ACCESO (ESTILO INDUSTRIAL / PRECAUCIÓN) === */
+    /* === BANNER DE ACCESO (BLANCO/AZUL) === */
     #access-banner {
-        background: #ffcc00; /* Amarillo industrial */
-        color: #000; /* Texto negro */
+        background: #fff; 
+        color: var(--main-color); 
         text-align: center;
         padding: 15px; 
         font-family: var(--font-title); 
@@ -73,23 +73,21 @@
         font-weight: 900; /* Extra negrita */
         text-transform: uppercase;
         
-        /* ESTILO UNIFICADO PERO DESTACADO */
-        border: 4px solid var(--main-color); /* Borde del color del tema */
-        margin: 0; 
+        /* ESTILO UNIFICADO */
+        border-bottom: 4px solid var(--main-color); 
+        border-left: 4px solid var(--main-color); 
+        border-right: 4px solid var(--main-color); 
+        /* Sin borde arriba para pegarse al menú */
         
-        /* Transformación estática para llamar la atención */
+        margin: 0; 
         position: relative;
         z-index: 50;
-        box-shadow: 0 4px 0 rgba(0,0,0,0.2);
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
     }
     
     #access-banner:hover { 
-        background: #000; 
-        color: #ffcc00;
-        border-color: #ffcc00;
-        transform: translateY(2px);
-        box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+        background: var(--main-color); 
+        color: #fff;
     }
 
     /* === TOAST NOTIFICATION === */
@@ -579,6 +577,10 @@
       
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
           <div id="m-cats"></div>
+          
+          <button id="m-btn-interest-small" class="btn" style="padding: 2px 8px; font-size: 0.8rem; background: #eee; color: var(--ink); border: 1px solid #999; display:none;" onclick="closeModal(); openClientGate();">
+              ¿TE INTERESA?
+          </button>
       </div>
 
       <div style="margin-bottom: 1rem; display:flex; align-items:center;">
@@ -589,8 +591,7 @@
       <div id="m-desc"></div>
       <br>
       <button id="m-btn" class="btn" style="width:100%">LO QUIERO (+1)</button>
-      
-      </div>
+    </div>
   </div>
 </div>
 
@@ -1228,12 +1229,14 @@ function openModal(id) {
   const priceLabel = document.getElementById('m-price');
   const btnSide = document.getElementById('m-btn-side');
   const btnMain = document.getElementById('m-btn');
+  const btnInterest = document.getElementById('m-btn-interest-small');
 
   if(isVip) {
       priceLabel.style.display = 'inline-block';
       priceLabel.innerText = p.precio + " €";
       
       btnSide.style.display = 'inline-block';
+      btnInterest.style.display = 'none'; // Ocultar boton pequeño
       btnMain.innerText = "LO QUIERO (+1)";
       
       // Asignar funcion de compra a ambos botones
@@ -1257,6 +1260,7 @@ function openModal(id) {
       // SI NO ES VIP
       priceLabel.style.display = 'none';
       btnSide.style.display = 'none';
+      btnInterest.style.display = 'inline-block'; // Mostrar boton pequeño
       
       // Botón principal se convierte en "¡ME INTERESA!" (con exclamaciones)
       btnMain.innerText = "¡ME INTERESA!";
