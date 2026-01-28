@@ -16,11 +16,11 @@
 
   <style>
     :root {
-      /* COLOR PÚBLICO (VERDE OSCURO) */
-      --main-color: #006847; 
+      /* COLOR PÚBLICO (AZUL ZAUNK) */
+      --main-color: #253494; 
       
-      /* COLOR PRIVADO (AZUL ZAUNK) */
-      --vip-color: #253494;
+      /* COLOR PRIVADO (VERDE OSCURO) */
+      --vip-color: #006847;
 
       --paper: #fcfcfc;
       --ink: #1a1a1a;
@@ -60,10 +60,10 @@
     .intro-text { font-family: var(--font-title); font-size: 1.5rem; letter-spacing: 5px; color: var(--main-color); animation: blink 1s infinite; }
     @keyframes blink { 50% { opacity: 0.5; } }
 
-    /* === BANNER DE ACCESO (BLANCO CON BORDE DE COLOR) === */
+    /* === BANNER DE ACCESO (ESTILO INDUSTRIAL / PRECAUCIÓN) === */
     #access-banner {
-        background: #fff; 
-        color: var(--main-color); 
+        background: #ffcc00; /* Amarillo industrial */
+        color: #000; /* Texto negro */
         text-align: center;
         padding: 15px; 
         font-family: var(--font-title); 
@@ -73,22 +73,23 @@
         font-weight: 900; /* Extra negrita */
         text-transform: uppercase;
         
-        /* ESTILO UNIFICADO */
+        /* ESTILO UNIFICADO PERO DESTACADO */
         border: 4px solid var(--main-color); /* Borde del color del tema */
         margin: 0; 
         
-        /* Transformación suave */
+        /* Transformación estática para llamar la atención */
         position: relative;
         z-index: 50;
-        transition: all 0.3s ease;
+        box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+        transition: all 0.2s ease;
     }
     
-    /* EFECTO HOVER: INVERSIÓN + ZOOM */
     #access-banner:hover { 
-        background: var(--main-color); 
-        color: #fff;
-        transform: scale(1.02); /* Pequeño zoom */
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        background: #000; 
+        color: #ffcc00;
+        border-color: #ffcc00;
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 rgba(0,0,0,0.2);
     }
 
     /* === TOAST NOTIFICATION === */
@@ -324,16 +325,23 @@
     /* === MODALES (CSS SEPARADO) === */
     .modal-overlay {
       position: fixed; inset: 0; 
-      background: var(--main-color); /* Fondo dinámico según el tema */
-      opacity: 0.95; /* Transparencia para ver ligeramente el fondo */
+      /* Fondo dinámico AZUL por defecto */
+      background: rgba(37, 52, 148, 0.9); 
       display: none; align-items: center; justify-content: center; z-index: 100;
       transition: background 0.5s ease;
     }
     
+    /* En modo VIP, el fondo se vuelve verde */
+    body.vip-mode .modal-overlay {
+       background: rgba(0, 104, 71, 0.9) !important;
+    }
+    
     .modal-box {
-      background: #fff; border: 4px solid #fff;
+      background: #fff; /* Fondo BLANCO SÓLIDO (Opaco) */
+      border: 4px solid #fff;
       width: 90%; max-width: 800px;
       box-shadow: 20px 20px 0px var(--ink);
+      opacity: 1; /* Asegurar opacidad total del contenido */
     }
 
     /* 1. MODAL FICHA PRODUCTO */
@@ -469,7 +477,7 @@
 <body>
 
 <div id="intro-layer">
-  <img id="intro-logo-img" src="img/zaunk-logo-2.png" class="intro-logo">
+  <img id="intro-logo-img" src="img/Zaunk_Logo.png" class="intro-logo">
   <div class="intro-text" id="intro-txt">LOADING NOISE...</div>
 </div>
 
@@ -483,7 +491,7 @@
 
 <header>
   <div class="logo-wrapper" onclick="goHome()">
-    <img id="header-logo" src="img/zaunk-logo-2.png" alt="ZAUNK LOGO" onerror="this.style.display='none'">
+    <img id="header-logo" src="img/Zaunk_Logo.png" alt="ZAUNK LOGO" onerror="this.style.display='none'">
   </div>
   <div style="margin-top: 1rem;">
     <h2 id="web-title" style="margin:0; letter-spacing: 2px;">DIY PEDALS</h2>
@@ -581,7 +589,8 @@
       <div id="m-desc"></div>
       <br>
       <button id="m-btn" class="btn" style="width:100%">LO QUIERO (+1)</button>
-    </div>
+      
+      </div>
   </div>
 </div>
 
@@ -872,7 +881,8 @@ function enableVipMode() {
     isVip = true;
     document.body.classList.add('vip-mode');
     
-    document.getElementById('header-logo').src = "img/Zaunk_Logo.png"; 
+    // CAMBIO LOGO Y TEXTO A VERSIÓN VIP (VERDE -> LOGO VERDE)
+    document.getElementById('header-logo').src = "img/zaunk-logo-2.png"; 
     document.getElementById('web-title').innerText = "DIY EFFECTS";
 
     const intro = document.getElementById('intro-layer');
@@ -1533,10 +1543,6 @@ function downloadHTML() {
   const newUrl = document.getElementById('txt-form-url').value;
   const newEntry = document.getElementById('txt-form-entry').value;
   const newEntryRef = document.getElementById('txt-form-entry-ref').value;
-  
-  const newAccessUrl = document.getElementById('txt-form-access-url').value;
-  const newAccessEntry = document.getElementById('txt-form-access-entry').value;
-  
   const newShipping = document.getElementById('txt-shipping').value;
   const newShippingEU = document.getElementById('txt-shipping-eu').value;
   
