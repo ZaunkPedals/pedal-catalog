@@ -593,6 +593,10 @@
       
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
           <div id="m-cats"></div>
+          
+          <button id="m-btn-interest-small" class="btn" style="padding: 2px 8px; font-size: 0.8rem; background: #eee; color: var(--ink); border: 1px solid #999; display:none;" onclick="closeModal(); openClientGate();">
+              ¿TE INTERESA?
+          </button>
       </div>
 
       <div style="margin-bottom: 1rem; display:flex; align-items:center;">
@@ -896,7 +900,7 @@ function enableVipMode() {
     isVip = true;
     document.body.classList.add('vip-mode');
     
-    // CAMBIO LOGO Y TEXTO A VERSIÓN VIP (VERDE -> LOGO VERDE)
+    // CAMBIO LOGO Y TEXTO A VERSIÓN VIP
     document.getElementById('header-logo').src = "img/zaunk-logo-2.png"; 
     document.getElementById('web-title').innerText = "DIY EFFECTS";
 
@@ -1239,12 +1243,14 @@ function openModal(id) {
   const priceLabel = document.getElementById('m-price');
   const btnSide = document.getElementById('m-btn-side');
   const btnMain = document.getElementById('m-btn');
+  const btnInterest = document.getElementById('m-btn-interest-small');
 
   if(isVip) {
       priceLabel.style.display = 'inline-block';
       priceLabel.innerText = p.precio + " €";
       
       btnSide.style.display = 'inline-block';
+      btnInterest.style.display = 'none'; // Ocultar boton pequeño
       btnMain.innerText = "LO QUIERO (+1)";
       
       // Asignar funcion de compra a ambos botones
@@ -1268,6 +1274,7 @@ function openModal(id) {
       // SI NO ES VIP
       priceLabel.style.display = 'none';
       btnSide.style.display = 'none';
+      btnInterest.style.display = 'inline-block'; // Mostrar boton pequeño
       
       // Botón principal se convierte en "¡ME INTERESA!" (con exclamaciones)
       btnMain.innerText = "¡ME INTERESA!";
@@ -1422,7 +1429,7 @@ async function genHash(type) {
       
       setTimeout(() => { document.getElementById(outputId).style.display = 'none'; }, 10000);
   } catch(e) {
-      alert("Error al generar hash");
+      alert("Error al descargar: " + e.message);
   }
 }
 
