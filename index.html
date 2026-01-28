@@ -907,13 +907,19 @@ function openClientGate() {
     const input = document.getElementById('client-pass');
     input.value = '';
     
-    // Generar enlace dinámico para petición de acceso
-    const accessId = "REQ-" + Math.floor(Math.random() * 1000000);
+    // === GENERACIÓN ID (FORMATO UNIFICADO: PET-AAMMDD-XXX) ===
+    const now = new Date();
+    const dateStr = now.toISOString().slice(2,10).replace(/-/g, ""); // AAMMDD
+    const randomStr = Math.floor(Math.random() * 1000).toString().padStart(3, '0'); // 3 dígitos (000-999)
+    
+    const accessId = `PET-${dateStr}-${randomStr}`;
+    // ===========================================================
+
     const finalAccessUrl = `${FORM_ACCESS_URL}?usp=pp_url&${FORM_ACCESS_ENTRY}=${accessId}`;
     document.getElementById('access-request-link').href = finalAccessUrl;
 
     document.getElementById('client-gate-modal').style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // BLOQUEAR SCROLL
+    document.body.style.overflow = 'hidden'; 
     setTimeout(() => input.focus(), 50);
 }
 
