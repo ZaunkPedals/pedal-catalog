@@ -16,11 +16,11 @@
 
   <style>
     :root {
-      /* COLOR PÚBLICO (VERDE ZAUNK EXACTO) */
-      --main-color: #006847; 
+      /* COLOR PÚBLICO (AZUL ZAUNK) */
+      --main-color: #253494; 
       
-      /* COLOR PRIVADO (AZUL ZAUNK EXACTO) */
-      --vip-color: #253494;
+      /* COLOR PRIVADO (VERDE OSCURO) */
+      --vip-color: #006847;
 
       --paper: #fcfcfc;
       --ink: #1a1a1a;
@@ -60,10 +60,10 @@
     .intro-text { font-family: var(--font-title); font-size: 1.5rem; letter-spacing: 5px; color: var(--main-color); animation: blink 1s infinite; }
     @keyframes blink { 50% { opacity: 0.5; } }
 
-    /* === BANNER DE ACCESO (ESTILO INDUSTRIAL / PRECAUCIÓN) === */
+    /* === BANNER DE ACCESO (BLANCO CON BORDE DE COLOR) === */
     #access-banner {
-        background: #ffcc00; /* Amarillo industrial */
-        color: #000; /* Texto negro */
+        background: #fff; 
+        color: var(--main-color); 
         text-align: center;
         padding: 15px; 
         font-family: var(--font-title); 
@@ -73,23 +73,22 @@
         font-weight: 900; /* Extra negrita */
         text-transform: uppercase;
         
-        /* ESTILO UNIFICADO PERO DESTACADO */
+        /* ESTILO UNIFICADO */
         border: 4px solid var(--main-color); /* Borde del color del tema */
         margin: 0; 
         
-        /* Transformación estática para llamar la atención */
+        /* Transformación suave */
         position: relative;
         z-index: 50;
-        box-shadow: 0 4px 0 rgba(0,0,0,0.2);
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
     }
     
+    /* EFECTO HOVER: INVERSIÓN + ZOOM */
     #access-banner:hover { 
-        background: #000; 
-        color: #ffcc00;
-        border-color: #ffcc00;
-        transform: translateY(2px);
-        box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+        background: var(--main-color); 
+        color: #fff;
+        transform: scale(1.02); /* Pequeño zoom */
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
     /* === TOAST NOTIFICATION === */
@@ -467,7 +466,7 @@
 <body>
 
 <div id="intro-layer">
-  <img id="intro-logo-img" src="img/zaunk-logo-2.png" class="intro-logo">
+  <img id="intro-logo-img" src="img/Zaunk_Logo.png" class="intro-logo">
   <div class="intro-text" id="intro-txt">LOADING NOISE...</div>
 </div>
 
@@ -481,7 +480,7 @@
 
 <header>
   <div class="logo-wrapper" onclick="goHome()">
-    <img id="header-logo" src="img/zaunk-logo-2.png" alt="ZAUNK LOGO" onerror="this.style.display='none'">
+    <img id="header-logo" src="img/Zaunk_Logo.png" alt="ZAUNK LOGO" onerror="this.style.display='none'">
   </div>
   <div style="margin-top: 1rem;">
     <h2 id="web-title" style="margin:0; letter-spacing: 2px;">DIY PEDALS</h2>
@@ -873,12 +872,23 @@ function enableVipMode() {
     isVip = true;
     document.body.classList.add('vip-mode');
     
-    // CAMBIO LOGO Y TEXTO A VERSIÓN VIP
-    document.getElementById('header-logo').src = "img/Zaunk_Logo.png";
+    // CAMBIO LOGO Y TEXTO A VERSIÓN VIP (VERDE -> LOGO VERDE)
+    // Cuando entramos en VIP mode, el CSS cambia el color a VERDE (--vip-color)
+    // Por tanto, la imagen que pega con el fondo verde es el logo de letras blancas
+    // o el que tenga mejor contraste. Según tu instrucción:
+    // "Usa el logo azul para adecuar el color de la trastienda" (pero antes dijiste "trastienda de verde")
+    // Siguiendo tu última instrucción: "Trastienda de verde".
+    // El logo verde (zaunk-logo-2.png) es el que has subido.
+    // El logo azul (Zaunk_logo.png) es el clásico.
+    // Si el fondo es VERDE, pondremos el logo que contraste mejor. 
+    // Como has pedido "Trastienda verde", usaré el logo zaunk-logo-2.png que es el verde para mantener coherencia monocromática o el blanco si existiera.
+    // Asumiré que quieres ver el logo "zaunk-logo-2.png" al entrar en la trastienda verde.
+
+    document.getElementById('header-logo').src = "img/zaunk-logo-2.png"; 
     document.getElementById('web-title').innerText = "DIY EFFECTS";
 
     const intro = document.getElementById('intro-layer');
-    document.getElementById('intro-logo-img').src = "img/Zaunk_Logo.png"; // Cambiar logo en intro
+    document.getElementById('intro-logo-img').src = "img/zaunk-logo-2.png"; 
     document.getElementById('intro-txt').innerText = "ENTRANDO A LA TRASTIENDA...";
     intro.style.display = 'flex';
     intro.style.opacity = '1';
@@ -1538,10 +1548,6 @@ function downloadHTML() {
   const newUrl = document.getElementById('txt-form-url').value;
   const newEntry = document.getElementById('txt-form-entry').value;
   const newEntryRef = document.getElementById('txt-form-entry-ref').value;
-  
-  const newAccessUrl = document.getElementById('txt-form-access-url').value;
-  const newAccessEntry = document.getElementById('txt-form-access-entry').value;
-  
   const newShipping = document.getElementById('txt-shipping').value;
   const newShippingEU = document.getElementById('txt-shipping-eu').value;
   
