@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="es"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zaunk Pedals! | DIY Effects</title>
   
   <meta name="description" content="Custom Guitar, Bass and Synth Effects.">
@@ -11,8 +10,8 @@
   <link rel="icon" type="image/png" href="img/Zaunk_Logo.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&amp;family=Oswald:wght@500;700&amp;display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -501,19 +500,19 @@
 
   </style>
 </head>
-<body>
+<body style="">
 
-<div id="intro-layer">
+<div id="intro-layer" style="opacity: 1; display: flex;">
   <img id="intro-logo-img" src="img/Zaunk_Logo.png" class="intro-logo">
   <div class="intro-text" id="intro-txt">LOADING NOISE...</div>
 </div>
 
-<div id="toast">¡AÑADIDO A LA CESTA!</div>
+<div id="toast" style="display: none;">¡AÑADIDO A LA CESTA!</div>
 
-<div id="scroll-up" onclick="goHome()" style="display:none;">↑</div>
+<div id="scroll-up" onclick="goHome()" style="display: none;">↑</div>
 
 <div id="fab" onclick="openCheckout()" style="display:none;">
-  <span id="fab-count">0</span> -> REVISAR PEDIDO
+  <span id="fab-count">0</span> -&gt; REVISAR PEDIDO
 </div>
 
 <header>
@@ -526,39 +525,50 @@
   </div>
 </header>
 
-<nav class="nav-bar" id="main-nav">
-  </nav>
+<nav class="nav-bar" id="main-nav"></nav>
 
-<div id="access-banner" onclick="openClientGate()">
+<div id="access-banner" onclick="openClientGate()" style="display: block;">
     ¿TE INTERESA ALGÚN PEDAL? ¡HAZ CLICK AQUÍ!
 </div>
 
 <main class="container">
   
-  <div id="public-catalog-title-container">
+  <div id="public-catalog-title-container" style="display: block;">
       <div class="catalog-badge-title">
           <h2>CATÁLOGO</h2>
       </div>
   </div>
 
-  <div id="catalog-root">
-    <div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div>
-  </div>
+  <div id="catalog-root" style="display: block;"><div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div></div>
 
-  <div id="sec-about" class="info-page">
+  <div id="sec-about" class="info-page" style="display: none;">
     <h2>ABOUT US</h2>
-    <div class="info-content" id="txt-about-content">
-      Somos Zaunk Effects. Construimos ruido desde el País Vasco con nuestras propias manos.<br>
-      DIY or DIE.
-    </div>
+    <div class="info-content" id="txt-about-content"><p><strong>ZAUNK PEDALS</strong> es construcción de efectos custom.</p>
+
+<p>Reivindicamos la ética <strong>Punk DIY</strong>, y el trabajo manual frente a la obsolescencia programada que nos rodea. Entender para crear, reparar y modificar.</p>
+
+<p>Combinamos métodos clásicos y modernos para fabricar herramientas sonoras crudas, ruidosas y <strong>accesibles</strong> para todos. <strong>Zaunk oihua da!</strong></p></div>
   </div>
 
-  <div id="sec-faq" class="info-page">
+  <div id="sec-faq" class="info-page" style="display: none;">
     <h2>FAQ</h2>
-    <div class="info-content" id="txt-faq-content">
-      <strong>¿Hacéis envíos?</strong><br>Sí, a todo el mundo.<br><br>
-      <strong>¿Son True Bypass?</strong><br>Por supuesto.
-    </div>
+    <div class="info-content" id="txt-faq-content"><p><strong>¿Cómo funciona la compra?</strong><br>
+<strong>Esto no es Amazon.</strong> Los pedidos no son automáticos. Al enviar tu solicitud recibimos un formulario, comprobamos el stock físico y contactamos contigo para confirmar el pedido y facilitar los datos de pago.</p>
+
+<p><strong>La Trastienda y Stock</strong><br>
+Zaunk funciona mediante <strong>pequeñas tiradas limitadas</strong>, no es una producción industrial. "La Trastienda" es un espacio reservado para el stock especial y clientes habituales.</p>
+
+<p><strong>Envíos y Plazos</strong><br>
+Trabajamos por lotes. Si hay stock, el envío se realiza en un plazo máximo de <strong>3 días</strong> (habitualmente 24h). Actualmente los envíos se centran en la Península, aunque se puede consultar para envíos a Europa.</p>
+
+<p><strong>Alimentación</strong><br>
+Los pedales requieren fuente de alimentación estándar de <strong>9V con centro negativo</strong>. No suelen incluirse (salvo en modelos específicos como la Sirena Dub).</p>
+
+<p><strong>Garantía y Reparaciones</strong><br>
+Si surge algún problema técnico con un pedal Zaunk, ponte en contacto. Ofrecemos soporte y reparación directa de nuestros equipos.</p>
+
+<p><strong>¿Pedidos Custom?</strong><br>
+Debido a la disponibilidad limitada de tiempo, se aceptan muy pocos encargos personalizados, aunque siempre se puede consultar.</p></div>
   </div>
 
 </main>
@@ -567,15 +577,15 @@
   <div class="container">
     <div class="socials">
       <a id="link-insta" href="https://www.instagram.com/zaunk_pedals/" target="_blank">
-        <svg class="social-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        <svg class="social-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
         INSTAGRAM
       </a>
       <a id="link-yt" href="https://www.youtube.com/@ZaunkPedals" target="_blank">
-        <svg class="social-icon" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+        <svg class="social-icon" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg>
         YOUTUBE
       </a>
       <a id="link-email" href="mailto:zaunkpedals@gmail.com">
-        <svg class="social-icon" viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-11.179l4.623 5.467zm-4.488-6.353h21.73l-10.864 11.136-10.866-11.136zm7.393 7.06l3.473 3.56c.324.332.852.332 1.178 0l3.472-3.56 4.617 5.733h-17.356l4.616-5.733zm8.849-1.593l4.623-5.467v11.179l-4.623-5.712z"/></svg>
+        <svg class="social-icon" viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-11.179l4.623 5.467zm-4.488-6.353h21.73l-10.864 11.136-10.866-11.136zm7.393 7.06l3.473 3.56c.324.332.852.332 1.178 0l3.472-3.56 4.617 5.733h-17.356l4.616-5.733zm8.849-1.593l4.623-5.467v11.179l-4.623-5.712z"></path></svg>
         EMAIL
       </a>
     </div>
@@ -583,48 +593,65 @@
   </div>
 </footer>
 
-<div id="lightbox" onclick="closeLightbox()">
-  <span class="lightbox-close-btn">&times;</span>
+<div id="lightbox" onclick="closeLightbox()" style="display: none;">
+  <span class="lightbox-close-btn">×</span>
   <img id="lightbox-img" src="">
 </div>
 
-<div class="modal-overlay" id="modal">
+<div class="modal-overlay" id="modal" style="display: none;">
   <div class="modal-box">
     <div style="text-align:right;">
       <button class="btn" style="padding:5px 10px;" onclick="closeModal()">X CERRAR</button>
     </div>
     <div id="modal-media-col">
       <div class="carousel-container">
-        <button class="carousel-btn prev" onclick="scrollCarousel(-1)">&lt;</button>
+        <button class="carousel-btn prev" onclick="scrollCarousel(-1)" style="display: block;">&lt;</button>
         <div class="carousel-track" id="carousel-track"></div>
-        <button class="carousel-btn next" onclick="scrollCarousel(1)">&gt;</button>
+        <button class="carousel-btn next" onclick="scrollCarousel(1)" style="display: block;">&gt;</button>
       </div>
-      <div id="carousel-dots" class="carousel-dots"></div>
+      <div id="carousel-dots" class="carousel-dots"><div class="dot active"></div><div class="dot "></div><div class="dot "></div><div class="dot"></div><div class="dot"></div></div>
     </div>
     <div id="modal-info">
-      <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;"></h2>
+      <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;">The Red Artifact</h2>
       
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
-          <div id="m-cats"></div>
+          <div id="m-cats"><span style="background:var(--main-color); color:#fff; padding:2px 6px; margin-right:5px; font-size:0.8rem;">FUZZ</span></div>
           
-          <button id="m-btn-interest-small" class="btn" style="padding: 2px 8px; font-size: 0.8rem; background: #eee; color: var(--ink); border: 1px solid #999; display:none;" onclick="closeModal(); openClientGate();">
+          <button id="m-btn-interest-small" class="btn" style="padding: 2px 8px; font-size: 0.8rem; background: rgb(238, 238, 238); color: var(--ink); border: 1px solid rgb(153, 153, 153); display: inline-block;" onclick="closeModal(); openClientGate();">
               ¿TE INTERESA?
           </button>
       </div>
 
       <div style="margin-bottom: 1rem; display:flex; align-items:center;">
         <h3 id="m-price" style="background:var(--main-color); color:#fff; display:none; padding:5px 10px; margin:0;">0 €</h3>
-        <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px; display:none;">LO QUIERO (+1)</button>
+        <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px; display: none; opacity: 1;">LO QUIERO (+1)</button>
       </div>
       
-      <div id="m-desc"></div>
+      <div id="m-desc">El <b>Red Artifact</b> (Fuzz War) es un pedal de fuzz salvaje y abrasivo, capaz de ir de una saturación cálida a una distorsión caótica. Perfecto para quienes buscan un muro de sonido imparable.<br>
+<h3>CARACTERÍSTICAS:</h3>
+
+<p><strong>Sección de Control Fuzz:</strong></p>
+
+<ul>
+  <li><strong>Fuzz:</strong> Controla la intensidad del fuzz, desde una ligera saturación hasta distorsión total.</li>
+  <li><strong>Tone:</strong> Ajusta el rango de frecuencias, proporcionando una barrida amplia desde un fuzz grave y oscuro hasta agudos penetrantes.</li>
+  <li><strong>Volume:</strong> Controla el nivel de salida general, permitiendo que el fuzz sea tan fuerte o sutil como lo desees.</li>
+</ul>
+
+<p>
+  Funciona con una <strong>fuente de alimentación estándar para pedales</strong>: 
+  <strong>9 Voltios DC, centro negativo</strong> (no incluida).
+</p>
+
+
+</div>
       <br>
-      <button id="m-btn" class="btn" style="width:100%">LO QUIERO (+1)</button>
+      <button id="m-btn" class="btn" style="width: 100%; opacity: 1;">¡ME INTERESA!</button>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="checkout-modal">
+<div class="modal-overlay" id="checkout-modal" style="display: none;">
   <div class="modal-box">
     <div class="checkout-header">
       <h2>REVISA TU PEDIDO</h2>
@@ -646,7 +673,7 @@
   </div>
 </div>
 
-<div id="client-gate-modal" class="modal-overlay">
+<div id="client-gate-modal" class="modal-overlay" style="display: none;">
    <div class="modal-box">
       <h3 style="margin-top:0;">ACCEDE A LA TRASTIENDA</h3>
       <p style="margin-bottom:1.5rem;">Introduce tu clave de acceso</p>
@@ -655,13 +682,13 @@
 
       <div style="display:flex; flex-direction:column; gap:10px; margin-top:1rem;">
           <button class="btn" onclick="checkClientAccess()">ENTRAR</button>
-          <a id="access-request-link" href="#" target="_blank" class="btn" style="background:#eee; color:#000; border-color:#999; text-align:center; text-decoration:none;">PIDE TU ACCESO</a>
+          <a id="access-request-link" href="https://docs.google.com/forms/d/e/TU_ID_DE_FORMULARIO_DE_ACCESO/viewform?usp=pp_url&amp;entry.TU_ID_DE_CAMPO=REQ-758707" target="_blank" class="btn" style="background:#eee; color:#000; border-color:#999; text-align:center; text-decoration:none;">PIDE TU ACCESO</a>
           <button class="btn" onclick="closeClientGate()" style="border-color:red; color:red; margin-top:5px;">CANCELAR</button>
       </div>
    </div>
 </div>
 
-<div id="login-modal" class="modal-overlay">
+<div id="login-modal" class="modal-overlay" style="display: none;">
    <div class="modal-box" style="max-width:400px; text-align:center; height: auto;">
       <h3 style="margin-top:0;">ACCESO ADMIN</h3>
       <input type="password" id="login-pass" placeholder="Contraseña..." style="font-size:1.5rem; letter-spacing:5px; text-align:center;">
@@ -672,7 +699,7 @@
    </div>
 </div>
 
-<div id="admin">
+<div id="admin" style="display: none;">
   <div class="container">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
       <h1>PANEL DE CONTROL</h1>
@@ -686,7 +713,7 @@
           <label>Nombre:</label> <input id="e-nombre">
           <label>Precio (€):</label> <input type="number" id="e-precio">
           <label>Categorías:</label> <input id="e-cat" list="cat-suggestions">
-          <datalist id="cat-suggestions"></datalist>
+          <datalist id="cat-suggestions"><option value="Fuzz"></option><option value="Bass"></option><option value="dub"></option><option value="synth"></option></datalist>
           <label style="background:#ddd; padding:10px; display:flex; align-items:center; margin:1rem 0;">
             <input type="checkbox" id="e-agotado"> <span style="margin-left:5px; font-weight:bold;">MARCAR COMO AGOTADO</span>
           </label>
@@ -711,7 +738,19 @@
         
         <div class="admin-card">
           <h3>INVENTARIO</h3>
-          <div id="admin-list" style="max-height:300px; overflow-y:auto; border:1px solid #ccc; padding:5px;"></div>
+          <div id="admin-list" style="max-height:300px; overflow-y:auto; border:1px solid #ccc; padding:5px;">
+    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
+      <span><b>BASSATI</b> <small>70€</small> </span>
+      <div><button onclick="editP('woolly-mammoth')">EDIT</button><button onclick="delP('woolly-mammoth')" style="color:red">X</button></div>
+    </div>
+    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
+      <span><b>The Double Trouble: NJD Dub Siren &amp; Delay </b> <small>145€</small> </span>
+      <div><button onclick="editP('the-double-trouble-njd-dub-siren--delay-')">EDIT</button><button onclick="delP('the-double-trouble-njd-dub-siren--delay-')" style="color:red">X</button></div>
+    </div>
+    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
+      <span><b>The Red Artifact</b> <small>80€</small> </span>
+      <div><button onclick="editP('the-red-artifact')">EDIT</button><button onclick="delP('the-red-artifact')" style="color:red">X</button></div>
+    </div></div>
           <br><button class="btn" style="width:100%;" onclick="downloadJson()">💾 DESCARGAR PEDALES.JSON</button>
         </div>
       </div>
@@ -726,7 +765,7 @@
               <label>Título Web:</label> <input id="txt-title">
               <label>Subtítulo:</label> <input id="txt-subtitle">
               <label>Footer:</label> <input id="txt-footer">
-              <label>About Us (HTML):</label> <textarea id="txt-about" rows="3"></textarea>
+              <label>About Us (HTML):</label> <textarea id="txt-about" rows="3" style="width: 369px; height: 198px;"></textarea>
               <label>FAQ (HTML):</label> <textarea id="txt-faq" rows="3"></textarea>
           </div>
 
@@ -762,8 +801,8 @@
               </div>
           </div>
           
-          <input type="hidden" id="txt-admin-hash">
-          <input type="hidden" id="txt-client-hash">
+          <input type="hidden" id="txt-admin-hash" value="7938e835c55906d701a4b828aa65f41d80ab14f7b61428b75266ab8f6bdd1cc6">
+          <input type="hidden" id="txt-client-hash" value="66ab20cdb403bd6ddfecde48a52c725e691f6491fafc3a28c8bb557ba9ac05ca">
 
           <br>
           <button class="btn" style="width:100%; background:var(--ink); color:#fff;" onclick="downloadHTML()">💾 DESCARGAR INDEX.HTML</button>
@@ -792,8 +831,8 @@
                 <input id="hash-input-client" placeholder="Nueva clave clientes..." style="margin:0;">
                 <button class="btn" onclick="genHash('client')">GENERAR</button>
               </div>
-              <div id="hash-output-client" class="hash-box" style="display:none; margin-top:10px; font-size:0.7rem; word-break:break-all;">
-                 Hash: <span id="hash-str-client" style="color:#fff;"></span>
+              <div id="hash-output-client" class="hash-box" style="display: block; margin-top: 10px; font-size: 0.7rem; word-break: break-all;">
+                 Hash: <span id="hash-str-client" style="color:#fff;">66ab20cdb403bd6ddfecde48a52c725e691f6491fafc3a28c8bb557ba9ac05ca</span>
               </div>
           </div>
       </div>
@@ -808,12 +847,12 @@ const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe6Jz1f86UZjYZTeeKw_D
 const FORM_ENTRY = "entry.614982379";
 const FORM_ENTRY_REF = "entry.290444409";
 
-const FORM_ACCESS_URL = "https://docs.google.com/forms/d/e/TU_ID_DE_FORMULARIO_DE_ACCESO/viewform"; 
-const FORM_ACCESS_ENTRY = "entry.TU_ID_DE_CAMPO"; 
+const FORM_ACCESS_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfcO8TVkngcV9X1HHVkd3Lwd4V_w1ZSZJrlepYngiMaFaq2zw/viewform"; 
+const FORM_ACCESS_ENTRY = "entry.436883588"; 
 
 const SECRET_WORD = "nagusi"; 
 const H_PASS = "7938e835c55906d701a4b828aa65f41d80ab14f7b61428b75266ab8f6bdd1cc6"; 
-const CLIENT_PASS_HASH = "4983a0ab83ed86e0e7213c8783940193232960b77878655e0526323116e09f59"; // 'cliente'
+const CLIENT_PASS_HASH = "66ab20cdb403bd6ddfecde48a52c725e691f6491fafc3a28c8bb557ba9ac05ca"; // 'cliente'
 
 let db = [];
 let cart = new Map();
@@ -1637,5 +1676,5 @@ function downloadHTML() {
   }
 }
 </script>
-</body>
-</html>
+
+</body></html>
