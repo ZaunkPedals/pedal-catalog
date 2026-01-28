@@ -16,9 +16,12 @@
 
   <style>
     :root {
-      /* COLOR PÚBLICO (AZUL GRISÁCEO - "OFF") */
-      --main-color: #37474f; 
+      /* COLOR PÚBLICO (VERDE OSCURO PROFUNDO) */
+      --main-color: #164a3e; 
       
+      /* COLOR PRIVADO (AZUL ZAUNK) */
+      --vip-color: #253494;
+
       --paper: #fcfcfc;
       --ink: #1a1a1a;
       
@@ -26,9 +29,9 @@
       --font-title: 'Oswald', sans-serif;
     }
 
-    /* COLOR PRIVADO (AZUL ZAUNK - "ON") */
+    /* AL ENTRAR EN MODO VIP, CAMBIAMOS LA VARIABLE PRINCIPAL */
     body.vip-mode {
-        --main-color: #253494; 
+        --main-color: var(--vip-color); 
     }
 
     * { box-sizing: border-box; }
@@ -57,7 +60,7 @@
     .intro-text { font-family: var(--font-title); font-size: 1.5rem; letter-spacing: 5px; color: var(--main-color); animation: blink 1s infinite; }
     @keyframes blink { 50% { opacity: 0.5; } }
 
-    /* === BANNER DE ACCESO (UNIFICADO AL MENÚ + HOVER AZUL) === */
+    /* === BANNER DE ACCESO (UNIFICADO AL MENÚ + HOVER) === */
     #access-banner {
         background: #fff; 
         color: var(--main-color); 
@@ -79,7 +82,7 @@
     #access-banner:hover { 
         background: var(--main-color); 
         color: #fff;
-        transform: scale(1.02) translateY(5px); /* Efecto de movimiento */
+        transform: scale(1.02) translateY(5px);
         box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         border-color: var(--main-color);
     }
@@ -305,7 +308,7 @@
 
     /* === MODALES (CSS SEPARADO) === */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.85); /* Fondo oscuro neutro */
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
       display: none; align-items: center; justify-content: center; z-index: 100;
     }
     
@@ -939,6 +942,7 @@ function renderFront() {
         // LOGICA CONDICIONAL
         let controlsHTML = '';
         let priceBadge = '';
+        let btnInterest = '';
         
         if (isVip) {
             priceBadge = `<div class="price-tag">${p.precio} €</div>`;
@@ -951,6 +955,9 @@ function renderFront() {
                 </div>
                 <button class="add-btn" onclick="saveToCart('${p.id}')" ${disabled}>${inCartQty > 0 ? 'ACTUALIZAR' : 'AÑADIR'}</button>
               </div>`;
+        } else {
+            // SI NO ES VIP, PONER BOTON DE INTERES EN LA GRID
+            btnInterest = `<button class="btn" style="width:100%; margin-top:10px; font-size:0.9rem;" onclick="openClientGate()">¿TE INTERESA?</button>`;
         }
 
         const card = document.createElement('div');
@@ -967,6 +974,7 @@ function renderFront() {
           <h3 onclick="openModal('${p.id}')" style="cursor:pointer">${p.nombre}</h3>
           <p>${p.descripcionCorta || ''}</p>
           ${controlsHTML}
+          ${btnInterest}
         `;
         grid.appendChild(card);
       });
