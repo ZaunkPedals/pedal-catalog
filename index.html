@@ -156,7 +156,7 @@
 
     /* === CATÁLOGO === */
     #public-catalog-title {
-        text-align: left; /* ALINEADO IZQUIERDA */
+        text-align: left; 
         margin-top: 2rem; margin-bottom: 2rem; 
         border-bottom: 2px solid var(--zaunk-blue); padding-bottom: 10px;
         font-size: 2rem; letter-spacing: 3px;
@@ -521,12 +521,14 @@
     </div>
     <div id="modal-info">
       <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;"></h2>
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem;">
+      
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
           <div id="m-cats"></div>
           <button id="m-btn-interest-small" class="btn" style="padding: 2px 8px; font-size: 0.8rem; background: #eee; color: var(--ink); border: 1px solid #999; display:none;" onclick="closeModal(); openClientGate();">
-              ¿TE INTERESA?
+              [ ¿TE INTERESA? ]
           </button>
       </div>
+
       <div style="margin-bottom: 1rem; display:flex; align-items:center;">
         <h3 id="m-price" style="background:var(--zaunk-blue); color:#fff; display:none; padding:5px 10px; margin:0;">0 €</h3>
         <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px; display:none;">LO QUIERO (+1)</button>
@@ -565,7 +567,12 @@
    <div class="modal-box" style="max-width:400px; text-align:center; height:auto;">
       <h3 style="margin-top:0;">ACCEDE A LA TRASTIENDA</h3>
       <p style="margin-bottom:1.5rem;">Introduce tu clave de acceso</p>
-      <input type="password" id="client-pass" placeholder="Contraseña..." style="font-size:1.2rem; text-align:center;">
+      
+      <div style="position:relative; width:80%; margin:0 auto;">
+          <input type="password" id="client-pass" placeholder="Contraseña..." style="font-size:1.2rem; text-align:center; width:100%;">
+          <span onclick="togglePassVisibility('client-pass')" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:1.2rem;">👁️</span>
+      </div>
+
       <div style="display:flex; flex-direction:column; gap:10px; margin-top:1rem;">
           <button class="btn" onclick="checkClientAccess()">ENTRAR</button>
           <a id="access-request-link" href="#" target="_blank" class="btn" style="background:#eee; color:#000; border-color:#999; text-align:center; text-decoration:none;">PIDE TU ACCESO</a>
@@ -675,10 +682,11 @@
               </div>
           </div>
           
+          <input type="hidden" id="txt-admin-hash">
+          
           <div class="admin-group">
               <h4>HASH ACCESO CLIENTES</h4>
               <input id="txt-client-hash" readonly style="background:#ddd;">
-              <small>Usa el generador de abajo y pega el resultado aquí.</small>
           </div>
 
           <br>
@@ -689,12 +697,29 @@
     
     <div class="admin-card" style="border-color:red; margin-top:2rem;">
       <h3 style="color:red; margin-top:0;">⚠️ SEGURIDAD</h3>
-      <div style="display:flex; gap:10px;">
-        <input id="hash-input" placeholder="Nueva clave..." style="margin:0;">
-        <button class="btn" onclick="genHash()">GENERAR HASH</button>
-      </div>
-      <div id="hash-output" class="hash-box" style="display:none; margin-top:10px;">
-        Copia esto: <strong id="hash-str" style="color:#fff;"></strong> (Se borra en 10s)
+      
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+          <div style="border-right:1px dashed #ccc; padding-right:10px;">
+              <h4 style="margin-top:0;">ACCESO ADMIN</h4>
+              <div style="display:flex; gap:5px;">
+                <input id="hash-input-admin" placeholder="Nueva clave admin..." style="margin:0;">
+                <button class="btn" onclick="genHash('admin')">GENERAR</button>
+              </div>
+              <div id="hash-output-admin" class="hash-box" style="display:none; margin-top:10px; font-size:0.7rem; word-break:break-all;">
+                 Hash: <span id="hash-str-admin" style="color:#fff;"></span>
+              </div>
+          </div>
+
+          <div>
+              <h4 style="margin-top:0;">ACCESO TRASTIENDA</h4>
+              <div style="display:flex; gap:5px;">
+                <input id="hash-input-client" placeholder="Nueva clave clientes..." style="margin:0;">
+                <button class="btn" onclick="genHash('client')">GENERAR</button>
+              </div>
+              <div id="hash-output-client" class="hash-box" style="display:none; margin-top:10px; font-size:0.7rem; word-break:break-all;">
+                 Hash: <span id="hash-str-client" style="color:#fff;"></span>
+              </div>
+          </div>
       </div>
     </div>
   </div>
@@ -707,13 +732,12 @@ const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe6Jz1f86UZjYZTeeKw_D
 const FORM_ENTRY = "entry.614982379";
 const FORM_ENTRY_REF = "entry.290444409";
 
-// CONFIGURACION FORMULARIO DE ACCESO (RELLENA ESTO CON TUS DATOS)
 const FORM_ACCESS_URL = "https://docs.google.com/forms/d/e/TU_ID_DE_FORMULARIO_DE_ACCESO/viewform"; 
 const FORM_ACCESS_ENTRY = "entry.TU_ID_DE_CAMPO"; 
 
 const SECRET_WORD = "nagusi"; 
 const H_PASS = "7938e835c55906d701a4b828aa65f41d80ab14f7b61428b75266ab8f6bdd1cc6"; 
-const CLIENT_PASS_HASH = "4983a0ab83ed86e0e7213c8783940193232960b77878655e0526323116e09f59"; // Hash para 'cliente'
+const CLIENT_PASS_HASH = "4983a0ab83ed86e0e7213c8783940193232960b77878655e0526323116e09f59"; // 'cliente'
 
 let db = [];
 let cart = new Map();
@@ -754,6 +778,7 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('txt-form-access-entry').value = FORM_ACCESS_ENTRY;
   
   document.getElementById('txt-client-hash').value = CLIENT_PASS_HASH;
+  document.getElementById('txt-admin-hash').value = H_PASS;
 
   document.getElementById('txt-insta').value = document.getElementById('link-insta').href;
   document.getElementById('txt-youtube').value = document.getElementById('link-yt').href;
@@ -779,10 +804,15 @@ function closeClientGate() {
     document.getElementById('client-gate-modal').style.display = 'none';
 }
 
+function togglePassVisibility(id) {
+    const input = document.getElementById(id);
+    input.type = input.type === "password" ? "text" : "password";
+}
+
 async function checkClientAccess() {
-    // 1. OBTENER Y LIMPIAR PASSWORD (TRIM + LOWERCASE)
+    // ELIMINADO toLowerCase para permitir contraseñas con mayúsculas
     const rawPass = document.getElementById('client-pass').value;
-    const pass = rawPass.trim().toLowerCase();
+    const pass = rawPass.trim(); // Solo quitamos espacios extra
     
     if(!pass) return;
     
@@ -813,7 +843,7 @@ function enableVipMode() {
         setTimeout(() => intro.style.display = 'none', 800);
         renderFront(); 
         document.getElementById('access-banner').style.display = 'none'; 
-        document.getElementById('public-catalog-title').style.display = 'none'; // Ocultar titulo catálogo
+        document.getElementById('public-catalog-title').style.display = 'none';
     }, 1500);
 }
 
@@ -850,7 +880,6 @@ function goHome() {
     document.querySelectorAll('.info-page').forEach(p => p.style.display = 'none');
     window.scrollTo({top: 0, behavior: 'smooth'});
     
-    // Mostrar título catálogo solo si no es VIP
     if(!isVip) document.getElementById('public-catalog-title').style.display = 'block';
 }
 
@@ -865,7 +894,6 @@ function renderFront() {
       nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="scrollToCat('${cat}')">${cat}</a>`;
   });
   
-  // LOGICA: FAQ SOLO VISIBLE SI ES VIP
   if(isVip) {
       nav.innerHTML += `<a href="javascript:void(0)" class="nav-link" onclick="showInfoPage('faq')">FAQ</a>`;
   }
@@ -944,7 +972,7 @@ function scrollToCat(cat) {
 
 function showInfoPage(page) {
     document.getElementById('catalog-root').style.display = 'none';
-    document.getElementById('public-catalog-title').style.display = 'none'; // Ocultar título catálogo siempre en info
+    document.getElementById('public-catalog-title').style.display = 'none'; 
     document.querySelectorAll('.info-page').forEach(p => p.style.display = 'none');
     document.getElementById(`sec-${page}`).style.display = 'block';
     window.scrollTo(0,0);
@@ -1134,9 +1162,6 @@ function openModal(id) {
   const p = db.find(x => x.id === id);
   if(!p) return;
   
-  // RESET CARRUSEL (Scroll al inicio)
-  document.getElementById('carousel-track').scrollLeft = 0;
-
   document.getElementById('m-title').innerText = p.nombre;
   
   // MODIFICACION: PRECIO Y BOTON SOLO SI ES VIP
@@ -1230,6 +1255,12 @@ function openModal(id) {
   btns.forEach(b => b.style.display = totalItems > 1 ? 'block' : 'none');
 
   document.getElementById('modal').style.display = 'flex';
+  
+  // RESET CARRUSEL (Scroll al inicio)
+  // IMPORTANTE: Hacerlo después de que el modal sea visible
+  setTimeout(() => {
+      track.scrollLeft = 0;
+  }, 10);
 }
 
 function closeModal() { 
@@ -1292,7 +1323,8 @@ async function checkLogin() {
     if(!pass) return;
     try {
         const h = await hash(pass);
-        if(h === H_PASS) {
+        const currentAdminHash = document.getElementById('txt-admin-hash').value || H_PASS;
+        if(h === currentAdminHash) {
             closeLogin();
             document.getElementById('admin').style.display = 'block';
         } else {
@@ -1303,14 +1335,23 @@ async function checkLogin() {
 
 function closeAdmin() { document.getElementById('admin').style.display = 'none'; renderFront(); }
 
-async function genHash() {
-  const v = document.getElementById('hash-input').value;
+async function genHash(type) {
+  let inputId = type === 'admin' ? 'hash-input-admin' : 'hash-input-client';
+  let outputId = type === 'admin' ? 'hash-output-admin' : 'hash-output-client';
+  let spanId = type === 'admin' ? 'hash-str-admin' : 'hash-str-client';
+  let targetInputId = type === 'admin' ? 'txt-admin-hash' : 'txt-client-hash';
+
+  const v = document.getElementById(inputId).value;
   if(!v) return;
   try {
       const h = await hash(v);
-      document.getElementById('hash-output').style.display = 'block';
-      document.getElementById('hash-str').innerText = h;
-      setTimeout(() => { document.getElementById('hash-output').style.display = 'none'; }, 10000);
+      document.getElementById(outputId).style.display = 'block';
+      document.getElementById(spanId).innerText = h;
+      
+      // AUTO-RELLENAR EL CAMPO DEL ADMIN
+      document.getElementById(targetInputId).value = h;
+      
+      setTimeout(() => { document.getElementById(outputId).style.display = 'none'; }, 10000);
   } catch(e) {
       alert("Error al generar hash");
   }
@@ -1463,9 +1504,10 @@ function downloadHTML() {
   clone.querySelector('#txt-shipping').setAttribute('value', newShipping);
   clone.querySelector('#txt-shipping-eu').setAttribute('value', newShippingEU);
   
-  const newHash = document.getElementById('hash-str').innerText;
-  if (newHash && newHash.length > 10) {
-      scriptContent = scriptContent.replace(/const H_PASS\s*=\s*".*?";/, `const H_PASS = "${newHash}";`);
+  // GUARDAR HASHS
+  const newAdminHash = document.getElementById('txt-admin-hash').value;
+  if (newAdminHash && newAdminHash.length > 10) {
+      scriptContent = scriptContent.replace(/const H_PASS\s*=\s*".*?";/, `const H_PASS = "${newAdminHash}";`);
   }
   
   const newClientHash = document.getElementById('txt-client-hash').value;
