@@ -16,10 +16,10 @@
 
   <style>
     :root {
-      /* COLOR PÚBLICO (NEGRO ABSOLUTO) */
-      --main-color: #000000; 
+      /* COLOR PÚBLICO (VERDE ZAUNK EXACTO) */
+      --main-color: #006847; 
       
-      /* COLOR PRIVADO (AZUL ZAUNK) */
+      /* COLOR PRIVADO (AZUL ZAUNK EXACTO) */
       --vip-color: #253494;
 
       --paper: #fcfcfc;
@@ -60,39 +60,36 @@
     .intro-text { font-family: var(--font-title); font-size: 1.5rem; letter-spacing: 5px; color: var(--main-color); animation: blink 1s infinite; }
     @keyframes blink { 50% { opacity: 0.5; } }
 
-    /* === BANNER DE ACCESO (INTEGRADO Y LLAMATIVO) === */
+    /* === BANNER DE ACCESO (ESTILO INDUSTRIAL / PRECAUCIÓN) === */
     #access-banner {
-        background: #fff; 
-        color: var(--main-color); 
+        background: #ffcc00; /* Amarillo industrial */
+        color: #000; /* Texto negro */
         text-align: center;
         padding: 15px; 
         font-family: var(--font-title); 
         font-size: 1.2rem;
         cursor: pointer; 
-        letter-spacing: 2px;
-        font-weight: 900;
+        letter-spacing: 1px;
+        font-weight: 900; /* Extra negrita */
         text-transform: uppercase;
         
-        /* INTEGRACIÓN TOTAL CON EL MENÚ */
-        border-bottom: 4px solid var(--main-color);
-        border-left: 4px solid var(--main-color);
-        border-right: 4px solid var(--main-color);
-        margin: 0; /* Pegado al menú superior */
-        width: 100%;
+        /* ESTILO UNIFICADO PERO DESTACADO */
+        border: 4px solid var(--main-color); /* Borde del color del tema */
+        margin: 0; 
         
-        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* Transformación estática para llamar la atención */
+        position: relative;
+        z-index: 50;
+        box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+        transition: all 0.2s ease;
     }
     
-    /* EFECTO HOVER LLAMATIVO (INVERSIÓN + SALTO) */
     #access-banner:hover { 
-        background: var(--main-color); 
-        color: #fff; /* O Amarillo si prefieres: #ffcc00 */
-        border-color: var(--main-color);
-        padding: 20px; /* Se hace un poco más grande */
-        transform: scale(1.02); /* Pequeño zoom */
-        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-        z-index: 99;
-        position: relative;
+        background: #000; 
+        color: #ffcc00;
+        border-color: #ffcc00;
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 rgba(0,0,0,0.2);
     }
 
     /* === TOAST NOTIFICATION === */
@@ -128,7 +125,7 @@
     /* === HEADER === */
     header {
       text-align: center;
-      padding: 2rem 1rem 0 1rem; /* Quitamos padding bottom para pegar el menú */
+      padding: 2rem 1rem 1rem 1rem;
       background-color: #fff;
     }
 
@@ -150,7 +147,6 @@
       text-align: center;
       -webkit-overflow-scrolling: touch;
       transition: background 0.5s ease;
-      margin-top: 2rem; /* Separación del logo */
     }
     .nav-bar::-webkit-scrollbar { display: none; }
     .nav-bar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -188,7 +184,7 @@
 
     /* === CATÁLOGO === */
     #public-catalog-title-container {
-        margin-top: 3rem; margin-bottom: 2rem;
+        margin-top: 2rem; margin-bottom: 2rem; 
         border-bottom: 2px dashed var(--main-color);
         text-align: left;
     }
@@ -849,17 +845,22 @@ function closeClientGate() {
 
 async function checkClientAccess() {
     const rawPass = document.getElementById('client-pass').value;
-    const pass = rawPass.trim(); // Solo quitamos espacios extra
+    const pass = rawPass.trim(); 
     
     if(!pass) return;
     
     try {
         const h = await hash(pass);
-        // IMPORTANTE: Priorizar el valor del input del admin si existe
-        let storedHash = document.getElementById('txt-client-hash').value;
-        if(!storedHash || storedHash.length < 10) storedHash = CLIENT_PASS_HASH;
+        // IMPORTANTE: Primero comprobar contra la variable local (fallback)
+        if (h === CLIENT_PASS_HASH) {
+             closeClientGate();
+             enableVipMode();
+             return;
+        }
         
-        if(h === storedHash) {
+        // Si no es la default, mirar si hay una custom en el input oculto
+        const storedHash = document.getElementById('txt-client-hash').value;
+        if(storedHash && storedHash.length > 10 && h === storedHash) {
             closeClientGate();
             enableVipMode();
         } else {
@@ -1537,6 +1538,10 @@ function downloadHTML() {
   const newUrl = document.getElementById('txt-form-url').value;
   const newEntry = document.getElementById('txt-form-entry').value;
   const newEntryRef = document.getElementById('txt-form-entry-ref').value;
+  
+  const newAccessUrl = document.getElementById('txt-form-access-url').value;
+  const newAccessEntry = document.getElementById('txt-form-access-entry').value;
+  
   const newShipping = document.getElementById('txt-shipping').value;
   const newShippingEU = document.getElementById('txt-shipping-eu').value;
   
