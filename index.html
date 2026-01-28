@@ -16,8 +16,8 @@
 
   <style>
     :root {
-      /* COLOR PÚBLICO (VERDE OSCURO PROFUNDO) */
-      --main-color: #164a3e; 
+      /* COLOR PÚBLICO (NEGRO ABSOLUTO) */
+      --main-color: #000000; 
       
       /* COLOR PRIVADO (AZUL ZAUNK) */
       --vip-color: #253494;
@@ -60,31 +60,39 @@
     .intro-text { font-family: var(--font-title); font-size: 1.5rem; letter-spacing: 5px; color: var(--main-color); animation: blink 1s infinite; }
     @keyframes blink { 50% { opacity: 0.5; } }
 
-    /* === BANNER DE ACCESO (UNIFICADO AL MENÚ + HOVER) === */
+    /* === BANNER DE ACCESO (INTEGRADO Y LLAMATIVO) === */
     #access-banner {
         background: #fff; 
         color: var(--main-color); 
         text-align: center;
         padding: 15px; 
         font-family: var(--font-title); 
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         cursor: pointer; 
-        letter-spacing: 1px;
-        font-weight: bold;
+        letter-spacing: 2px;
+        font-weight: 900;
+        text-transform: uppercase;
         
-        /* ESTILO UNIFICADO */
+        /* INTEGRACIÓN TOTAL CON EL MENÚ */
         border-bottom: 4px solid var(--main-color);
         border-left: 4px solid var(--main-color);
         border-right: 4px solid var(--main-color);
-        margin: 0; 
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        margin: 0; /* Pegado al menú superior */
+        width: 100%;
+        
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
+    
+    /* EFECTO HOVER LLAMATIVO (INVERSIÓN + SALTO) */
     #access-banner:hover { 
         background: var(--main-color); 
-        color: #fff;
-        transform: scale(1.02) translateY(5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        color: #fff; /* O Amarillo si prefieres: #ffcc00 */
         border-color: var(--main-color);
+        padding: 20px; /* Se hace un poco más grande */
+        transform: scale(1.02); /* Pequeño zoom */
+        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        z-index: 99;
+        position: relative;
     }
 
     /* === TOAST NOTIFICATION === */
@@ -120,7 +128,7 @@
     /* === HEADER === */
     header {
       text-align: center;
-      padding: 2rem 1rem 1rem 1rem;
+      padding: 2rem 1rem 0 1rem; /* Quitamos padding bottom para pegar el menú */
       background-color: #fff;
     }
 
@@ -142,6 +150,7 @@
       text-align: center;
       -webkit-overflow-scrolling: touch;
       transition: background 0.5s ease;
+      margin-top: 2rem; /* Separación del logo */
     }
     .nav-bar::-webkit-scrollbar { display: none; }
     .nav-bar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -177,9 +186,9 @@
       transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000;
     }
 
-    /* === CATÁLOGO (ESTILO BADGE) === */
+    /* === CATÁLOGO === */
     #public-catalog-title-container {
-        margin-top: 2rem; margin-bottom: 2rem;
+        margin-top: 3rem; margin-bottom: 2rem;
         border-bottom: 2px dashed var(--main-color);
         text-align: left;
     }
@@ -479,7 +488,7 @@
     <img id="header-logo" src="img/zaunk-logo-2.png" alt="ZAUNK LOGO" onerror="this.style.display='none'">
   </div>
   <div style="margin-top: 1rem;">
-    <h2 id="web-title" style="margin:0; letter-spacing: 2px;">DIY EFFECT PEDALS</h2>
+    <h2 id="web-title" style="margin:0; letter-spacing: 2px;">DIY PEDALS</h2>
     <p id="web-subtitle" style="font-family: var(--font-body); margin:0.5rem 0 0 0;">Custom Guitar, Bass and Synth Effects</p>
   </div>
 </header>
@@ -840,22 +849,17 @@ function closeClientGate() {
 
 async function checkClientAccess() {
     const rawPass = document.getElementById('client-pass').value;
-    const pass = rawPass.trim(); 
+    const pass = rawPass.trim(); // Solo quitamos espacios extra
     
     if(!pass) return;
     
     try {
         const h = await hash(pass);
-        // IMPORTANTE: Primero comprobar contra la variable local (fallback)
-        if (h === CLIENT_PASS_HASH) {
-             closeClientGate();
-             enableVipMode();
-             return;
-        }
+        // IMPORTANTE: Priorizar el valor del input del admin si existe
+        let storedHash = document.getElementById('txt-client-hash').value;
+        if(!storedHash || storedHash.length < 10) storedHash = CLIENT_PASS_HASH;
         
-        // Si no es la default, mirar si hay una custom en el input oculto
-        const storedHash = document.getElementById('txt-client-hash').value;
-        if(storedHash && storedHash.length > 10 && h === storedHash) {
+        if(h === storedHash) {
             closeClientGate();
             enableVipMode();
         } else {
@@ -873,6 +877,7 @@ function enableVipMode() {
     document.getElementById('web-title').innerText = "DIY EFFECTS";
 
     const intro = document.getElementById('intro-layer');
+    document.getElementById('intro-logo-img').src = "img/Zaunk_Logo.png"; // Cambiar logo en intro
     document.getElementById('intro-txt').innerText = "ENTRANDO A LA TRASTIENDA...";
     intro.style.display = 'flex';
     intro.style.opacity = '1';
@@ -1532,10 +1537,6 @@ function downloadHTML() {
   const newUrl = document.getElementById('txt-form-url').value;
   const newEntry = document.getElementById('txt-form-entry').value;
   const newEntryRef = document.getElementById('txt-form-entry-ref').value;
-  
-  const newAccessUrl = document.getElementById('txt-form-access-url').value;
-  const newAccessEntry = document.getElementById('txt-form-access-entry').value;
-  
   const newShipping = document.getElementById('txt-shipping').value;
   const newShippingEU = document.getElementById('txt-shipping-eu').value;
   
