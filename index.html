@@ -935,7 +935,6 @@ window.addEventListener('popstate', (event) => {
     
     modals.forEach(id => {
         const el = document.getElementById(id);
-        // Comprobar si está visible (flex o block)
         if (el && (el.style.display === 'flex' || el.style.display === 'block')) {
             el.style.display = 'none';
             closedAny = true;
@@ -944,13 +943,19 @@ window.addEventListener('popstate', (event) => {
 
     if (closedAny) {
         document.body.style.overflow = ''; // Restaurar Scroll
-        document.getElementById('carousel-track').innerHTML = ""; // Limpiar carrusel por si acaso
+        document.getElementById('carousel-track').innerHTML = ""; 
     }
 
     // 2. Si estaba en FAQ o About Us, volvemos a la home
     const visibleInfo = document.querySelector('.info-page[style*="display: block"]');
     if (visibleInfo) {
         goHome(true); 
+    }
+    
+    // 3. NUEVO: SI NO HAY ESTADO "VIP", SALIR DE LA TRASTIENDA
+    // (Esto ocurre cuando el usuario da atrás desde la trastienda)
+    if (isVip && (!event.state || event.state.mode !== 'vip')) {
+        disableVipMode();
     }
 });
 
@@ -979,7 +984,6 @@ function openClientGate() {
 }
 
 function closeClientGate() {
-    // Si cerramos con botón X/Cancelar, usamos Back si hay historial
     if (history.state && history.state.modal === 'client-gate') {
         history.back();
     } else {
@@ -996,15 +1000,12 @@ async function checkClientAccess() {
     
     try {
         const h = await hash(pass);
-        // IMPORTANTE: Primero comprobar contra la variable local (fallback)
         if (h === CLIENT_PASS_HASH) {
-             // AL ENTRAR, QUEREMOS QUITAR EL MODAL DEL HISTORIAL
              if (history.state && history.state.modal === 'client-gate') {
-                 history.back(); // Esto cierra el modal visualmente gracias al popstate
+                 history.back(); 
              } else {
                  closeClientGate();
              }
-             // Pequeño delay para asegurar que el modal se cierra antes de la transición
              setTimeout(() => enableVipMode(), 50);
              return;
         }
@@ -1027,7 +1028,6 @@ function enableVipMode() {
     isVip = true;
     document.body.classList.add('vip-mode');
     
-    // CAMBIO LOGO Y TEXTO A VERSIÓN VIP (VERDE -> LOGO VERDE)
     document.getElementById('header-logo').src = "img/zaunk-logo-2.png"; 
     document.getElementById('web-title').innerText = "DIY EFFECTS";
 
@@ -1037,6 +1037,10 @@ function enableVipMode() {
     intro.style.display = 'flex';
     intro.style.opacity = '1';
     
+    // NUEVO: AÑADIR ESTADO VIP AL HISTORIAL
+    // Usamos #trastienda para que se vea claro en la URL
+    history.pushState({mode: 'vip'}, "", "#trastienda");
+    
     setTimeout(() => {
         intro.style.opacity = '0';
         setTimeout(() => intro.style.display = 'none', 800);
@@ -1044,6 +1048,22 @@ function enableVipMode() {
         document.getElementById('access-banner').style.display = 'none'; 
         document.getElementById('public-catalog-title-container').style.display = 'none';
     }, 1500); 
+}
+
+// NUEVO: FUNCIÓN PARA SALIR DE MODO VIP (RESTAURAR AZUL)
+function disableVipMode() {
+    isVip = false;
+    document.body.classList.remove('vip-mode');
+    
+    // Restaurar Logo y Texto Azul
+    document.getElementById('header-logo').src = "img/Zaunk_Logo.png"; 
+    document.getElementById('web-title').innerText = document.getElementById('txt-title').value || "DIY PEDALS";
+
+    // Restaurar elementos públicos
+    document.getElementById('access-banner').style.display = 'block'; 
+    document.getElementById('public-catalog-title-container').style.display = 'block';
+    
+    renderFront(); // Re-pintar catálogo (oculta stock agotado visualmente etc)
 }
 
 async function loadData() {
@@ -1059,7 +1079,6 @@ async function loadData() {
       let vids = p.videoIDs || [];
       if(!vids.length && p.videoID) vids = [p.videoID];
       
-      // Mapeo de propiedad proximamente (si no existe, false)
       return { 
           ...p, 
           categoria: cats, 
@@ -1092,9 +1111,7 @@ function goHome(fromHistory = false) {
     
     if(!isVip) document.getElementById('public-catalog-title-container').style.display = 'block';
     
-    // Si no venimos del historial (botón atrás), limpiamos la URL para evitar bucles
     if (!fromHistory) {
-        // Si hay hash, lo quitamos
         if(window.location.hash) {
             history.pushState("", document.title, window.location.pathname + window.location.search);
         }
@@ -1132,28 +1149,20 @@ function renderFront() {
         const activeClass = inCartQty > 0 ? 'active' : '';
         const displayQty = inCartQty > 0 ? inCartQty : 1; 
         
-        // --- LOGICA BADGES ---
         let soldOutBadge = '';
-        
-        // 1. SOLD OUT: Solo se muestra si es VIP (en pública se ve normal)
         if(p.agotado && isVip) soldOutBadge = '<div class="sold-out-badge">SOLD OUT</div>';
-        
-        // 2. PRÓXIMAMENTE: Se muestra siempre
         if(p.proximamente) soldOutBadge = '<div class="coming-soon-badge">PRÓXIMAMENTE</div>';
         
-        // Eliminada clase 'agotado' visual para permitir color y click
         const agotadoClass = ''; 
-        
         const disabled = (p.agotado || p.proximamente) ? 'disabled' : '';
         const img = p.imagenes[0] || ''; 
 
-        // LOGICA CONDICIONAL
         let controlsHTML = '';
         let priceBadge = '';
         
         if (isVip) {
             if (p.proximamente) {
-                 priceBadge = ''; // No mostrar precio si es próximamente
+                 priceBadge = ''; 
                  controlsHTML = `
                   <div class="qty-control">
                     <button class="add-btn" disabled style="background:#ccc; border-color:#ccc; cursor:not-allowed;">PRÓXIMAMENTE</button>
@@ -1196,7 +1205,6 @@ function renderFront() {
 }
 
 function scrollToCat(cat) {
-    // SCROLL SUAVE CORREGIDO PARA EVITAR EL MENÚ STICKY
     document.getElementById('catalog-root').style.display = 'block';
     document.querySelectorAll('.info-page').forEach(p => p.style.display = 'none');
     
@@ -1204,7 +1212,7 @@ function scrollToCat(cat) {
 
     const el = document.getElementById(`cat-${cat}`);
     if(el) {
-        const headerOffset = 150; // Ajuste para que no lo tape el menú
+        const headerOffset = 150; 
         const elementPosition = el.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
        
@@ -1223,10 +1231,8 @@ function showInfoPage(page) {
     const targetSection = document.getElementById(`sec-${page}`);
     targetSection.style.display = 'block';
     
-    // GUARDAR HISTORIAL
     history.pushState({page: page}, "", "#" + page);
     
-    // SCROLL AL TITULO DE LA SECCION
     setTimeout(() => {
         const headerOffset = 100; 
         const elementPosition = targetSection.getBoundingClientRect().top;
@@ -1284,7 +1290,6 @@ window.onscroll = updateFab;
 
 // === GESTIÓN DEL MODAL CHECKOUT ===
 function openCheckout() {
-    // BLOQUEAR SCROLL DE FONDO
     document.body.style.overflow = 'hidden';
 
     const modal = document.getElementById('checkout-modal');
@@ -1292,14 +1297,12 @@ function openCheckout() {
     const shipOptionsDiv = document.getElementById('shipping-options');
     list.innerHTML = "";
     
-    // OBTENER PRECIOS CON SEGURIDAD (Si no existen, usa default)
     const elPen = document.getElementById('txt-shipping');
     const elEU = document.getElementById('txt-shipping-eu');
     
     const shipPen = elPen ? (parseInt(elPen.value) || 6) : 6;
     const shipEU = elEU ? (parseInt(elEU.value) || 0) : 0;
     
-    // CREAR RADIO BUTTONS (Orden: Recogida -> Península -> EU)
     let htmlShips = `<label><input type="radio" name="ship" value="0" data-name="Recogida en mano" onchange="updateCheckoutTotal()"> Recogida en mano [Gratis]</label>`;
     
     htmlShips += `<label><input type="radio" name="ship" value="${shipPen}" data-name="Península" checked onchange="updateCheckoutTotal()"> Península [${shipPen} €]</label>`;
@@ -1310,7 +1313,6 @@ function openCheckout() {
     
     shipOptionsDiv.innerHTML = htmlShips;
     
-    // Construir lista de items
     cart.forEach((qty, id) => {
         const p = db.find(x => x.id === id);
         if(p) {
@@ -1337,7 +1339,6 @@ function openCheckout() {
     updateCheckoutTotal();
     modal.style.display = 'flex';
     
-    // AÑADIR HISTORIAL
     history.pushState({modal: 'checkout'}, "", "#checkout");
 }
 
@@ -1348,21 +1349,18 @@ function updateCheckoutTotal() {
         if(p) subtotal += (parseInt(p.precio) * qty);
     });
     
-    // Buscar el radio seleccionado
     const selectedRadio = document.querySelector('input[name="ship"]:checked');
     const envio = selectedRadio ? parseInt(selectedRadio.value) : 0;
     
     document.getElementById('ck-subtotal').innerText = subtotal;
-    // document.getElementById('ck-shipping').innerText = envio; // Ya se ve en el radio
     document.getElementById('ck-total').innerText = subtotal + envio;
 }
 
 function closeCheckout() {
-    // Si cerramos con botón, simulamos atrás
     if (history.state && history.state.modal === 'checkout') {
         history.back();
     } else {
-        document.body.style.overflow = ''; // DESBLOQUEAR SCROLL
+        document.body.style.overflow = ''; 
         document.getElementById('checkout-modal').style.display = 'none';
     }
 }
@@ -1388,8 +1386,7 @@ function updateCheckoutQty(id, change) {
     updateFab();
     if(cart.size === 0) closeCheckout();
     else {
-        // Recargar contenido del checkout visualmente sin cambiar historial
-        // Pequeño hack: reutilizamos la logica de pintado pero sin pushState
+        // Recargar contenido visualmente
         const modal = document.getElementById('checkout-modal');
         const list = document.getElementById('checkout-list');
         list.innerHTML = "";
@@ -1453,10 +1450,8 @@ function confirmOrder() {
 }
 
 function openModal(id) {
-  // BLOQUEAR SCROLL DE FONDO
   document.body.style.overflow = 'hidden';
   
-  // 1. Force scroll to top of the content box
   const modalBox = document.querySelector('#modal .modal-box');
   if(modalBox) {
       setTimeout(() => { modalBox.scrollTop = 0; }, 10); 
@@ -1465,19 +1460,16 @@ function openModal(id) {
   const p = db.find(x => x.id === id);
   if(!p) return;
   
-  // RESET CARRUSEL (Scroll al inicio)
   document.getElementById('carousel-track').scrollLeft = 0;
 
   document.getElementById('m-title').innerText = p.nombre;
   
-  // MODIFICACION: PRECIO Y BOTON SOLO SI ES VIP
   const priceLabel = document.getElementById('m-price');
   const btnSide = document.getElementById('m-btn-side');
   const btnMain = document.getElementById('m-btn');
   const btnInterest = document.getElementById('m-btn-interest-small');
 
   if(isVip) {
-      // SI ES PRÓXIMAMENTE, OCULTAMOS PRECIO Y DESACTIVAMOS BOTONES
       if(p.proximamente) {
           priceLabel.style.display = 'none';
           btnSide.innerText = "PRÓXIMAMENTE";
@@ -1503,9 +1495,8 @@ function openModal(id) {
           btnMain.disabled = false;
           btnMain.style.opacity = 1;
           
-          btnInterest.style.display = 'none'; // Ocultar boton pequeño
+          btnInterest.style.display = 'none';
           
-          // Asignar funcion de compra a ambos botones
           [btnSide, btnMain].forEach(b => {
               b.onclick = () => {
                     if(p.agotado) return;
@@ -1524,12 +1515,10 @@ function openModal(id) {
       }
 
   } else {
-      // SI NO ES VIP
       priceLabel.style.display = 'none';
       btnSide.style.display = 'none';
       btnInterest.style.display = 'inline-block'; 
       
-      // Botón principal se convierte en "¡ME INTERESA!"
       btnMain.innerText = "¡ME INTERESA!";
       btnMain.disabled = false;
       btnMain.style.opacity = 1;
@@ -1539,7 +1528,6 @@ function openModal(id) {
       };
   }
   
-  // Gestion AGOTADO (prioridad sobre próximamente para lógica visual de botones, aunque próximamente ya lo maneja arriba)
   if(p.agotado && isVip && !p.proximamente) {
       btnSide.innerText = "AGOTADO"; btnSide.disabled = true; btnSide.style.opacity = 0.5;
       btnMain.innerText = "AGOTADO"; btnMain.disabled = true; btnMain.style.opacity = 0.5;
@@ -1583,22 +1571,18 @@ function openModal(id) {
 
   document.getElementById('modal').style.display = 'flex';
   
-  // GUARDAR ESTADO HISTORIAL PARA QUE EL BOTÓN "ATRÁS" FUNCIONE
   history.pushState({modal: 'product'}, "", "#" + id);
 
-  // RESET CARRUSEL (Scroll al inicio)
   setTimeout(() => {
       track.scrollLeft = 0;
   }, 10);
 }
 
 function closeModal() { 
-    // Si cerramos con botón X, volvemos atrás para limpiar la URL
-    // (Solo si hay estado de historial, para no salir de la web)
     if (history.state && history.state.modal === 'product') {
         history.back();
     } else {
-        document.body.style.overflow = ''; // DESBLOQUEAR SCROLL
+        document.body.style.overflow = ''; 
         document.getElementById('modal').style.display = 'none'; 
         document.getElementById('carousel-track').innerHTML = ""; 
     }
@@ -1620,18 +1604,15 @@ function setupKeys() {
     keyBuffer += e.key.toLowerCase();
     if(keyBuffer.length > 20) keyBuffer = keyBuffer.slice(-20);
     
-    // Si se detecta la palabra secreta
     if(keyBuffer.endsWith(SECRET_WORD)) {
-        e.preventDefault(); // Evitar que la ultima letra se escriba si es input
+        e.preventDefault(); 
         forceLogin();
     }
   });
   
-  // Listener especifico para el input del login (ENTER KEY)
   document.getElementById('login-pass').addEventListener('keydown', (e) => {
       if(e.key === 'Enter') checkLogin();
   });
-  // Listener para el input de cliente
   document.getElementById('client-pass').addEventListener('keydown', (e) => {
       if(e.key === 'Enter') checkClientAccess();
   });
@@ -1639,16 +1620,14 @@ function setupKeys() {
 
 function forceLogin() {
     const input = document.getElementById('login-pass');
-    input.value = ''; // Limpiar primero
+    input.value = ''; 
     document.getElementById('login-modal').style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // BLOQUEAR SCROLL
+    document.body.style.overflow = 'hidden'; 
     
-    // Añadir historial
     history.pushState({modal: 'login'}, "", "#login");
     
-    // Retraso para evitar que la tecla 'i' se cuele en el focus
     setTimeout(() => {
-        input.value = ''; // Asegurar limpieza total
+        input.value = ''; 
         input.focus();
     }, 50);
 }
@@ -1669,17 +1648,14 @@ async function checkLogin() {
         const h = await hash(pass);
         const currentAdminHash = document.getElementById('txt-admin-hash').value || H_PASS;
         if(h === currentAdminHash) {
-            // Cerrar modal de login (si tiene historial, usar back)
             if (history.state && history.state.modal === 'login') {
                 history.back(); 
             } else {
                 document.getElementById('login-modal').style.display = 'none';
             }
             
-            // Abrir Admin
             setTimeout(() => {
                 document.getElementById('admin').style.display = 'block';
-                // Añadir estado para admin también
                 history.pushState({modal: 'admin'}, "", "#admin");
             }, 50);
             
@@ -1732,13 +1708,11 @@ function setupDragDrop() {
         e.target.style.background = '#fff';
         const files = e.dataTransfer.files;
         if (files.length > 0) {
-            // Intentar obtener el ID del pedal para crear la carpeta virtual
             let pedalID = document.getElementById('e-id').value;
             if(!pedalID) {
-                // Si no hay ID, generarlo desde el nombre
                 const name = document.getElementById('e-nombre').value;
                 if(name) pedalID = name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-                else pedalID = "general"; // Fallback
+                else pedalID = "general"; 
             }
             
             const path = `img/pedales/${pedalID}/${files[0].name}`;
