@@ -729,7 +729,7 @@ Debido a la falta de tiempo, se aceptan muy pocos encargos personalizados, aunqu
           <label>Nombre:</label> <input id="e-nombre">
           <label>Precio (€):</label> <input type="number" id="e-precio">
           <label>Categorías:</label> <input id="e-cat" list="cat-suggestions">
-          <datalist id="cat-suggestions"><option value="Fuzz"></option><option value="Bass"></option><option value="dub"></option><option value="synth"></option><option value="Reverb"></option><option value="Tremolo"></option><option value="preamp"></option><option value="Compressor"></option></datalist>
+          <datalist id="cat-suggestions"><option value="Fuzz"></option><option value="Bass"></option><option value="dub"></option><option value="synth"></option></datalist>
           <label style="background:#ddd; padding:10px; display:flex; align-items:center; margin:1rem 0;">
             <input type="checkbox" id="e-agotado"> <span style="margin-left:5px; font-weight:bold;">MARCAR COMO AGOTADO</span>
           </label>
@@ -769,34 +769,6 @@ Debido a la falta de tiempo, se aceptan muy pocos encargos personalizados, aunqu
     <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
       <span><b>The Red Artifact</b> <small>80€</small> </span>
       <div><button onclick="editP('the-red-artifact')">EDIT</button><button onclick="delP('the-red-artifact')" style="color:red">X</button></div>
-    </div>
-    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
-      <span><b>Bazz Fuss</b> <small>40€</small> </span>
-      <div><button onclick="editP('bazz-fuss')">EDIT</button><button onclick="delP('bazz-fuss')" style="color:red">X</button></div>
-    </div>
-    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
-      <span><b>Fantastic Reverbito</b> <small>100€</small> </span>
-      <div><button onclick="editP('fantastic-reverbito')">EDIT</button><button onclick="delP('fantastic-reverbito')" style="color:red">X</button></div>
-    </div>
-    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
-      <span><b>Spaghetti Surfer</b> <small>70€</small> <span style="color:red;">[SOLD]</span></span>
-      <div><button onclick="editP('spaghetti-surfer')">EDIT</button><button onclick="delP('spaghetti-surfer')" style="color:red">X</button></div>
-    </div>
-    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
-      <span><b>Desert Storm</b> <small>60€</small> </span>
-      <div><button onclick="editP('desert-storm')">EDIT</button><button onclick="delP('desert-storm')" style="color:red">X</button></div>
-    </div>
-    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
-      <span><b>ZASCAM</b> <small>80€</small> </span>
-      <div><button onclick="editP('zascam')">EDIT</button><button onclick="delP('zascam')" style="color:red">X</button></div>
-    </div>
-    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
-      <span><b>Fantasmico</b> <small>85€</small> </span>
-      <div><button onclick="editP('fantasmico')">EDIT</button><button onclick="delP('fantasmico')" style="color:red">X</button></div>
-    </div>
-    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
-      <span><b>Optic Compressor</b> <small>40€</small> </span>
-      <div><button onclick="editP('optic-compressor')">EDIT</button><button onclick="delP('optic-compressor')" style="color:red">X</button></div>
     </div></div>
           <br><button class="btn" style="width:100%;" onclick="downloadJson()">💾 DESCARGAR PEDALES.JSON</button>
         </div>
@@ -849,7 +821,7 @@ Debido a la falta de tiempo, se aceptan muy pocos encargos personalizados, aunqu
           </div>
           
           <input type="hidden" id="txt-admin-hash" value="7938e835c55906d701a4b828aa65f41d80ab14f7b61428b75266ab8f6bdd1cc6">
-          <input type="hidden" id="txt-client-hash" value="1afa95a6c07dae57c9dfeb7066681c2d99b7a80f0a742a15140ac33efbce7390">
+          <input type="hidden" id="txt-client-hash" value="66ab20cdb403bd6ddfecde48a52c725e691f6491fafc3a28c8bb557ba9ac05ca">
 
           <br>
           <button class="btn" style="width:100%; background:var(--ink); color:#fff;" onclick="downloadHTML()">💾 DESCARGAR INDEX.HTML</button>
@@ -879,7 +851,7 @@ Debido a la falta de tiempo, se aceptan muy pocos encargos personalizados, aunqu
                 <button class="btn" onclick="genHash('client')">GENERAR</button>
               </div>
               <div id="hash-output-client" class="hash-box" style="display: block; margin-top: 10px; font-size: 0.7rem; word-break: break-all;">
-                 Hash: <span id="hash-str-client" style="color:#fff;">1afa95a6c07dae57c9dfeb7066681c2d99b7a80f0a742a15140ac33efbce7390</span>
+                 Hash: <span id="hash-str-client" style="color:#fff;">66ab20cdb403bd6ddfecde48a52c725e691f6491fafc3a28c8bb557ba9ac05ca</span>
               </div>
           </div>
       </div>
@@ -899,7 +871,7 @@ const FORM_ACCESS_ENTRY = "entry.436883588";
 
 const SECRET_WORD = "nagusi"; 
 const H_PASS = "7938e835c55906d701a4b828aa65f41d80ab14f7b61428b75266ab8f6bdd1cc6"; 
-const CLIENT_PASS_HASH = "1afa95a6c07dae57c9dfeb7066681c2d99b7a80f0a742a15140ac33efbce7390"; // 'cliente'
+const CLIENT_PASS_HASH = "66ab20cdb403bd6ddfecde48a52c725e691f6491fafc3a28c8bb557ba9ac05ca"; // 'cliente'
 
 let db = [];
 let cart = new Map();
@@ -1414,6 +1386,10 @@ function confirmOrder() {
 function openModal(id) {
   // BLOQUEAR SCROLL DE FONDO
   document.body.style.overflow = 'hidden';
+  
+  // 1. Force scroll to top of the content box
+  const modalBox = document.querySelector('#modal .modal-box');
+  if(modalBox) modalBox.scrollTop = 0;
 
   const p = db.find(x => x.id === id);
   if(!p) return;
