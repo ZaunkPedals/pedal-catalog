@@ -25,11 +25,11 @@
     "id": "the-double-trouble-njd-dub-siren--delay-",
     "nombre": "The Double Trouble: NJD Dub Siren & Delay ",
     "categoria": [
-      "dub",
-      "synth"
+      "dub"
     ],
     "precio": "145",
     "agotado": false,
+    "proximamente": false,
     "imagenes": [
       "img/pedales/dub-siren/Zaunk_Add_Siren_Cover.png",
       "img/pedales/dub-siren/Zaunk_Add_siren_EN.png",
@@ -39,8 +39,7 @@
       "hhkBgY2TfvI"
     ],
     "descripcionCorta": "La herramienta definitiva para el Sound System.",
-    "descripcionLarga": "<p>No es solo una sirena Dub clásica tipo NJD, es una estación de ruido. Incluye una sección dedicada de Echo/Delay y mods para generar texturas bizarras y oscilaciones. Dub, Reggae y caos sonoro.</p>\n\n<p><strong>SECCIÓN DUB SIREN:</strong></p>\n<ul>\n  <li><strong>Trigger:</strong> Interruptor de activación (momentáneo o fijo).</li>\n  <li><strong>Tone & Mode:</strong> 4 tonos y 4 formas de onda seleccionables.</li>\n  <li><strong>Rate:</strong> Velocidad del LFO (incluye modo manual).</li>\n</ul>\n\n<p><strong>SECCIÓN ECHO/DELAY:</strong></p>\n<ul>\n  <li><strong>Mix & Echo:</strong> Mezcla y tiempo del delay.</li>\n  <li><strong>Feedback & Warp:</strong> Genera auto-oscilación y deformación de la señal.</li>\n  <li><strong>Blast:</strong> Filtro de frecuencias momentáneo para efectos locos.</li>\n</ul>\n\n<p><small>Alimentación: 9V DC estándar (centro negativo). Salida: RCA.</small></p>",
-    "proximamente": false
+    "descripcionLarga": "<p>No es solo una sirena Dub clásica tipo NJD, es una estación de ruido. Incluye una sección dedicada de Echo/Delay y mods para generar texturas bizarras y oscilaciones. Dub, Reggae y caos sonoro.</p>\n\n<p><strong>SECCIÓN DUB SIREN:</strong></p>\n<ul>\n  <li><strong>Trigger:</strong> Interruptor de activación (momentáneo o fijo).</li>\n  <li><strong>Tone & Mode:</strong> 4 tonos y 4 formas de onda seleccionables.</li>\n  <li><strong>Rate:</strong> Velocidad del LFO (incluye modo manual).</li>\n</ul>\n\n<p><strong>SECCIÓN ECHO/DELAY:</strong></p>\n<ul>\n  <li><strong>Mix & Echo:</strong> Mezcla y tiempo del delay.</li>\n  <li><strong>Feedback & Warp:</strong> Genera auto-oscilación y deformación de la señal.</li>\n  <li><strong>Blast:</strong> Filtro de frecuencias momentáneo para efectos locos.</li>\n</ul>\n\n<p><small>Alimentación: 9V DC estándar (centro negativo). Salida: RCA.</small></p>"
   },
   {
     "id": "the-red-artifact",
@@ -112,8 +111,8 @@
       "Tremolo"
     ],
     "precio": "70",
-    "agotado": true,
-    "proximamente": false,
+    "agotado": false,
+    "proximamente": true,
     "imagenes": [
       "img/pedales/spaghetti-surfer/Tremolo_Cover.png",
       "img/pedales/spaghetti-surfer/Tremolo_Back_ES.png",
