@@ -514,11 +514,11 @@
 
   </style>
 </head>
-<body style="">
+<body style="" class="vip-mode">
 
 <div id="intro-layer" style="opacity: 1; display: flex;">
-  <img id="intro-logo-img" src="img/Zaunk_Logo.png" class="intro-logo">
-  <div class="intro-text" id="intro-txt">LOADING NOISE...</div>
+  <img id="intro-logo-img" src="img/zaunk-logo-2.png" class="intro-logo">
+  <div class="intro-text" id="intro-txt">ENTRANDO A LA TRASTIENDA...</div>
 </div>
 
 <div id="toast" style="display: none;">¡AÑADIDO A LA CESTA!</div>
@@ -531,7 +531,7 @@
 
 <header>
   <div class="logo-wrapper" onclick="goHome()">
-    <img id="header-logo" src="img/Zaunk_Logo.png" alt="ZAUNK LOGO" onerror="this.style.display='none'">
+    <img id="header-logo" src="img/zaunk-logo-2.png" alt="ZAUNK LOGO" onerror="this.style.display='none'">
   </div>
   <div style="margin-top: 1rem;">
     <h2 id="web-title" style="margin:0; letter-spacing: 2px;">DIY PEDALS</h2>
@@ -696,7 +696,7 @@ Debido a la falta de tiempo, se aceptan muy pocos encargos personalizados, aunqu
 
       <div style="display:flex; flex-direction:column; gap:10px; margin-top:1rem;">
           <button class="btn" onclick="checkClientAccess()">ENTRAR</button>
-          <a id="access-request-link" href="https://docs.google.com/forms/d/e/1FAIpQLSfcO8TVkngcV9X1HHVkd3Lwd4V_w1ZSZJrlepYngiMaFaq2zw/viewform?usp=pp_url&amp;entry.436883588=REQ-938868" target="_blank" class="btn" style="background:#eee; color:#000; border-color:#999; text-align:center; text-decoration:none;">PIDE TU ACCESO</a>
+          <a id="access-request-link" href="https://docs.google.com/forms/d/e/1FAIpQLSfcO8TVkngcV9X1HHVkd3Lwd4V_w1ZSZJrlepYngiMaFaq2zw/viewform?usp=pp_url&amp;entry.436883588=PET-260201-446" target="_blank" class="btn" style="background:#eee; color:#000; border-color:#999; text-align:center; text-decoration:none;">PIDE TU ACCESO</a>
           <button class="btn" onclick="closeClientGate()" style="border-color:red; color:red; margin-top:5px;">CANCELAR</button>
       </div>
    </div>
@@ -723,16 +723,16 @@ Debido a la falta de tiempo, se aceptan muy pocos encargos personalizados, aunqu
       <div>
         <div class="admin-card" id="pedal-editor-card">
           <h3>EDITOR PEDALES</h3>
-          <input type="hidden" id="e-id">
+          <input type="hidden" id="e-id" value="">
           <label>Nombre:</label> <input id="e-nombre">
           <label>Precio (€):</label> <input type="number" id="e-precio">
           <label>Categorías:</label> <input id="e-cat" list="cat-suggestions">
-          <datalist id="cat-suggestions"><option value="Fuzz"></option><option value="Bass"></option><option value="dub"></option><option value="synth"></option></datalist>
+          <datalist id="cat-suggestions"><option value="Fuzz"></option><option value="Bass"></option><option value="dub"></option><option value="synth"></option><option value="Reverb"></option><option value="Tremolo"></option><option value="preamp"></option><option value="Compressor"></option></datalist>
           <label style="background:#ddd; padding:10px; display:flex; align-items:center; margin:1rem 0;">
-            <input type="checkbox" id="e-agotado"> <span style="margin-left:5px; font-weight:bold;">MARCAR COMO AGOTADO</span>
+            <input type="checkbox" id="e-agotado" value=""> <span style="margin-left:5px; font-weight:bold;">MARCAR COMO AGOTADO</span>
           </label>
           <label style="background:#ffeb3b; padding:10px; display:flex; align-items:center; margin:1rem 0;">
-            <input type="checkbox" id="e-proximamente"> <span style="margin-left:5px; font-weight:bold;">MARCAR COMO "PRÓXIMAMENTE"</span>
+            <input type="checkbox" id="e-proximamente" value=""> <span style="margin-left:5px; font-weight:bold;">MARCAR COMO "PRÓXIMAMENTE"</span>
           </label>
           <label>Imágenes (1 URL/línea):</label> <textarea id="e-imgs" rows="3" placeholder="Arrastra aquí tus fotos desde la carpeta 'img' o pega las rutas..."></textarea>
           <label>Youtube IDs:</label> <textarea id="e-videos" rows="2"></textarea>
@@ -767,6 +767,34 @@ Debido a la falta de tiempo, se aceptan muy pocos encargos personalizados, aunqu
     <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
       <span><b>The Red Artifact</b> <small>80€</small> </span>
       <div><button onclick="editP('the-red-artifact')">EDIT</button><button onclick="delP('the-red-artifact')" style="color:red">X</button></div>
+    </div>
+    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
+      <span><b>Bazz Fuss</b> <small>40€</small> </span>
+      <div><button onclick="editP('bazz-fuss')">EDIT</button><button onclick="delP('bazz-fuss')" style="color:red">X</button></div>
+    </div>
+    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
+      <span><b>Fantastic Reverbito</b> <small>100€</small> </span>
+      <div><button onclick="editP('fantastic-reverbito')">EDIT</button><button onclick="delP('fantastic-reverbito')" style="color:red">X</button></div>
+    </div>
+    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
+      <span><b>Spaghetti Surfer</b> <small>70€</small> </span>
+      <div><button onclick="editP('spaghetti-surfer')">EDIT</button><button onclick="delP('spaghetti-surfer')" style="color:red">X</button></div>
+    </div>
+    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
+      <span><b>Desert Storm</b> <small>60€</small> </span>
+      <div><button onclick="editP('desert-storm')">EDIT</button><button onclick="delP('desert-storm')" style="color:red">X</button></div>
+    </div>
+    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
+      <span><b>ZASCAM</b> <small>80€</small> </span>
+      <div><button onclick="editP('zascam')">EDIT</button><button onclick="delP('zascam')" style="color:red">X</button></div>
+    </div>
+    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
+      <span><b>Fantasmico</b> <small>85€</small> </span>
+      <div><button onclick="editP('fantasmico')">EDIT</button><button onclick="delP('fantasmico')" style="color:red">X</button></div>
+    </div>
+    <div style="border-bottom:1px solid #ccc; padding:5px; display:flex; justify-content:space-between; align-items:center;">
+      <span><b>Optic Compressor</b> <small>40€</small> </span>
+      <div><button onclick="editP('optic-compressor')">EDIT</button><button onclick="delP('optic-compressor')" style="color:red">X</button></div>
     </div></div>
           <br><button class="btn" style="width:100%;" onclick="downloadJson()">💾 DESCARGAR PEDALES.JSON</button>
         </div>
@@ -819,7 +847,7 @@ Debido a la falta de tiempo, se aceptan muy pocos encargos personalizados, aunqu
           </div>
           
           <input type="hidden" id="txt-admin-hash" value="7938e835c55906d701a4b828aa65f41d80ab14f7b61428b75266ab8f6bdd1cc6">
-          <input type="hidden" id="txt-client-hash" value="66ab20cdb403bd6ddfecde48a52c725e691f6491fafc3a28c8bb557ba9ac05ca">
+          <input type="hidden" id="txt-client-hash" value="1afa95a6c07dae57c9dfeb7066681c2d99b7a80f0a742a15140ac33efbce7390">
 
           <br>
           <button class="btn" style="width:100%; background:var(--ink); color:#fff;" onclick="downloadHTML()">💾 DESCARGAR INDEX.HTML</button>
@@ -849,7 +877,7 @@ Debido a la falta de tiempo, se aceptan muy pocos encargos personalizados, aunqu
                 <button class="btn" onclick="genHash('client')">GENERAR</button>
               </div>
               <div id="hash-output-client" class="hash-box" style="display: block; margin-top: 10px; font-size: 0.7rem; word-break: break-all;">
-                 Hash: <span id="hash-str-client" style="color:#fff;">66ab20cdb403bd6ddfecde48a52c725e691f6491fafc3a28c8bb557ba9ac05ca</span>
+                 Hash: <span id="hash-str-client" style="color:#fff;">1afa95a6c07dae57c9dfeb7066681c2d99b7a80f0a742a15140ac33efbce7390</span>
               </div>
           </div>
       </div>
@@ -869,7 +897,7 @@ const FORM_ACCESS_ENTRY = "entry.436883588";
 
 const SECRET_WORD = "nagusi"; 
 const H_PASS = "7938e835c55906d701a4b828aa65f41d80ab14f7b61428b75266ab8f6bdd1cc6"; 
-const CLIENT_PASS_HASH = "66ab20cdb403bd6ddfecde48a52c725e691f6491fafc3a28c8bb557ba9ac05ca"; // 'cliente'
+const CLIENT_PASS_HASH = "1afa95a6c07dae57c9dfeb7066681c2d99b7a80f0a742a15140ac33efbce7390"; // 'cliente'
 
 let db = [];
 let cart = new Map();
