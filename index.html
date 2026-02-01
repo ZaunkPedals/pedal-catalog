@@ -1396,7 +1396,9 @@ function openModal(id) {
   
   // 1. Force scroll to top of the content box
   const modalBox = document.querySelector('#modal .modal-box');
-  if(modalBox) modalBox.scrollTop = 0;
+  if(modalBox) {
+      setTimeout(() => { modalBox.scrollTop = 0; }, 10); // Un pequeño timeout asegura que el renderizado esté listo
+  }
 
   const p = db.find(x => x.id === id);
   if(!p) return;
@@ -1518,12 +1520,6 @@ function openModal(id) {
   btns.forEach(b => b.style.display = totalItems > 1 ? 'block' : 'none');
 
   document.getElementById('modal').style.display = 'flex';
-  
-  // CORRECCIÓN SCROLL: Hacerlo justo DESPUÉS de mostrar el modal
-  const modalBox = document.querySelector('#modal .modal-box');
-  if(modalBox) {
-      setTimeout(() => { modalBox.scrollTop = 0; }, 10); // Un pequeño timeout asegura que el renderizado esté listo
-  }
   
   // GUARDAR ESTADO HISTORIAL PARA QUE EL BOTÓN "ATRÁS" FUNCIONE
   history.pushState({modal: true}, "", "#" + id);
