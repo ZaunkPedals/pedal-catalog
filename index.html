@@ -927,21 +927,30 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('txt-email').value = document.getElementById('link-email').href.replace('mailto:', '');
 });
 
-// GESTIÓN HISTORIAL (NAVEGADOR)
+// GESTIÓN HISTORIAL UNIFICADA (NAVEGADOR)
 window.addEventListener('popstate', (event) => {
-    // 1. Si el usuario da "Atrás" y estaba en modal, cerramos modal
-    const modal = document.getElementById('modal');
-    if (modal.style.display === 'flex') {
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-        return;
-    }
+    // 1. CERRAR TODOS LOS MODALES POSIBLES
+    const modals = ['modal', 'checkout-modal', 'client-gate-modal', 'login-modal', 'admin', 'lightbox'];
+    let closedAny = false;
     
+    modals.forEach(id => {
+        const el = document.getElementById(id);
+        // Comprobar si está visible (flex o block)
+        if (el && (el.style.display === 'flex' || el.style.display === 'block')) {
+            el.style.display = 'none';
+            closedAny = true;
+        }
+    });
+
+    if (closedAny) {
+        document.body.style.overflow = ''; // Restaurar Scroll
+        document.getElementById('carousel-track').innerHTML = ""; // Limpiar carrusel por si acaso
+    }
+
     // 2. Si estaba en FAQ o About Us, volvemos a la home
-    // (Comprobamos si hay alguna pagina de info visible)
     const visibleInfo = document.querySelector('.info-page[style*="display: block"]');
     if (visibleInfo) {
-        goHome(true); // true = called from history (no push state)
+        goHome(true); 
     }
 });
 
@@ -951,25 +960,32 @@ function openClientGate() {
     const input = document.getElementById('client-pass');
     input.value = '';
     
-    // === GENERACIÓN ID (FORMATO UNIFICADO: PET-AAMMDD-XXX) ===
+    // Generar ID
     const now = new Date();
-    const dateStr = now.toISOString().slice(2,10).replace(/-/g, ""); // AAMMDD
-    const randomStr = Math.floor(Math.random() * 1000).toString().padStart(3, '0'); // 3 dígitos (000-999)
-    
+    const dateStr = now.toISOString().slice(2,10).replace(/-/g, ""); 
+    const randomStr = Math.floor(Math.random() * 1000).toString().padStart(3, '0'); 
     const accessId = `PET-${dateStr}-${randomStr}`;
-    // ===========================================================
 
     const finalAccessUrl = `${FORM_ACCESS_URL}?usp=pp_url&${FORM_ACCESS_ENTRY}=${accessId}`;
     document.getElementById('access-request-link').href = finalAccessUrl;
 
     document.getElementById('client-gate-modal').style.display = 'flex';
     document.body.style.overflow = 'hidden'; 
+    
+    // AÑADIR HISTORIAL
+    history.pushState({modal: 'client-gate'}, "", "#access");
+    
     setTimeout(() => input.focus(), 50);
 }
 
 function closeClientGate() {
-    document.getElementById('client-gate-modal').style.display = 'none';
-    document.body.style.overflow = ''; // DESBLOQUEAR SCROLL
+    // Si cerramos con botón X/Cancelar, usamos Back si hay historial
+    if (history.state && history.state.modal === 'client-gate') {
+        history.back();
+    } else {
+        document.getElementById('client-gate-modal').style.display = 'none';
+        document.body.style.overflow = ''; 
+    }
 }
 
 async function checkClientAccess() {
@@ -982,16 +998,25 @@ async function checkClientAccess() {
         const h = await hash(pass);
         // IMPORTANTE: Primero comprobar contra la variable local (fallback)
         if (h === CLIENT_PASS_HASH) {
-             closeClientGate();
-             enableVipMode();
+             // AL ENTRAR, QUEREMOS QUITAR EL MODAL DEL HISTORIAL
+             if (history.state && history.state.modal === 'client-gate') {
+                 history.back(); // Esto cierra el modal visualmente gracias al popstate
+             } else {
+                 closeClientGate();
+             }
+             // Pequeño delay para asegurar que el modal se cierra antes de la transición
+             setTimeout(() => enableVipMode(), 50);
              return;
         }
         
-        // Si no es la default, mirar si hay una custom en el input oculto
         const storedHash = document.getElementById('txt-client-hash').value;
         if(storedHash && storedHash.length > 10 && h === storedHash) {
-            closeClientGate();
-            enableVipMode();
+             if (history.state && history.state.modal === 'client-gate') {
+                 history.back();
+             } else {
+                 closeClientGate();
+             }
+             setTimeout(() => enableVipMode(), 50);
         } else {
             alert("Contraseña incorrecta");
         }
@@ -1311,6 +1336,9 @@ function openCheckout() {
     
     updateCheckoutTotal();
     modal.style.display = 'flex';
+    
+    // AÑADIR HISTORIAL
+    history.pushState({modal: 'checkout'}, "", "#checkout");
 }
 
 function updateCheckoutTotal() {
@@ -1330,8 +1358,13 @@ function updateCheckoutTotal() {
 }
 
 function closeCheckout() {
-    document.body.style.overflow = ''; // DESBLOQUEAR SCROLL
-    document.getElementById('checkout-modal').style.display = 'none';
+    // Si cerramos con botón, simulamos atrás
+    if (history.state && history.state.modal === 'checkout') {
+        history.back();
+    } else {
+        document.body.style.overflow = ''; // DESBLOQUEAR SCROLL
+        document.getElementById('checkout-modal').style.display = 'none';
+    }
 }
 
 function updateCheckoutQty(id, change) {
@@ -1354,7 +1387,36 @@ function updateCheckoutQty(id, change) {
     
     updateFab();
     if(cart.size === 0) closeCheckout();
-    else openCheckout(); 
+    else {
+        // Recargar contenido del checkout visualmente sin cambiar historial
+        // Pequeño hack: reutilizamos la logica de pintado pero sin pushState
+        const modal = document.getElementById('checkout-modal');
+        const list = document.getElementById('checkout-list');
+        list.innerHTML = "";
+        cart.forEach((qty, id) => {
+            const p = db.find(x => x.id === id);
+            if(p) {
+                const img = p.imagenes[0] || '';
+                const row = document.createElement('div');
+                row.className = 'checkout-item';
+                row.innerHTML = `
+                    ${img ? `<img src="${img}" class="checkout-img">` : ''}
+                    <div class="checkout-details">
+                        <h4>${p.nombre}</h4>
+                        <small>${p.precio} €/ud</small>
+                    </div>
+                    <div class="checkout-actions">
+                        <button class="checkout-btn" onclick="updateCheckoutQty('${id}', -1)">-</button>
+                        <span style="width:20px; text-align:center;">${qty}</span>
+                        <button class="checkout-btn" onclick="updateCheckoutQty('${id}', 1)">+</button>
+                        <button class="checkout-btn del-btn" onclick="updateCheckoutQty('${id}', -999)">X</button>
+                    </div>
+                `;
+                list.appendChild(row);
+            }
+        });
+        updateCheckoutTotal();
+    }
 }
 
 function confirmOrder() {
@@ -1397,7 +1459,7 @@ function openModal(id) {
   // 1. Force scroll to top of the content box
   const modalBox = document.querySelector('#modal .modal-box');
   if(modalBox) {
-      setTimeout(() => { modalBox.scrollTop = 0; }, 10); // Un pequeño timeout asegura que el renderizado esté listo
+      setTimeout(() => { modalBox.scrollTop = 0; }, 10); 
   }
 
   const p = db.find(x => x.id === id);
@@ -1522,7 +1584,7 @@ function openModal(id) {
   document.getElementById('modal').style.display = 'flex';
   
   // GUARDAR ESTADO HISTORIAL PARA QUE EL BOTÓN "ATRÁS" FUNCIONE
-  history.pushState({modal: true}, "", "#" + id);
+  history.pushState({modal: 'product'}, "", "#" + id);
 
   // RESET CARRUSEL (Scroll al inicio)
   setTimeout(() => {
@@ -1531,14 +1593,14 @@ function openModal(id) {
 }
 
 function closeModal() { 
-    document.body.style.overflow = ''; // DESBLOQUEAR SCROLL
-    document.getElementById('modal').style.display = 'none'; 
-    document.getElementById('carousel-track').innerHTML = ""; 
-    
-    // Si cerramos con el botón X, volvemos atrás para limpiar la URL
+    // Si cerramos con botón X, volvemos atrás para limpiar la URL
     // (Solo si hay estado de historial, para no salir de la web)
-    if (history.state && history.state.modal) {
+    if (history.state && history.state.modal === 'product') {
         history.back();
+    } else {
+        document.body.style.overflow = ''; // DESBLOQUEAR SCROLL
+        document.getElementById('modal').style.display = 'none'; 
+        document.getElementById('carousel-track').innerHTML = ""; 
     }
 }
 function scrollCarousel(dir) { const track = document.getElementById('carousel-track'); track.scrollBy({ left: dir * track.clientWidth, behavior: 'smooth' }); }
@@ -1581,6 +1643,9 @@ function forceLogin() {
     document.getElementById('login-modal').style.display = 'flex';
     document.body.style.overflow = 'hidden'; // BLOQUEAR SCROLL
     
+    // Añadir historial
+    history.pushState({modal: 'login'}, "", "#login");
+    
     // Retraso para evitar que la tecla 'i' se cuele en el focus
     setTimeout(() => {
         input.value = ''; // Asegurar limpieza total
@@ -1589,8 +1654,12 @@ function forceLogin() {
 }
 
 function closeLogin() {
-    document.getElementById('login-modal').style.display = 'none';
-    document.body.style.overflow = ''; // DESBLOQUEAR SCROLL
+    if (history.state && history.state.modal === 'login') {
+        history.back();
+    } else {
+        document.getElementById('login-modal').style.display = 'none';
+        document.body.style.overflow = ''; 
+    }
 }
 
 async function checkLogin() {
@@ -1600,15 +1669,34 @@ async function checkLogin() {
         const h = await hash(pass);
         const currentAdminHash = document.getElementById('txt-admin-hash').value || H_PASS;
         if(h === currentAdminHash) {
-            closeLogin();
-            document.getElementById('admin').style.display = 'block';
+            // Cerrar modal de login (si tiene historial, usar back)
+            if (history.state && history.state.modal === 'login') {
+                history.back(); 
+            } else {
+                document.getElementById('login-modal').style.display = 'none';
+            }
+            
+            // Abrir Admin
+            setTimeout(() => {
+                document.getElementById('admin').style.display = 'block';
+                // Añadir estado para admin también
+                history.pushState({modal: 'admin'}, "", "#admin");
+            }, 50);
+            
         } else {
             alert("Denegado");
         }
     } catch(e) { alert("Error"); }
 }
 
-function closeAdmin() { document.getElementById('admin').style.display = 'none'; renderFront(); }
+function closeAdmin() { 
+    if (history.state && history.state.modal === 'admin') {
+        history.back();
+    } else {
+        document.getElementById('admin').style.display = 'none'; 
+        renderFront(); 
+    }
+}
 
 async function genHash(type) {
   let inputId = type === 'admin' ? 'hash-input-admin' : 'hash-input-client';
