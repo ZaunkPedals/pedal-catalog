@@ -3,7 +3,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zaunk Pedals! | DIY Effects</title>
-  
+   
   <meta name="description" content="Custom Guitar, Bass and Synth Effects.">
   <meta property="og:title" content="Zaunk Pedals! | DIY Effects">
   <meta property="og:image" content="img/Zaunk_Logo.png">
@@ -17,13 +17,13 @@
     :root {
       /* COLOR PÚBLICO (AZUL ZAUNK) */
       --main-color: #253494; 
-      
+       
       /* COLOR PRIVADO (VERDE OSCURO) */
       --vip-color: #006847;
 
       --paper: #fcfcfc;
       --ink: #1a1a1a;
-      
+       
       --font-body: 'Courier Prime', monospace;
       --font-title: 'Oswald', sans-serif;
     }
@@ -50,9 +50,16 @@
       position: fixed; inset: 0; background: #fff; z-index: 9999;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       transition: opacity 0.5s ease-out;
+      text-align: center; /* Centrado extra para móvil */
+      padding: 20px;
     }
     .intro-logo {
-      width: 200px; animation: spin-intro 2s infinite linear; margin-bottom: 20px;
+      width: 200px; 
+      max-width: 80vw; /* AJUSTE MÓVIL: Evita desbordamiento en pantallas pequeñas */
+      animation: spin-intro 2s infinite linear; 
+      margin-bottom: 20px;
+      display: block;
+      margin-left: auto; margin-right: auto; /* Asegura centrado de bloque */
     }
     @keyframes spin-intro { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .intro-text { font-family: var(--font-title); font-size: 1.5rem; letter-spacing: 5px; color: var(--main-color); animation: blink 1s infinite; }
@@ -86,7 +93,7 @@
         animation: color-breath 5s infinite ease-in-out;
         transition: transform 0.2s ease;
     }
-    
+     
     /* Hover detiene la animación y deja el estado sólido para dar feedback */
     #access-banner:hover { 
         animation: none;
@@ -113,7 +120,7 @@
       font-family: var(--font-title); font-size: 1.2rem; cursor: pointer; display: none; z-index: 90;
     }
     #fab:hover { transform: scale(1.05); }
-    
+     
     #scroll-up {
       position: fixed; bottom: 20px; left: 20px;
       width: 40px; height: 40px; background: #fff; border: 2px solid var(--main-color);
@@ -162,13 +169,13 @@
       text-transform: uppercase; letter-spacing: 1px; transition: 0.2s;
       cursor: pointer;
     }
-    
+     
     @media (hover: hover) {
         .nav-link:hover { color: var(--ink); background: #fff; transform: skew(-10deg); }
     }
 
     .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
-    
+     
     h1, h2, h3 { 
       font-family: var(--font-title); text-transform: uppercase; 
       color: var(--main-color); margin-top: 0;
@@ -199,7 +206,7 @@
         height: 2px; background: var(--main-color);
         z-index: 1;
     }
-    
+     
     .catalog-badge-title {
         background: var(--main-color); color: #fff; 
         padding: 5px 30px;
@@ -252,7 +259,7 @@
       overflow: hidden; cursor: pointer; background: #fff;
     }
     .card-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: 0.3s ease; }
-    
+     
     .img-wrapper::after {
       content: ""; position: absolute; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
@@ -295,7 +302,7 @@
       border: 3px solid red; color: red; font-size: 2rem; font-family: var(--font-title);
       padding: 10px; background: rgba(255,255,255,0.9); z-index: 60; white-space: nowrap;
     }
-    
+     
     .qty-control {
       border-top: 1px dotted var(--main-color);
       padding-top: 0.5rem; display: flex; align-items: center; justify-content: space-between; gap: 5px;
@@ -342,12 +349,12 @@
       display: none; align-items: center; justify-content: center; z-index: 100;
       transition: background 0.5s ease;
     }
-    
+     
     /* En modo VIP, el fondo se vuelve verde */
     body.vip-mode .modal-overlay {
        background: rgba(0, 104, 71, 0.95) !important;
     }
-    
+     
     .modal-box {
       background: #fff; /* Fondo BLANCO SÓLIDO (Opaco) */
       border: 4px solid #fff;
@@ -367,7 +374,7 @@
         display: flex; flex-direction: column;
         max-height: 90vh; padding: 2rem; gap: 1rem;
     }
-    
+     
     .checkout-header {
         display: flex; justify-content: space-between; align-items: center;
         border-bottom: 2px dashed var(--main-color);
@@ -388,13 +395,13 @@
     .checkout-actions { display: flex; align-items: center; gap: 5px; }
     .checkout-btn { width: 25px; height: 25px; cursor: pointer; background: #eee; border: 1px solid #000; font-weight: bold; }
     .del-btn { color: red; border-color: red; background: #fff; }
-    
+     
     /* RESUMEN PIE */
     #checkout-summary {
         background: #eef; padding: 1rem; border: 2px solid var(--main-color);
         font-family: var(--font-title); font-size: 1.1rem; text-align: right; flex-shrink: 0;
     }
-    
+     
     /* MODAL DE LOGIN (ESTILOS ESPECÍFICOS) */
     #client-gate-modal .modal-box {
         max-width: 500px; 
@@ -437,7 +444,7 @@
     }
     .carousel-item img { width: 100%; height: 100%; object-fit: cover; }
     .carousel-item iframe { width: 100%; aspect-ratio: 16/9; border: none; }
-    
+     
     .carousel-btn {
       position: absolute; top: 50%; transform: translateY(-50%);
       background: rgba(0,0,0,0.7); color: #fff; border: none;
@@ -492,7 +499,7 @@
     .format-toolbar { display: flex; gap: 5px; margin-bottom: 5px; }
     .format-btn { padding: 5px 10px; font-weight: bold; cursor: pointer; background: #eee; border: 1px solid #999; }
     .admin-group h4 { color: var(--main-color); border-bottom: 2px solid #ccc; padding-bottom: 5px; margin-top: 1.5rem; margin-bottom: 1rem; }
-    
+     
     /* INFO PAGES (About / FAQ) */
     .info-page { display: none; padding: 4rem 0; }
     .info-page h2 { border-bottom: 4px solid var(--main-color); display: inline-block; }
@@ -613,10 +620,10 @@ Debido a la falta de tiempo, se aceptan muy pocos encargos personalizados, aunqu
     </div>
     <div id="modal-info">
       <h2 id="m-title" style="font-size:2rem; margin-bottom:0.5rem;">The Red Artifact</h2>
-      
+       
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
           <div id="m-cats"><span style="background:var(--main-color); color:#fff; padding:2px 6px; margin-right:5px; font-size:0.8rem;">FUZZ</span></div>
-          
+           
           <button id="m-btn-interest-small" class="btn" style="padding: 2px 8px; font-size: 0.8rem; background: rgb(238, 238, 238); color: var(--ink); border: 1px solid rgb(153, 153, 153); display: inline-block;" onclick="closeModal(); openClientGate();">
               ¿TE INTERESA?
           </button>
@@ -626,7 +633,7 @@ Debido a la falta de tiempo, se aceptan muy pocos encargos personalizados, aunqu
         <h3 id="m-price" style="background:var(--main-color); color:#fff; display:none; padding:5px 10px; margin:0;">0 €</h3>
         <button id="m-btn-side" class="btn" style="padding: 5px 15px; font-size: 0.9rem; margin-left: 15px; display: none; opacity: 1;">LO QUIERO (+1)</button>
       </div>
-      
+       
       <div id="m-desc">El <b>Red Artifact</b> (Fuzz War) es un pedal de fuzz salvaje y abrasivo, capaz de ir de una saturación cálida a una distorsión caótica. Perfecto para quienes buscan un muro de sonido imparable.<br>
 <h3>CARACTERÍSTICAS:</h3>
 
@@ -677,7 +684,7 @@ Debido a la falta de tiempo, se aceptan muy pocos encargos personalizados, aunqu
    <div class="modal-box">
       <h3 style="margin-top:0;">ACCEDE A LA TRASTIENDA</h3>
       <p style="margin-bottom:1.5rem;">Introduce tu clave de acceso</p>
-      
+       
       <input type="password" id="client-pass" placeholder="Contraseña..." style="font-size:1.5rem; letter-spacing:5px; text-align:center; margin-bottom:10px;">
 
       <div style="display:flex; flex-direction:column; gap:10px; margin-top:1rem;">
@@ -901,6 +908,16 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('txt-email').value = document.getElementById('link-email').href.replace('mailto:', '');
 });
 
+// GESTIÓN HISTORIAL (NAVEGADOR)
+window.addEventListener('popstate', (event) => {
+    // Si el usuario da "Atrás", ocultamos el modal
+    const modal = document.getElementById('modal');
+    if (modal.style.display === 'flex') {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+});
+
 // === LOGICA CLIENTE VIP ===
 function openClientGate() {
     if(isVip) return; 
@@ -1102,7 +1119,7 @@ function scrollToCat(cat) {
         const headerOffset = 150; // Ajuste para que no lo tape el menú
         const elementPosition = el.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-      
+       
         window.scrollTo({
              top: offsetPosition,
              behavior: "smooth"
@@ -1412,6 +1429,9 @@ function openModal(id) {
 
   document.getElementById('modal').style.display = 'flex';
   
+  // GUARDAR ESTADO HISTORIAL PARA QUE EL BOTÓN "ATRÁS" FUNCIONE
+  history.pushState({modal: true}, "", "#" + id);
+
   // RESET CARRUSEL (Scroll al inicio)
   setTimeout(() => {
       track.scrollLeft = 0;
@@ -1422,6 +1442,12 @@ function closeModal() {
     document.body.style.overflow = ''; // DESBLOQUEAR SCROLL
     document.getElementById('modal').style.display = 'none'; 
     document.getElementById('carousel-track').innerHTML = ""; 
+    
+    // Si cerramos con el botón X, volvemos atrás para limpiar la URL
+    // (Solo si hay estado de historial, para no salir de la web)
+    if (history.state && history.state.modal) {
+        history.back();
+    }
 }
 function scrollCarousel(dir) { const track = document.getElementById('carousel-track'); track.scrollBy({ left: dir * track.clientWidth, behavior: 'smooth' }); }
 function viewImage(src) { document.getElementById('lightbox').style.display = 'flex'; document.getElementById('lightbox-img').src = src; }
@@ -1621,7 +1647,7 @@ function downloadHTML() {
       document.getElementById('txt-faq-content').innerHTML = document.getElementById('txt-faq').value;
       
       document.title = document.getElementById('txt-tab-title').value;
-    
+      
       const clone = document.documentElement.cloneNode(true);
       clone.querySelector('#catalog-root').innerHTML = '<div style="text-align:center; padding: 4rem;"><h2>CARGANDO ARTEFACTOS...</h2></div>';
       clone.querySelector('#intro-layer').style.opacity = '1';
@@ -1636,11 +1662,11 @@ function downloadHTML() {
       clone.querySelector('#checkout-modal').style.display = 'none'; 
       clone.querySelector('#login-modal').style.display = 'none'; 
       clone.querySelector('#client-gate-modal').style.display = 'none';
-    
+      
       // Mostrar cosas que se ocultan en VIP mode
       clone.querySelector('#access-banner').style.display = 'block'; 
       clone.querySelector('#public-catalog-title-container').style.display = 'block';
-    
+      
       let scriptContent = clone.querySelector('script').innerHTML;
       const newUrl = document.getElementById('txt-form-url').value;
       const newEntry = document.getElementById('txt-form-entry').value;
